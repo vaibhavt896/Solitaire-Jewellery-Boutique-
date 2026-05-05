@@ -1,12 +1,17 @@
+'use client';
+
 import Link from 'next/link';
+import { motion, useReducedMotion } from 'framer-motion';
 import { getFeaturedPiece } from '@/lib/data/pieces';
 import { whatsappLinkFor } from '@/lib/site';
 import { Reveal } from '@/components/Reveal';
 
 export function FeaturedPiece() {
+  const reduce = useReducedMotion();
   const piece = getFeaturedPiece();
   const main = piece.images[0];
   if (!main) return null;
+
   return (
     <section className="section-pad bg-bone">
       <div className="container-wide">
@@ -16,18 +21,27 @@ export function FeaturedPiece() {
         </Reveal>
 
         <div className="grid md:grid-cols-2 gap-8 lg:gap-16 items-center">
-          <Reveal>
-            <div className="aspect-[4/5] bg-bone-deep overflow-hidden">
-              <img
-                src={main.src}
-                alt={main.alt}
-                loading="lazy"
-                className="w-full h-full object-cover"
-              />
-            </div>
-          </Reveal>
+          {/* Cinematic image reveal: curtain lifts from bottom, image zooms out */}
+          <motion.div
+            className="aspect-[4/5] bg-bone-deep overflow-hidden"
+            initial={reduce ? {} : { clipPath: 'inset(0 0 100% 0)' }}
+            whileInView={reduce ? {} : { clipPath: 'inset(0 0 0% 0)' }}
+            viewport={{ once: true, margin: '-8%' }}
+            transition={{ duration: 1.3, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <motion.img
+              src={main.src}
+              alt={main.alt}
+              loading="lazy"
+              className="w-full h-full object-cover"
+              initial={reduce ? {} : { scale: 1.14 }}
+              whileInView={reduce ? {} : { scale: 1 }}
+              viewport={{ once: true, margin: '-8%' }}
+              transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1] }}
+            />
+          </motion.div>
 
-          <Reveal delay={0.1}>
+          <Reveal delay={0.15}>
             <p className="text-mono text-micro uppercase tracking-eyebrow text-gold-deep">
               {piece.collectionLabel} · SKU {piece.sku}
             </p>
