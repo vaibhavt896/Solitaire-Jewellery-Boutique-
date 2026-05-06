@@ -22,11 +22,11 @@ export function Hero() {
 
   return (
     /*
-     * mt-[-80px] pulls the section up behind the sticky header (h-20 = 80px).
-     * The video now fills the full viewport INCLUDING the header zone, which
-     * makes the transparent header actually show the video behind it.
+     * mt-[-120px] pulls the section up behind the sticky header (h = 120px).
+     * The video fills the full viewport INCLUDING the header zone so the
+     * transparent header shows the video behind it.
      */
-    <section className="relative h-[calc(100svh+96px)] mt-[-96px] min-h-[760px] overflow-hidden bg-ink">
+    <section className="relative h-[calc(100svh+120px)] mt-[-120px] min-h-[760px] overflow-hidden bg-ink">
 
       {/* ── Video with Ken Burns ── */}
       <div className="absolute inset-0">

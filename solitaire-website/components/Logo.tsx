@@ -7,7 +7,7 @@ export function Logo({ className, light }: Props) {
       alt="Solitaire Jewellery Boutique"
       className={className}
       style={{
-        height: 145,
+        height: 76,
         width: "auto",
         filter: light ? "brightness(0) invert(1)" : "none",
         transition: "filter 0.4s ease",

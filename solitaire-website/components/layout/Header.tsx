@@ -26,7 +26,7 @@ export function Header() {
   const closeMega = () => { megaTimer.current = setTimeout(() => setMega(false), 140); };
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 88);
+    const onScroll = () => setScrolled(window.scrollY > 108);
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
@@ -50,12 +50,12 @@ export function Header() {
       <header
         className="sticky top-0 z-40"
         style={{
-          height: 96,
+          height: 120,
           background: glass ? 'transparent' : 'rgba(251,247,238,0.97)',
           backdropFilter:         glass ? 'none' : 'blur(20px)',
           WebkitBackdropFilter:   glass ? 'none' : 'blur(20px)',
           borderBottom: glass
-            ? '1px solid transparent'
+            ? '1px solid rgba(255,255,255,0.13)'
             : '1px solid rgba(216,205,178,0.40)',
           transition: 'background 0.65s ease, border-color 0.65s ease',
         }}
@@ -215,7 +215,7 @@ export function Header() {
           role="dialog"
           aria-modal="true"
         >
-          <div className="container-wide flex items-center justify-between h-24 border-b border-line">
+          <div className="container-wide flex items-center justify-between h-[120px] border-b border-line">
             <Logo />
             <button
               type="button"
