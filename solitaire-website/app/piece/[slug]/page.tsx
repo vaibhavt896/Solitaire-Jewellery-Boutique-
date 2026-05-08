@@ -1,11 +1,7 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import type { Metadata } from 'next';
-import {
-  PIECES,
-  getPiece,
-  getRelatedPieces,
-} from '@/lib/data/pieces';
+import { PIECES, getPiece, getRelatedPieces } from '@/lib/data/pieces';
 import { whatsappLinkFor } from '@/lib/site';
 import { JsonLd } from '@/components/JsonLd';
 import { breadcrumbSchema, productSchema } from '@/lib/seo/schema';
@@ -42,6 +38,15 @@ export default async function PiecePage({ params }: Params) {
 
   const whatsappMessage = `Hi Solitaire — I'm interested in ${piece.title} (SKU ${piece.sku}). Could you share availability and a price?`;
 
+  const hasCertCard =
+    piece.certification &&
+    (piece.certification.type === 'GIA' || piece.certification.type === 'IGI');
+
+  const verifyUrl =
+    piece.certification?.type === 'GIA'
+      ? 'https://www.gia.edu/report-check'
+      : 'https://www.igi.org/verify-your-report';
+
   return (
     <>
       <JsonLd data={productSchema(piece)} />
@@ -54,21 +59,15 @@ export default async function PiecePage({ params }: Params) {
         ])}
       />
 
+      {/* Main product section */}
       <section className="bg-bone pt-12 pb-16 md:pt-16 md:pb-24">
         <div className="container-wide">
           <nav aria-label="Breadcrumb" className="text-small text-ink-muted mb-8">
-            <Link href="/" className="link-underline">
-              Home
-            </Link>
+            <Link href="/" className="link-underline">Home</Link>
             <span className="mx-2 text-gold">·</span>
-            <Link href="/collections" className="link-underline">
-              Collections
-            </Link>
+            <Link href="/collections" className="link-underline">Collections</Link>
             <span className="mx-2 text-gold">·</span>
-            <Link
-              href={`/collections/${piece.collection}`}
-              className="link-underline"
-            >
+            <Link href={`/collections/${piece.collection}`} className="link-underline">
               {piece.collectionLabel}
             </Link>
             <span className="mx-2 text-gold">·</span>
@@ -143,15 +142,14 @@ export default async function PiecePage({ params }: Params) {
 
               <div className="mt-8">
                 <h2 className="eyebrow mb-3">Materials</h2>
-                <p className="text-body text-ink-soft">
-                  {piece.materials.join(' · ')}
-                </p>
+                <p className="text-body text-ink-soft">{piece.materials.join(' · ')}</p>
               </div>
             </Reveal>
           </div>
         </div>
       </section>
 
+      {/* Long description */}
       <section className="section-pad bg-bone-deep">
         <div className="container-content">
           <Reveal>
@@ -163,6 +161,139 @@ export default async function PiecePage({ params }: Params) {
         </div>
       </section>
 
+      {/* Certificate visualization — GIA / IGI only */}
+      {hasCertCard && (
+        <section className="bg-bone py-16 md:py-20">
+          <div className="container-content">
+            <Reveal>
+              <p className="eyebrow mb-8">Certificate of Authenticity</p>
+              <div
+                style={{
+                  maxWidth: 500,
+                  border: '1px solid rgba(166,124,44,0.28)',
+                  boxShadow: '0 4px 32px rgba(26,20,16,0.07)',
+                  background: 'var(--bone)',
+                }}
+              >
+                {/* Header row */}
+                <div
+                  className="flex items-center justify-between px-7 py-5"
+                  style={{ borderBottom: '1px solid var(--line)' }}
+                >
+                  <div>
+                    <p
+                      style={{
+                        fontFamily: 'var(--font-body)',
+                        fontSize: 8,
+                        letterSpacing: '0.24em',
+                        textTransform: 'uppercase',
+                        color: 'var(--ink-muted)',
+                      }}
+                    >
+                      Grading Report
+                    </p>
+                    <p className="font-display mt-1" style={{ fontSize: '1.5rem' }}>
+                      {piece.certification!.type}
+                    </p>
+                  </div>
+                  <span style={{ fontSize: 20, color: 'var(--gold-deep)', opacity: 0.7 }}>◆</span>
+                </div>
+
+                {/* Data rows */}
+                <div className="px-7 py-5 space-y-0">
+                  {piece.certification!.number && (
+                    <div
+                      className="flex justify-between gap-6 py-3"
+                      style={{ borderBottom: '1px solid var(--line)' }}
+                    >
+                      <span
+                        style={{
+                          fontFamily: 'var(--font-mono, monospace)',
+                          fontSize: 11,
+                          color: 'var(--ink-muted)',
+                        }}
+                      >
+                        Report No.
+                      </span>
+                      <span
+                        style={{
+                          fontFamily: 'var(--font-mono, monospace)',
+                          fontSize: 11,
+                          color: 'var(--ink)',
+                          fontWeight: 600,
+                          letterSpacing: '0.05em',
+                        }}
+                      >
+                        {piece.certification!.number}
+                      </span>
+                    </div>
+                  )}
+                  {piece.specifications.map((s, i) => (
+                    <div
+                      key={s.label}
+                      className="flex justify-between gap-6 py-3"
+                      style={{
+                        borderBottom:
+                          i < piece.specifications.length - 1 ? '1px solid var(--line)' : 'none',
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontFamily: 'var(--font-mono, monospace)',
+                          fontSize: 11,
+                          color: 'var(--ink-muted)',
+                        }}
+                      >
+                        {s.label}
+                      </span>
+                      <span
+                        style={{
+                          fontFamily: 'var(--font-mono, monospace)',
+                          fontSize: 11,
+                          color: 'var(--ink)',
+                          textAlign: 'right',
+                        }}
+                      >
+                        {s.value}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Verify footer */}
+                <div
+                  className="px-7 py-4"
+                  style={{ borderTop: '1px solid var(--line)', background: 'var(--bone-deep)' }}
+                >
+                  <p
+                    style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: 9,
+                      letterSpacing: '0.12em',
+                      color: 'var(--ink-muted)',
+                      textTransform: 'uppercase',
+                    }}
+                  >
+                    Verify at{' '}
+                    <a
+                      href={verifyUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: 'var(--gold-deep)', textDecoration: 'underline' }}
+                    >
+                      {piece.certification!.type === 'GIA'
+                        ? 'gia.edu/report-check'
+                        : 'igi.org/verify-your-report'}
+                    </a>
+                  </p>
+                </div>
+              </div>
+            </Reveal>
+          </div>
+        </section>
+      )}
+
+      {/* Care / Returns / Shipping accordions */}
       <section className="bg-bone">
         <div className="container-content py-16">
           <Accordion title="Care Instructions">
@@ -170,40 +301,49 @@ export default async function PiecePage({ params }: Params) {
           </Accordion>
           <Accordion title="Authenticity & Returns">
             <p>
-              Every piece comes with a Solitaire authentication card and the
-              applicable certificate (GIA, IGI, or BIS). Bring the piece in for
-              an annual check-up at no charge — we tighten settings, polish,
-              and re-foil any kundan that has loosened.
+              Every piece comes with a Solitaire authentication card and the applicable
+              certificate (GIA, IGI, or BIS). Bring the piece in for an annual check-up at
+              no charge — we tighten settings, polish, and re-foil any kundan that has
+              loosened.
             </p>
           </Accordion>
           <Accordion title="Shipping & Visit">
             <p>
-              Inspection is in-store at Swaroop Nagar, Kanpur. For high-value
-              pieces, we arrange a private courier for trial within Kanpur and
-              Lucknow.
+              Inspection is in-store at Swaroop Nagar, Kanpur. For high-value pieces, we
+              arrange a private courier for trial within Kanpur and Lucknow.
             </p>
           </Accordion>
         </div>
       </section>
 
+      {/* Related pieces — horizontal scroll carousel */}
       {related.length > 0 && (
         <section className="section-pad bg-bone">
           <div className="container-wide">
-            <Reveal className="mb-12">
+            <Reveal className="mb-10">
               <p className="eyebrow">You may also like</p>
               <h2 className="display-page mt-3">More from the boutique</h2>
             </Reveal>
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
-              {related.slice(0, 4).map((p, i) => (
-                <Reveal key={p.slug} delay={i * 0.05}>
+
+            <div
+              className="flex gap-5 md:gap-7 overflow-x-auto pb-4 -mx-4 md:-mx-6 lg:-mx-10 px-4 md:px-6 lg:px-10"
+              style={{ scrollSnapType: 'x mandatory', scrollbarWidth: 'none' }}
+            >
+              {related.map((p) => (
+                <div
+                  key={p.slug}
+                  className="flex-shrink-0 w-56 md:w-68 lg:w-72"
+                  style={{ scrollSnapAlign: 'start' }}
+                >
                   <PieceCard piece={p} />
-                </Reveal>
+                </div>
               ))}
             </div>
           </div>
         </section>
       )}
 
+      {/* Bottom CTA */}
       <section className="bg-bone-deep py-16 md:py-24">
         <div className="container-content text-center">
           <p className="eyebrow mb-4">Still deciding?</p>

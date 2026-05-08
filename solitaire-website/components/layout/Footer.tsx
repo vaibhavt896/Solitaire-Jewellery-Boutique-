@@ -1,14 +1,15 @@
 import Link from 'next/link';
 import { SITE } from '@/lib/site';
 import { COLLECTIONS } from '@/lib/data/collections';
-import { Logo } from '@/components/Logo';
 
 export function Footer() {
   return (
     <footer className="bg-ink text-bone mt-16">
       <div className="container-wide py-20">
         <div className="grid md:grid-cols-12 gap-12 md:gap-8">
-          <div className="md:col-span-4">
+
+          {/* Brand column */}
+          <div className="md:col-span-3">
             <div className="text-bone">
               <span
                 className="font-display text-h2 font-medium tracking-wide block"
@@ -52,14 +53,32 @@ export function Footer() {
             </p>
           </div>
 
+          {/* Collections column */}
           <FooterColumn title="Collections">
-            {COLLECTIONS.slice(0, 7).map((c) => (
+            {COLLECTIONS.slice(0, 6).map((c) => (
               <FooterLink key={c.slug} href={`/collections/${c.slug}`}>
                 {c.title}
               </FooterLink>
             ))}
           </FooterColumn>
 
+          {/* Learn column — surfaces journal content */}
+          <FooterColumn title="Learn">
+            <FooterLink href="/journal/polki-vs-kundan-a-buyers-guide">
+              Polki vs Kundan Guide
+            </FooterLink>
+            <FooterLink href="/journal/how-to-verify-a-gia-certified-solitaire">
+              Verify a GIA Certificate
+            </FooterLink>
+            <FooterLink href="/journal/wedding-jewellery-checklist-up-bride">
+              Bridal Checklist
+            </FooterLink>
+            <FooterLink href="/trust">Trust & Certification</FooterLink>
+            <FooterLink href="/craftsmanship">Craftsmanship</FooterLink>
+            <FooterLink href="/journal">All Articles</FooterLink>
+          </FooterColumn>
+
+          {/* Visit column */}
           <FooterColumn title="Visit">
             <FooterLink href="/visit">Swaroop Nagar</FooterLink>
             <FooterLink href={SITE.mapsDirectionsUrl} external>
@@ -67,8 +86,10 @@ export function Footer() {
             </FooterLink>
             <FooterLink href="/visit">Hours</FooterLink>
             <FooterLink href="/bridal/book">Book Appointment</FooterLink>
+            <FooterLink href="/contact">Contact Us</FooterLink>
           </FooterColumn>
 
+          {/* Connect column */}
           <FooterColumn title="Connect">
             <FooterLink href={SITE.instagram} external>
               Instagram
@@ -77,17 +98,13 @@ export function Footer() {
               WhatsApp
             </FooterLink>
             <FooterLink href={`mailto:${SITE.email}`}>Email</FooterLink>
+            <FooterLink href="/story">Our Story</FooterLink>
             <FooterLink href="/journal">Journal</FooterLink>
           </FooterColumn>
 
-          <FooterColumn title="The Boutique">
-            <FooterLink href="/story">Our Story</FooterLink>
-            <FooterLink href="/craftsmanship">Craftsmanship</FooterLink>
-            <FooterLink href="/trust">Trust & Certification</FooterLink>
-            <FooterLink href="/contact">Contact</FooterLink>
-          </FooterColumn>
         </div>
 
+        {/* Newsletter */}
         <div className="mt-16 pt-10 border-t border-bone/15">
           <form className="flex flex-col md:flex-row md:items-center gap-4">
             <div className="md:flex-1">
@@ -120,7 +137,23 @@ export function Footer() {
           </form>
         </div>
 
-        <div className="mt-16 pt-8 border-t border-bone/15 flex flex-col md:flex-row md:items-center md:justify-between gap-4 text-micro text-bone/60">
+        {/* Social proof trust line */}
+        <div className="mt-12 pt-8 border-t border-bone/15">
+          <p
+            className="text-center text-bone/50"
+            style={{
+              fontFamily: 'var(--font-body)',
+              fontSize: 9,
+              letterSpacing: '0.18em',
+              textTransform: 'uppercase',
+            }}
+          >
+            Trusted by 500+ families in Kanpur · Certified by GIA & IGI · BIS Hallmarked
+          </p>
+        </div>
+
+        {/* Copyright bar */}
+        <div className="mt-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4 text-micro text-bone/60">
           <p>© 2026 Solitaire Jewellery Boutique. All rights reserved.</p>
           <ul className="flex flex-wrap gap-6">
             <li>
@@ -170,9 +203,7 @@ function FooterColumn({
 }) {
   return (
     <div className="md:col-span-2">
-      <p className="text-micro uppercase tracking-eyebrow text-gold-soft mb-5">
-        {title}
-      </p>
+      <p className="text-micro uppercase tracking-eyebrow text-gold-soft mb-5">{title}</p>
       <ul className="space-y-3">{children}</ul>
     </div>
   );
@@ -203,10 +234,7 @@ function FooterLink({
   }
   return (
     <li>
-      <Link
-        href={href}
-        className="text-small text-bone/80 hover:text-gold-soft transition-colors"
-      >
+      <Link href={href} className="text-small text-bone/80 hover:text-gold-soft transition-colors">
         {children}
       </Link>
     </li>

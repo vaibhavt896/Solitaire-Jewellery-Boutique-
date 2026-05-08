@@ -122,8 +122,32 @@ export function Hero() {
             style={{ width: 56, height: 1, background: 'rgba(245,238,224,0.20)' }}
           />
 
+          {/* Trust whisper line */}
+          <motion.div {...rise(0.50)} className="flex items-center gap-5 md:gap-8 overflow-hidden flex-wrap">
+            {['GIA Certified', 'IGI Certified', 'BIS Hallmarked', '500+ Families', 'Kanpur · UP'].map((item, i) => (
+              <span key={item} className="flex items-center gap-5 md:gap-8">
+                {i > 0 && (
+                  <span aria-hidden style={{ fontSize: 5, color: 'var(--gold-soft)', opacity: 0.4 }}>◆</span>
+                )}
+                <span
+                  style={{
+                    fontSize: 7.5,
+                    letterSpacing: '0.22em',
+                    textTransform: 'uppercase',
+                    fontFamily: 'var(--font-body)',
+                    color: 'var(--bone)',
+                    opacity: 0.30,
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {item}
+                </span>
+              </span>
+            ))}
+          </motion.div>
+
           {/* CTAs */}
-          <motion.div {...rise(0.60)} className="flex flex-wrap items-center gap-5">
+          <motion.div {...rise(0.68)} className="flex flex-wrap items-center gap-5 mt-8">
 
             {/* Primary — ghost with sliding fill */}
             <Link

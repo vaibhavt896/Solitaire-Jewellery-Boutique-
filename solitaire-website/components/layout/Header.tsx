@@ -16,14 +16,53 @@ import {
 const leftNav  = NAV_PRIMARY.slice(0, 3); // Collections · Bridal · Story
 const rightNav = NAV_PRIMARY.slice(3);    // Craftsmanship · Visit · Journal
 
+/* ── Book appointment dropdown ───────────────────────────── */
+function BookDropdown() {
+  const items = [
+    { label: 'Bridal Consultation',  sub: '45-minute private appointment',   href: '/bridal/book' },
+    { label: 'Engagement Ring',      sub: 'For the solitaire selection',      href: '/bridal/book?type=engagement' },
+    { label: 'Visit the Boutique',   sub: 'Swaroop Nagar, Kanpur',           href: '/visit' },
+  ];
+  return (
+    <div
+      style={{
+        background: 'rgba(253,250,245,0.98)',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
+        border: '1px solid rgba(216,205,178,0.40)',
+        boxShadow: '0 20px 48px rgba(26,20,16,0.12)',
+      }}
+    >
+      {items.map((item) => (
+        <Link
+          key={item.href}
+          href={item.href}
+          className="block px-5 py-4 hover:bg-bone-deep transition-colors border-b border-line/40 last:border-0"
+        >
+          <p className="text-small font-medium text-ink" style={{ letterSpacing: '0.02em' }}>
+            {item.label}
+          </p>
+          <p className="mt-0.5 text-ink-muted" style={{ fontFamily: 'var(--font-body)', fontSize: 10.5, letterSpacing: '0.03em' }}>
+            {item.sub}
+          </p>
+        </Link>
+      ))}
+    </div>
+  );
+}
+
 export function Header() {
-  const [scrolled, setScrolled]   = useState(false);
-  const [drawer, setDrawer]       = useState(false);
-  const [mega, setMega]           = useState(false);
-  const megaTimer                 = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const [scrolled, setScrolled]     = useState(false);
+  const [drawer, setDrawer]         = useState(false);
+  const [mega, setMega]             = useState(false);
+  const [bookOpen, setBookOpen]     = useState(false);
+  const megaTimer                   = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const bookTimer                   = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   const openMega  = () => { clearTimeout(megaTimer.current); setMega(true); };
   const closeMega = () => { megaTimer.current = setTimeout(() => setMega(false), 140); };
+  const openBook  = () => { clearTimeout(bookTimer.current); setBookOpen(true); };
+  const closeBook = () => { bookTimer.current = setTimeout(() => setBookOpen(false), 140); };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 108);
@@ -166,13 +205,11 @@ export function Header() {
               <IconWhatsApp size={17} />
             </a>
 
-            {/* Book Appointment — fades in only after scroll */}
-            <span
-              style={{
-                opacity: glass ? 0 : 1,
-                pointerEvents: glass ? 'none' : 'auto',
-                transition: 'opacity 0.55s ease',
-              }}
+            {/* Book Appointment — always visible, ghost in glass mode */}
+            <div
+              className="relative"
+              onMouseEnter={openBook}
+              onMouseLeave={closeBook}
             >
               <Link
                 href="/bridal/book"
@@ -183,16 +220,33 @@ export function Header() {
                   fontWeight: 600,
                   textTransform: 'uppercase',
                   color: 'var(--bone)',
-                  background: 'var(--ink)',
+                  background: glass ? 'transparent' : 'var(--ink)',
+                  border: glass ? '1px solid rgba(255,255,255,0.45)' : '1px solid transparent',
                   padding: '9px 17px',
-                  transition: 'background 0.3s ease',
+                  transition: 'background 0.4s ease, border-color 0.4s ease',
                 }}
-                onMouseEnter={e => { e.currentTarget.style.background = 'var(--gold-deep)'; }}
-                onMouseLeave={e => { e.currentTarget.style.background = 'var(--ink)'; }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.background = glass
+                    ? 'rgba(255,255,255,0.12)'
+                    : 'var(--gold-deep)';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.background = glass ? 'transparent' : 'var(--ink)';
+                }}
               >
                 Book
               </Link>
-            </span>
+
+              {bookOpen && (
+                <div
+                  className="absolute top-full right-0 z-50 mt-2 min-w-[230px]"
+                  onMouseEnter={openBook}
+                  onMouseLeave={closeBook}
+                >
+                  <BookDropdown />
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
