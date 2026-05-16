@@ -2,11 +2,54 @@
 
 import Link from 'next/link';
 import { motion, useReducedMotion } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
 import { SITE } from '@/lib/site';
 
 export function Hero() {
   const reduce = useReducedMotion();
+  const introRef  = useRef<HTMLVideoElement>(null);
+  const ambientRef = useRef<HTMLVideoElement>(null);
 
+  /*
+   * active = which video is currently visible.
+   * Both videos are always mounted so the browser can pre-buffer the next one.
+   * Sequence (non-reduced-motion):
+   *   intro plays → onEnded → ambient plays → onEnded → intro plays → …
+   * Reduced-motion:
+   *   ambient loops silently, intro never shown.
+   */
+  const [active, setActive] = useState<'intro' | 'ambient'>('intro');
+
+  /* Start intro on mount (or ambient for reduced-motion) */
+  useEffect(() => {
+    if (reduce) {
+      setActive('ambient');
+      ambientRef.current?.play().catch(() => {});
+    } else {
+      introRef.current?.play().catch(() => {});
+    }
+  }, [reduce]);
+
+  /* Intro finished → start ambient from the top */
+  const handleIntroEnd = () => {
+    const ambient = ambientRef.current;
+    if (!ambient) return;
+    ambient.currentTime = 0;
+    ambient.play().catch(() => {});
+    setActive('ambient');
+  };
+
+  /* Ambient finished → restart intro */
+  const handleAmbientEnd = () => {
+    if (reduce) return; // ambient loops via its loop attribute in reduced-motion
+    const intro = introRef.current;
+    if (!intro) return;
+    intro.currentTime = 0;
+    intro.play().catch(() => {});
+    setActive('intro');
+  };
+
+  /* Decorative rise animation for content */
   const rise = (delay: number) =>
     reduce
       ? {}
@@ -21,14 +64,9 @@ export function Hero() {
         };
 
   return (
-    /*
-     * mt-[-120px] pulls the section up behind the sticky header (h = 120px).
-     * The video fills the full viewport INCLUDING the header zone so the
-     * transparent header shows the video behind it.
-     */
     <section className="relative h-[calc(100svh+120px)] mt-[-120px] min-h-[760px] overflow-hidden bg-ink">
 
-      {/* ── Video with Ken Burns ── */}
+      {/* ── Video stack with Ken Burns ── */}
       <div className="absolute inset-0">
         <motion.div
           className="absolute inset-0 origin-center"
@@ -36,19 +74,57 @@ export function Hero() {
           animate={reduce ? {} : { scale: 1.12 }}
           transition={{ duration: 22, ease: 'easeInOut', repeat: Infinity, repeatType: 'reverse' }}
         >
+          {/* Intro video — plays first each cycle */}
           <video
-            src="/hero-video.mp4"
-            autoPlay
+            ref={introRef}
             muted
-            loop
             playsInline
+            preload="auto"
+            poster="/hero-intro-poster.webp"
+            onEnded={handleIntroEnd}
             aria-hidden
-            className="w-full h-full object-cover"
-          />
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{
+              opacity: active === 'intro' ? 1 : 0,
+              transition: 'opacity 1.0s ease',
+              willChange: 'opacity',
+              pointerEvents: 'none',
+            }}
+          >
+            <source src="/hero-intro-mobile.mp4" type="video/mp4" media="(max-width: 767px)" />
+            <source src="/hero-intro-h265.mp4"   type='video/mp4; codecs="hvc1"' />
+            <source src="/hero-intro-av1.mp4"    type='video/mp4; codecs="av01.0.05M.08"' />
+            <source src="/hero-intro.webm"       type="video/webm" />
+            <source src="/hero-intro-h264.mp4"   type="video/mp4" />
+          </video>
+
+          {/* Ambient video — plays second each cycle; loops in reduced-motion */}
+          <video
+            ref={ambientRef}
+            muted
+            playsInline
+            preload="auto"
+            loop={reduce === true}
+            poster="/hero-ambient-poster.webp"
+            onEnded={handleAmbientEnd}
+            aria-hidden
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{
+              opacity: active === 'ambient' ? 1 : 0,
+              transition: 'opacity 1.0s ease',
+              willChange: 'opacity',
+              pointerEvents: 'none',
+            }}
+          >
+            <source src="/hero-ambient-mobile.mp4" type="video/mp4" media="(max-width: 767px)" />
+            <source src="/hero-ambient-h265.mp4"   type='video/mp4; codecs="hvc1"' />
+            <source src="/hero-ambient-av1.mp4"    type='video/mp4; codecs="av01.0.05M.08"' />
+            <source src="/hero-ambient.webm"       type="video/webm" />
+            <source src="/hero-ambient-h264.mp4"   type="video/mp4" />
+          </video>
         </motion.div>
 
         {/* ── Cinematic overlay stack ── */}
-        {/* Strong bottom lift — where all the text lives */}
         <div
           className="absolute inset-0"
           style={{
@@ -56,7 +132,6 @@ export function Hero() {
               'linear-gradient(to top, rgba(14,11,8,0.93) 0%, rgba(14,11,8,0.55) 30%, rgba(14,11,8,0.15) 55%, transparent 75%)',
           }}
         />
-        {/* Left curtain — keeps left edge readable, right stays bright & cinematic */}
         <div
           className="absolute inset-0"
           style={{
@@ -64,7 +139,6 @@ export function Hero() {
               'linear-gradient(to right, rgba(14,11,8,0.40) 0%, rgba(14,11,8,0.10) 40%, transparent 65%)',
           }}
         />
-        {/* Top band — header legibility */}
         <div
           className="absolute inset-x-0 top-0"
           style={{
@@ -72,7 +146,6 @@ export function Hero() {
             background: 'linear-gradient(to bottom, rgba(14,11,8,0.55) 0%, transparent 100%)',
           }}
         />
-        {/* Warm gold tone — brand palette richness */}
         <div className="absolute inset-0 pointer-events-none" style={{ background: 'rgba(166,124,44,0.055)' }} />
       </div>
 
