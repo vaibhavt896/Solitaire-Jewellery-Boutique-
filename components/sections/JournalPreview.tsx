@@ -1,152 +1,219 @@
+/* ──────────────────────────────────────────────────────────
+   JournalPreview — Section 09
+   Magazine table-of-contents layout.
+   One featured article (large, left) + three secondary
+   (text-led, stacked right). No card frames — editorial.
+────────────────────────────────────────────────────────── */
+
 import Link from 'next/link';
 import Image from 'next/image';
 import { getRecentArticles } from '@/lib/data/journal';
 import { Reveal } from '@/components/Reveal';
 
 export function JournalPreview() {
-  const articles = getRecentArticles(5);
-  const featured = articles[0];
-  const secondary = articles.slice(1, 3);
+  const articles   = getRecentArticles(4);
+  const featured   = articles[0];
+  const secondary  = articles.slice(1, 4);
   if (!featured) return null;
 
   return (
-    <section className="section-pad bg-bone">
+    <section style={{ background: 'var(--stone-100)' }} className="section-pad">
       <div className="container-wide">
 
-        {/* Header */}
-        <Reveal className="flex items-end justify-between gap-8 mb-14 md:mb-18 flex-wrap">
+        {/* Header row */}
+        <Reveal className="flex items-end justify-between gap-8 mb-16 flex-wrap">
           <div>
-            <p className="eyebrow">The Solitaire Guide</p>
-            <h2 className="display-page mt-3 max-w-2xl">
-              Know before you buy.
+            <p className="eyebrow mb-4">06 — THE JOURNAL</p>
+            <h2
+              className="font-display"
+              style={{
+                fontSize: 'clamp(2rem, 4.5vw, 3.4rem)',
+                lineHeight: 1.05,
+                letterSpacing: '-0.022em',
+                fontStyle: 'italic',
+              }}
+            >
+              Read before you buy.
             </h2>
+            <p
+              style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: '0.9375rem',
+                color: 'var(--ink-muted)',
+                marginTop: '0.75rem',
+              }}
+            >
+              The long-form library for the discerning buyer. Updated every fortnight.
+            </p>
           </div>
-          <Link href="/journal" className="btn-ghost shrink-0">
-            All Articles
+          <Link
+            href="/journal"
+            className="btn-ghost shrink-0"
+            style={{ color: 'var(--aged-gold)', fontSize: 10.5, letterSpacing: '0.16em' }}
+          >
+            All articles →
           </Link>
         </Reveal>
 
-        {/* Featured article — full editorial card */}
-        <Reveal className="mb-12">
-          <Link
-            href={`/journal/${featured.slug}`}
-            className="group grid md:grid-cols-2 overflow-hidden bg-bone-deep"
-          >
-            {/* Image */}
-            <div className="relative aspect-[4/3] md:aspect-auto overflow-hidden">
-              <Image
-                src={featured.hero.src}
-                alt={featured.hero.alt}
-                fill
-                sizes="(max-width: 768px) 100vw, 50vw"
-                className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
-              />
-              {/* Category pill */}
-              <span
-                className="absolute top-4 left-4"
-                style={{
-                  fontSize: 8.5,
-                  letterSpacing: '0.18em',
-                  fontFamily: 'var(--font-body)',
-                  fontWeight: 600,
-                  textTransform: 'uppercase',
-                  color: 'var(--gold-deep)',
-                  border: '1px solid rgba(166,124,44,0.35)',
-                  padding: '3px 8px',
-                  background: 'rgba(251,247,238,0.92)',
-                  backdropFilter: 'blur(4px)',
-                }}
-              >
-                {featured.category}
-              </span>
-            </div>
+        {/* Magazine two-column layout */}
+        <div className="grid md:grid-cols-12 gap-10 lg:gap-16">
 
-            {/* Text panel */}
-            <div className="p-8 md:p-12 lg:p-14 flex flex-col justify-center">
+          {/* Featured article — left, 7 columns */}
+          <Reveal className="md:col-span-7">
+            <Link href={`/journal/${featured.slug}`} className="group block">
+
+              {/* Cinematic image */}
+              <div
+                className="relative overflow-hidden mb-6"
+                style={{ aspectRatio: '16/10' }}
+              >
+                <Image
+                  src={featured.hero.src}
+                  alt={featured.hero.alt}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 58vw"
+                  className="object-cover transition-transform duration-[1100ms] ease-out group-hover:scale-[1.03]"
+                />
+                {/* Tag pill */}
+                <span
+                  className="absolute top-5 left-5"
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 8.5,
+                    letterSpacing: '0.18em',
+                    textTransform: 'uppercase',
+                    color: 'var(--aged-gold)',
+                    border: '1px solid rgba(184,146,58,0.4)',
+                    padding: '3px 10px',
+                    background: 'rgba(244,239,227,0.92)',
+                    backdropFilter: 'blur(4px)',
+                  }}
+                >
+                  Featured · {featured.category}
+                </span>
+              </div>
+
+              {/* Article meta */}
               <p
-                className="mb-4"
                 style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: 9,
-                  letterSpacing: '0.20em',
+                  letterSpacing: '0.18em',
                   textTransform: 'uppercase',
-                  color: 'var(--gold-deep)',
+                  color: 'var(--ink-muted)',
+                  marginBottom: '0.75rem',
                 }}
               >
-                Featured Guide
+                {featured.readMinutes} min read · By the Boutique
               </p>
+
+              {/* Headline */}
               <h3
-                className="font-display leading-tight group-hover:text-gold-deep transition-colors duration-300"
-                style={{ fontSize: 'clamp(1.5rem, 3vw, 2.2rem)' }}
+                className="font-display group-hover:text-gold transition-colors duration-700"
+                style={{
+                  fontSize: 'clamp(1.5rem, 3vw, 2.2rem)',
+                  lineHeight: 1.1,
+                  letterSpacing: '-0.018em',
+                  marginBottom: '1rem',
+                }}
               >
                 {featured.title}
               </h3>
-              <p className="text-body text-ink-soft mt-5 max-w-sm">{featured.excerpt}</p>
-              <div className="mt-6 flex items-center gap-4">
-                <p className="text-small text-ink-muted">{featured.readMinutes} min read</p>
-                <span
-                  className="h-px flex-1"
-                  style={{
-                    background: 'var(--line)',
-                    maxWidth: 40,
-                  }}
-                />
-              </div>
-              <span
-                className="mt-5 text-small uppercase tracking-button font-medium text-ink-soft group-hover:text-gold-deep transition-colors duration-300"
-                style={{ letterSpacing: '0.14em' }}
-              >
-                Read the guide →
-              </span>
-            </div>
-          </Link>
-        </Reveal>
 
-        {/* Secondary row — 2 cards */}
-        <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
-          {secondary.map((a, i) => (
-            <Reveal key={a.slug} delay={i * 0.1}>
-              <Link href={`/journal/${a.slug}`} className="group block">
-                {/* Image */}
-                <div className="aspect-[16/9] overflow-hidden bg-bone-deep relative">
-                  <Image
-                    src={a.hero.src}
-                    alt={a.hero.alt}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]"
-                  />
-                  {/* Hover overlay + "Read" label */}
-                  <div className="absolute inset-0 bg-ink/0 group-hover:bg-ink/25 transition-colors duration-500 flex items-center justify-center">
-                    <span
-                      className="text-bone translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500"
+              <p
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '0.9375rem',
+                  lineHeight: 1.75,
+                  color: 'var(--ink-soft)',
+                  maxWidth: 480,
+                  marginBottom: '1.25rem',
+                }}
+              >
+                {featured.excerpt}
+              </p>
+
+              <span
+                className="btn-ghost group-hover:text-gold"
+                style={{ fontSize: 10, letterSpacing: '0.16em', color: 'var(--ink-soft)', transition: 'color 0.4s ease' }}
+              >
+                Continue reading →
+              </span>
+            </Link>
+          </Reveal>
+
+          {/* Secondary articles — right, 5 columns, stacked */}
+          <div className="md:col-span-5 flex flex-col">
+            {secondary.map((a, i) => (
+              <Reveal key={a.slug} delay={i * 0.08}>
+                <Link
+                  href={`/journal/${a.slug}`}
+                  className="group flex gap-5 items-start"
+                  style={{
+                    paddingTop: i === 0 ? 0 : '1.75rem',
+                    paddingBottom: '1.75rem',
+                    borderBottom: i < secondary.length - 1 ? '1px solid var(--ivory-smoke)' : 'none',
+                  }}
+                >
+                  {/* Small thumbnail */}
+                  <div
+                    className="flex-shrink-0 overflow-hidden relative"
+                    style={{ width: 88, height: 72 }}
+                  >
+                    <Image
+                      src={a.hero.src}
+                      alt={a.hero.alt}
+                      fill
+                      sizes="88px"
+                      className="object-cover transition-transform duration-700 group-hover:scale-[1.06]"
+                    />
+                  </div>
+
+                  {/* Text */}
+                  <div className="flex-1 min-w-0">
+                    <p
                       style={{
-                        fontSize: 9.5,
-                        letterSpacing: '0.20em',
-                        textTransform: 'uppercase',
                         fontFamily: 'var(--font-body)',
-                        fontWeight: 500,
+                        fontSize: 9,
+                        letterSpacing: '0.16em',
+                        textTransform: 'uppercase',
+                        color: 'var(--aged-gold)',
+                        marginBottom: '0.4rem',
                       }}
                     >
-                      Read Article →
+                      {a.category} · {a.readMinutes} min
+                    </p>
+                    <h4
+                      className="font-display group-hover:text-gold transition-colors duration-500"
+                      style={{
+                        fontSize: 'clamp(1rem, 1.8vw, 1.2rem)',
+                        lineHeight: 1.2,
+                        letterSpacing: '-0.01em',
+                        marginBottom: '0.4rem',
+                      }}
+                    >
+                      {a.title}
+                    </h4>
+                    <span
+                      style={{
+                        fontFamily: 'var(--font-body)',
+                        fontSize: 9.5,
+                        letterSpacing: '0.12em',
+                        textTransform: 'uppercase',
+                        color: 'var(--ink-muted)',
+                        transition: 'color 0.4s ease',
+                      }}
+                      className="group-hover:text-aged-gold"
+                    >
+                      Read this →
                     </span>
                   </div>
-                </div>
+                </Link>
+              </Reveal>
+            ))}
+          </div>
 
-                <p className="mt-4 eyebrow">{a.category}</p>
-                <h3 className="font-display text-h1 mt-2 leading-tight group-hover:text-gold-deep transition-colors duration-300">
-                  {a.title}
-                </h3>
-                <p className="text-body text-ink-soft mt-3">{a.excerpt}</p>
-                <p className="text-small text-ink-muted mt-4">
-                  {a.readMinutes} min read ·{' '}
-                  <span className="group-hover:text-gold-deep transition-colors">Read this →</span>
-                </p>
-              </Link>
-            </Reveal>
-          ))}
         </div>
-
       </div>
     </section>
   );

@@ -3,23 +3,40 @@
 @tailwind utilities;
 
 :root {
-  --ink: #1a1410;
-  --ink-soft: #4a4036;
-  --ink-muted: #7a6e60;
-  --bone: #fbf7ee;
-  --bone-deep: #f4eedf;
-  --paper: #ffffff;
-  --gold: #a8841c;
-  --gold-deep: #7a5f0e;
-  --gold-soft: #c9a84c;
-  --gold-veil: #f2ead0;
-  --rose: #c68b7e;
-  --rose-soft: #f5e2dc;
-  --emerald: #2c5a3f;
-  --ruby: #7a1818;
-  --line: #d8cdb2;
-  --shadow: rgba(26, 20, 16, 0.08);
-  --shadow-soft: rgba(26, 20, 16, 0.04);
+  /* ── Core palette ──────────────────────────────────── */
+  --ivory:         #F4EFE3;   /* Primary background */
+  --obsidian:      #1A1410;   /* Primary text */
+  --aged-gold:     #B8923A;   /* Accent */
+  --mahogany:      #3A1F14;   /* Dark sections, footer, transitions */
+  --emerald-w:     #2D4A3E;   /* Polki section accent */
+  --ruby-w:        #6B1F2A;   /* Antique gold accent */
+  --ivory-smoke:   #E8E0D0;   /* Soft dividers, card bg */
+
+  /* Stone scale */
+  --stone-100:     #FAF7EF;
+  --stone-200:     #EDE5D3;
+  --stone-400:     #B8AC92;
+  --stone-600:     #6B6353;
+  --stone-800:     #2D2820;
+
+  /* Legacy aliases (keep components working) */
+  --ink:           var(--obsidian);
+  --ink-soft:      #4A4036;
+  --ink-muted:     #7A6E60;
+  --bone:          var(--ivory);
+  --bone-deep:     var(--ivory-smoke);
+  --paper:         #FFFFFF;
+  --gold:          var(--aged-gold);
+  --gold-deep:     #8C6A20;
+  --gold-soft:     #C9A84C;
+  --gold-veil:     #F2EAD0;
+  --rose:          #C68B7E;
+  --rose-soft:     #F5E2DC;
+  --emerald:       var(--emerald-w);
+  --ruby:          var(--ruby-w);
+  --line:          var(--ivory-smoke);
+  --shadow:        rgba(26,20,16,0.08);
+  --shadow-soft:   rgba(26,20,16,0.04);
 }
 
 @layer base {
@@ -30,183 +47,211 @@
   }
 
   body {
-    background-color: var(--bone);
-    color: var(--ink);
+    background-color: var(--ivory);
+    color: var(--obsidian);
     font-family: var(--font-body), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-size: 1rem;
     line-height: 1.65;
   }
 
   @media (min-width: 768px) {
-    body {
-      font-size: 1.0625rem;
-    }
+    body { font-size: 1.0625rem; }
   }
 
   h1, h2, h3, h4 {
     font-family: var(--font-display), Garamond, 'Times New Roman', serif;
     font-weight: 500;
-    color: var(--ink);
+    color: var(--obsidian);
   }
 
   ::selection {
     background: var(--gold-veil);
-    color: var(--ink);
+    color: var(--obsidian);
   }
 
   *:focus-visible {
-    outline: 2px solid var(--gold-deep);
+    outline: 2px solid var(--aged-gold);
     outline-offset: 2px;
     border-radius: 2px;
   }
 }
 
 @layer components {
+  /* ── Eyebrow ── */
   .eyebrow {
-    @apply text-micro uppercase font-medium tracking-eyebrow text-gold-deep;
+    @apply text-micro uppercase font-medium tracking-eyebrow;
+    color: var(--aged-gold);
   }
 
-  .display-hero {
-    @apply font-display text-mega font-medium;
-  }
+  /* ── Display ── */
+  .display-hero    { @apply font-display text-mega font-medium; }
+  .display-page    { @apply font-display text-display font-medium; }
+  .display-section { @apply font-display text-h1 font-medium; }
+  .body-lead       { @apply font-body text-h3 font-normal leading-relaxed; color: var(--ink-soft); }
 
-  .display-page {
-    @apply font-display text-display font-medium;
-  }
+  /* ── Containers ── */
+  .container-narrow  { @apply mx-auto px-4 md:px-6 lg:px-8 max-w-narrow; }
+  .container-content { @apply mx-auto px-4 md:px-6 lg:px-8 max-w-content; }
+  .container-default { @apply mx-auto px-4 md:px-6 lg:px-8 max-w-default; }
+  .container-wide    { @apply mx-auto px-4 md:px-6 lg:px-8 max-w-wide; }
 
-  .display-section {
-    @apply font-display text-h1 font-medium;
-  }
+  /* ── Section padding ── */
+  .section-pad    { @apply py-16 md:py-24 lg:py-32; }
+  .section-pad-lg { @apply py-20 md:py-32 lg:py-46; }
 
-  .body-lead {
-    @apply font-body text-h3 font-normal text-ink-soft leading-relaxed;
-  }
-
-  .container-narrow {
-    @apply mx-auto px-4 md:px-6 lg:px-8 max-w-narrow;
-  }
-
-  .container-content {
-    @apply mx-auto px-4 md:px-6 lg:px-8 max-w-content;
-  }
-
-  .container-default {
-    @apply mx-auto px-4 md:px-6 lg:px-8 max-w-default;
-  }
-
-  .container-wide {
-    @apply mx-auto px-4 md:px-6 lg:px-8 max-w-wide;
-  }
-
-  .section-pad {
-    @apply py-16 md:py-24 lg:py-32;
-  }
-
-  .section-pad-lg {
-    @apply py-20 md:py-32 lg:py-46;
-  }
-
-  /* Buttons */
+  /* ── Buttons ── */
   .btn {
-    @apply inline-flex items-center justify-center text-small font-medium tracking-button uppercase transition-all duration-[240ms] ease-editorial whitespace-nowrap;
+    @apply inline-flex items-center justify-center text-small font-medium tracking-button uppercase whitespace-nowrap;
     padding: 1rem 2rem;
     min-height: 44px;
+    transition: all 700ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
-
-  .btn-primary {
-    @apply btn bg-ink text-bone hover:bg-gold-deep;
-  }
-
+  .btn-primary   { @apply btn; background: var(--obsidian); color: var(--ivory); }
+  .btn-primary:hover { background: var(--mahogany); }
   .btn-secondary {
-    @apply btn bg-transparent border border-line text-ink hover:bg-gold-veil hover:border-gold;
+    @apply btn bg-transparent;
+    border: 1px solid var(--ivory-smoke);
+    color: var(--obsidian);
   }
+  .btn-secondary:hover { background: var(--gold-veil); border-color: var(--aged-gold); }
 
   .btn-ghost {
-    @apply inline-flex items-center text-small font-medium tracking-button uppercase relative text-ink;
+    @apply inline-flex items-center text-small font-medium tracking-button uppercase relative;
+    color: var(--obsidian);
   }
-
   .btn-ghost::after {
     content: '';
     position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 100%;
-    height: 1px;
+    bottom: -2px; left: 0;
+    width: 100%; height: 1px;
     background: currentColor;
     transform-origin: right;
     transform: scaleX(0);
-    transition: transform 240ms cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 700ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
+  .btn-ghost:hover::after { transform-origin: left; transform: scaleX(1); }
 
-  .btn-ghost:hover::after {
-    transform-origin: left;
-    transform: scaleX(1);
+  /* ── Gold CTA (aged gold border/text, fills on hover) ── */
+  .btn-gold {
+    @apply btn bg-transparent;
+    border: 1px solid var(--aged-gold);
+    color: var(--aged-gold);
   }
+  .btn-gold:hover { background: var(--aged-gold); color: var(--ivory); }
 
-  /* Editorial link with underline-grow */
-  .link-underline {
-    @apply relative inline-block;
-  }
-
+  /* ── Link underline ── */
+  .link-underline { @apply relative inline-block; }
   .link-underline::after {
     content: '';
     position: absolute;
-    bottom: -1px;
-    left: 0;
-    width: 100%;
-    height: 1px;
-    background: var(--gold);
+    bottom: -1px; left: 0;
+    width: 100%; height: 1px;
+    background: var(--aged-gold);
     transform-origin: right;
     transform: scaleX(0);
-    transition: transform 240ms cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 700ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
+  .link-underline:hover::after { transform-origin: left; transform: scaleX(1); }
 
-  .link-underline:hover::after {
-    transform-origin: left;
-    transform: scaleX(1);
-  }
-
-  /* Marquee strip */
+  /* ── Marquee ── */
   .marquee-track {
     display: flex;
     width: max-content;
-    animation: marquee 28s linear infinite;
+    animation: marquee 40s linear infinite;
   }
-
   .marquee-track-reverse {
     display: flex;
     width: max-content;
-    animation: marquee-reverse 36s linear infinite;
+    animation: marquee-reverse 52s linear infinite;
   }
 
-  /* Hairline rule */
-  .hairline {
-    border-top: 1px solid var(--line);
-  }
+  /* ── Hairline ── */
+  .hairline { border-top: 1px solid var(--ivory-smoke); }
 
-  /* Dot separator */
+  /* ── Dot sep ── */
   .dot-sep::before {
     content: '·';
-    color: var(--gold);
+    color: var(--aged-gold);
     margin: 0 0.75rem;
+  }
+
+  /* ── Drop cap ── */
+  .drop-cap::first-letter {
+    font-family: var(--font-display), Garamond, serif;
+    font-size: 4.5em;
+    font-weight: 400;
+    line-height: 0.82;
+    float: left;
+    margin-right: 0.1em;
+    margin-top: 0.06em;
+    color: var(--aged-gold);
+  }
+
+  /* ── Editorial number counter ── */
+  .counter-num {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+    color: var(--aged-gold);
+  }
+
+  /* ── Section number ── */
+  .section-num {
+    font-family: var(--font-body);
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--aged-gold);
+    opacity: 0.65;
   }
 }
 
+/* ── Keyframes ────────────────────────────────────────── */
 @keyframes marquee {
   from { transform: translateX(0); }
   to   { transform: translateX(-50%); }
 }
-
 @keyframes marquee-reverse {
   from { transform: translateX(-50%); }
   to   { transform: translateX(0); }
 }
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes clip-up {
+  from { clip-path: inset(0 0 100% 0); transform: scale(1.04); }
+  to   { clip-path: inset(0 0 0% 0);   transform: scale(1); }
+}
+@keyframes word-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes count-line {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
 
-/* Reduced motion */
+/* ── Page transition overlay ────────────────────────── */
+.page-transition-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--mahogany);
+  z-index: 9999;
+  pointer-events: none;
+}
+
+/* ── Custom cursor ───────────────────────────────────── */
+.custom-cursor {
+  position: fixed;
+  top: 0; left: 0;
+  pointer-events: none;
+  z-index: 9998;
+  mix-blend-mode: normal;
+}
+
+/* ── Reduced motion ──────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
+  *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
@@ -214,7 +259,7 @@
   }
 }
 
-/* Print */
+/* ── Print ───────────────────────────────────────────── */
 @media print {
   body { background: white; }
   .no-print { display: none; }

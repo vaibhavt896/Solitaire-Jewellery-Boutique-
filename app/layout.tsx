@@ -7,6 +7,7 @@ import { MobileBar } from '@/components/layout/MobileBar';
 import { JsonLd } from '@/components/JsonLd';
 import { jewelryStoreSchema } from '@/lib/seo/schema';
 import { SITE } from '@/lib/site';
+import { CustomCursor } from '@/components/CustomCursor';
 
 const display = Cormorant_Garamond({
   subsets: ['latin'],
@@ -81,6 +82,7 @@ export default function RootLayout({
         >
           Skip to content
         </a>
+        <CustomCursor />
         <Header />
         <main id="main" className="min-h-[60vh]">
           {children}

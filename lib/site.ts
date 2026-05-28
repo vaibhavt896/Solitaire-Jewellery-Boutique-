@@ -48,11 +48,10 @@ export type NavItem = {
 
 export const NAV_PRIMARY: readonly NavItem[] = [
   { label: 'Collections', href: '/collections', hasMega: true },
-  { label: 'Bridal', href: '/bridal' },
-  { label: 'Story', href: '/story' },
-  { label: 'Craftsmanship', href: '/craftsmanship' },
-  { label: 'Visit', href: '/visit' },
-  { label: 'Journal', href: '/journal' },
+  { label: 'Bridal',    href: '/bridal' },
+  { label: 'Journal',   href: '/journal' },
+  { label: 'The Atelier', href: '/craftsmanship' },
+  { label: 'Visit',     href: '/visit' },
 ];
 
 export function whatsappLinkFor(message: string): string {

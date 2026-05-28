@@ -1,174 +1,16 @@
 'use client';
 
+/* ──────────────────────────────────────────────────────────
+   Footer — "inside back cover of a magazine"
+   Dark Mahogany background. Newsletter hero at top.
+   4 editorial columns. Generous vertical space.
+────────────────────────────────────────────────────────── */
+
 import Link from 'next/link';
 import { useState } from 'react';
 import { SITE } from '@/lib/site';
-import { COLLECTIONS } from '@/lib/data/collections';
 
-export function Footer() {
-  return (
-    <footer className="bg-ink text-bone mt-16">
-      <div className="container-wide py-20">
-        <div className="grid md:grid-cols-12 gap-12 md:gap-8">
-
-          {/* Brand column */}
-          <div className="md:col-span-3">
-            <div className="text-bone">
-              <span
-                className="font-display text-h2 font-medium tracking-wide block"
-                style={{ color: 'var(--bone)' }}
-              >
-                Solitaire
-                <span
-                  aria-hidden
-                  style={{
-                    display: 'inline-block',
-                    width: 6,
-                    height: 6,
-                    background: 'var(--gold-soft)',
-                    borderRadius: '50%',
-                    margin: '0 0.5rem',
-                    verticalAlign: 'middle',
-                  }}
-                />
-                <span
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '0.7rem',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.18em',
-                    color: 'var(--gold-soft)',
-                  }}
-                >
-                  Jewellery Boutique
-                </span>
-              </span>
-            </div>
-            <p className="mt-6 text-small text-bone/70 max-w-xs leading-relaxed">
-              An ultimate destination for intricate jewellery. Swaroop Nagar, Kanpur.
-            </p>
-            <p className="mt-6 text-small text-bone/70">
-              {SITE.address.full}
-              <br />
-              {SITE.hours.weekdays}
-              <br />
-              {SITE.phoneDisplay}
-            </p>
-          </div>
-
-          {/* Collections column */}
-          <FooterColumn title="Collections">
-            {COLLECTIONS.slice(0, 6).map((c) => (
-              <FooterLink key={c.slug} href={`/collections/${c.slug}`}>
-                {c.title}
-              </FooterLink>
-            ))}
-          </FooterColumn>
-
-          {/* Learn column — surfaces journal content */}
-          <FooterColumn title="Learn">
-            <FooterLink href="/journal/polki-vs-kundan-a-buyers-guide">
-              Polki vs Kundan Guide
-            </FooterLink>
-            <FooterLink href="/journal/how-to-verify-a-gia-certified-solitaire">
-              Verify a GIA Certificate
-            </FooterLink>
-            <FooterLink href="/journal/wedding-jewellery-checklist-up-bride">
-              Bridal Checklist
-            </FooterLink>
-            <FooterLink href="/trust">Trust & Certification</FooterLink>
-            <FooterLink href="/craftsmanship">Craftsmanship</FooterLink>
-            <FooterLink href="/journal">All Articles</FooterLink>
-          </FooterColumn>
-
-          {/* Visit column */}
-          <FooterColumn title="Visit">
-            <FooterLink href="/visit">Swaroop Nagar</FooterLink>
-            <FooterLink href={SITE.mapsDirectionsUrl} external>
-              Get Directions
-            </FooterLink>
-            <FooterLink href="/visit">Hours</FooterLink>
-            <FooterLink href="/bridal/book">Book Appointment</FooterLink>
-            <FooterLink href="/contact">Contact Us</FooterLink>
-          </FooterColumn>
-
-          {/* Connect column */}
-          <FooterColumn title="Connect">
-            <FooterLink href={SITE.instagram} external>
-              Instagram
-            </FooterLink>
-            <FooterLink href={SITE.whatsappUrl} external>
-              WhatsApp
-            </FooterLink>
-            <FooterLink href={`mailto:${SITE.email}`}>Email</FooterLink>
-            <FooterLink href="/story">Our Story</FooterLink>
-            <FooterLink href="/journal">Journal</FooterLink>
-          </FooterColumn>
-
-        </div>
-
-        {/* Newsletter */}
-        <div className="mt-16 pt-10 border-t border-bone/15">
-          <NewsletterForm />
-        </div>
-
-        {/* Social proof trust line */}
-        <div className="mt-12 pt-8 border-t border-bone/15">
-          <p
-            className="text-center text-bone/50"
-            style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: 9,
-              letterSpacing: '0.18em',
-              textTransform: 'uppercase',
-            }}
-          >
-            Trusted by 500+ families in Kanpur · Certified by GIA & IGI · BIS Hallmarked
-          </p>
-        </div>
-
-        {/* Copyright bar */}
-        <div className="mt-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4 text-micro text-bone/60">
-          <p>© 2026 Solitaire Jewellery Boutique. All rights reserved.</p>
-          <ul className="flex flex-wrap gap-6">
-            <li>
-              <Link href="/legal/privacy" className="hover:text-bone transition-colors">
-                Privacy
-              </Link>
-            </li>
-            <li>
-              <Link href="/legal/terms" className="hover:text-bone transition-colors">
-                Terms
-              </Link>
-            </li>
-            <li>
-              <Link href="/legal/cookies" className="hover:text-bone transition-colors">
-                Cookies
-              </Link>
-            </li>
-            <li>
-              <Link href="/legal/returns" className="hover:text-bone transition-colors">
-                Boutique Policy
-              </Link>
-            </li>
-            <li>
-              Designed by{' '}
-              <a
-                href="https://wingsmedia.in"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gold-soft hover:text-bone transition-colors"
-              >
-                Wings Media
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </footer>
-  );
-}
-
+/* ── Newsletter form ── */
 function NewsletterForm() {
   const [email,   setEmail]   = useState('');
   const [status,  setStatus]  = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
@@ -178,109 +20,179 @@ function NewsletterForm() {
     e.preventDefault();
     if (!email) return;
     setStatus('loading');
-    /* Placeholder: replace with real email service call */
     await new Promise(r => setTimeout(r, 800));
     setStatus('success');
-    setMessage('Thank you. We will be in touch.');
+    setMessage('Thank you. The next letter will arrive on the first Saturday of next month.');
     setEmail('');
   };
 
-  if (status === 'success') {
-    return (
-      <div className="flex flex-col md:flex-row md:items-center gap-4">
-        <div className="md:flex-1">
-          <p className="font-display text-h2" style={{ color: 'var(--bone)' }}>
-            A monthly note from the boutique
-          </p>
-        </div>
-        <p className="text-small text-gold-soft md:max-w-md">{message}</p>
-      </div>
-    );
-  }
-
   return (
-    <form
-      onSubmit={handleSubmit}
-      noValidate
-      className="flex flex-col md:flex-row md:items-center gap-4"
-    >
-      <div className="md:flex-1">
-        <p className="font-display text-h2" style={{ color: 'var(--bone)' }}>
-          A monthly note from the boutique
+    <div className="grid md:grid-cols-2 gap-10 lg:gap-20 items-start pb-20"
+      style={{ borderBottom: '1px solid rgba(244,239,227,0.10)' }}>
+
+      {/* Left: editorial heading */}
+      <div>
+        <p
+          style={{
+            fontFamily: 'var(--font-body)',
+            fontSize: 9.5,
+            letterSpacing: '0.22em',
+            textTransform: 'uppercase',
+            color: 'rgba(244,239,227,0.35)',
+            marginBottom: '0.75rem',
+          }}
+        >
+          A Monthly Letter
         </p>
-        <p className="text-small text-bone/70 mt-2 max-w-md">
+        <h3
+          className="font-display"
+          style={{
+            fontSize: 'clamp(1.8rem, 3.5vw, 2.6rem)',
+            color: 'var(--ivory)',
+            lineHeight: 1.1,
+            letterSpacing: '-0.02em',
+            fontStyle: 'italic',
+            marginBottom: '1.25rem',
+          }}
+        >
+          Nothing more than once a month.
+        </h3>
+        <p
+          style={{
+            fontFamily: 'var(--font-body)',
+            fontSize: '0.9375rem',
+            lineHeight: 1.75,
+            color: 'rgba(244,239,227,0.55)',
+            maxWidth: 380,
+          }}
+        >
           New pieces, occasional notes on craftsmanship, and a heads-up before each
-          Akshaya Tritiya and Dhanteras. No more than once a month.
+          Akshaya Tritiya and Dhanteras. We don&rsquo;t sell your email and we
+          don&rsquo;t write more than once a month.
         </p>
       </div>
-      <div className="flex flex-col gap-2 md:max-w-md md:w-full">
-        <div className="flex gap-3">
-          <label className="sr-only" htmlFor="newsletter-email">
-            Email address
-          </label>
-          <input
-            id="newsletter-email"
-            type="email"
-            required
-            value={email}
-            onChange={e => { setEmail(e.target.value); if (status === 'error') setStatus('idle'); }}
-            placeholder="Your email"
-            aria-describedby={status === 'error' ? 'newsletter-error' : undefined}
-            aria-invalid={status === 'error'}
-            disabled={status === 'loading'}
-            className="flex-1 bg-transparent border border-bone/30 px-4 py-3 text-bone placeholder:text-bone/50 focus:border-gold-soft focus:outline-none transition-colors disabled:opacity-50"
-          />
-          <button
-            type="submit"
-            disabled={status === 'loading'}
-            className="bg-gold-soft text-ink px-6 py-3 text-small uppercase tracking-button font-medium hover:bg-bone transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+
+      {/* Right: form */}
+      <div className="md:pt-8">
+        {status === 'success' ? (
+          <p
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: '1.0625rem',
+              fontStyle: 'italic',
+              color: 'var(--aged-gold)',
+              lineHeight: 1.6,
+            }}
           >
-            {status === 'loading' ? '…' : 'Subscribe'}
-          </button>
-        </div>
-        {status === 'error' && (
-          <p id="newsletter-error" role="alert" className="text-micro text-rose">
-            {message || 'Something went wrong. Please try again.'}
+            {message}
           </p>
+        ) : (
+          <form onSubmit={handleSubmit} noValidate>
+            <div className="flex gap-0">
+              <label className="sr-only" htmlFor="footer-email">Email address</label>
+              <input
+                id="footer-email"
+                type="email"
+                required
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                placeholder="Your email"
+                disabled={status === 'loading'}
+                style={{
+                  flex: 1,
+                  background: 'transparent',
+                  border: '1px solid rgba(244,239,227,0.20)',
+                  borderRight: 'none',
+                  padding: '13px 16px',
+                  color: 'var(--ivory)',
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '0.9375rem',
+                  outline: 'none',
+                  transition: 'border-color 0.4s ease',
+                }}
+                onFocus={e => { e.currentTarget.style.borderColor = 'rgba(184,146,58,0.6)'; }}
+                onBlur={e => { e.currentTarget.style.borderColor = 'rgba(244,239,227,0.20)'; }}
+              />
+              <button
+                type="submit"
+                disabled={status === 'loading'}
+                style={{
+                  background: 'var(--aged-gold)',
+                  color: 'var(--ivory)',
+                  border: 'none',
+                  padding: '13px 22px',
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 9.5,
+                  letterSpacing: '0.16em',
+                  textTransform: 'uppercase',
+                  cursor: 'pointer',
+                  transition: 'background 0.4s ease',
+                  whiteSpace: 'nowrap',
+                  opacity: status === 'loading' ? 0.6 : 1,
+                }}
+                onMouseEnter={e => { if (status !== 'loading') (e.currentTarget as HTMLButtonElement).style.background = 'var(--mahogany)'; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'var(--aged-gold)'; }}
+              >
+                {status === 'loading' ? '…' : 'Send the letter'}
+              </button>
+            </div>
+            <p
+              style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: 9.5,
+                color: 'rgba(244,239,227,0.28)',
+                marginTop: '0.75rem',
+                letterSpacing: '0.04em',
+              }}
+            >
+              Currently going to 2,400+ readers across India, Dubai, London, and Singapore.
+            </p>
+          </form>
         )}
       </div>
-    </form>
+    </div>
   );
 }
 
-function FooterColumn({
-  title,
-  children,
-}: {
-  title: string;
-  children: React.ReactNode;
-}) {
+/* ── Footer column ── */
+function FooterCol({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="md:col-span-2">
-      <p className="text-micro uppercase tracking-eyebrow text-gold-soft mb-5">{title}</p>
+    <div>
+      <p
+        style={{
+          fontFamily: 'var(--font-body)',
+          fontSize: 9,
+          letterSpacing: '0.22em',
+          textTransform: 'uppercase',
+          color: 'var(--aged-gold)',
+          marginBottom: '1.25rem',
+          opacity: 0.8,
+        }}
+      >
+        {title}
+      </p>
       <ul className="space-y-3">{children}</ul>
     </div>
   );
 }
 
-function FooterLink({
-  href,
-  children,
-  external,
-}: {
-  href: string;
-  children: React.ReactNode;
-  external?: boolean;
-}) {
+function FooterLink({ href, children, external }: { href: string; children: React.ReactNode; external?: boolean }) {
+  const style: React.CSSProperties = {
+    fontFamily: 'var(--font-body)',
+    fontSize: '0.875rem',
+    lineHeight: 1.5,
+    color: 'rgba(244,239,227,0.55)',
+    transition: 'color 0.4s ease',
+    display: 'block',
+  };
+  const onEnter = (e: React.SyntheticEvent<HTMLElement>) => { e.currentTarget.style.color = 'var(--ivory)'; };
+  const onLeave = (e: React.SyntheticEvent<HTMLElement>) => { e.currentTarget.style.color = 'rgba(244,239,227,0.55)'; };
+
   if (external) {
     return (
       <li>
-        <a
-          href={href}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-small text-bone/80 hover:text-gold-soft transition-colors"
-        >
+        <a href={href} target="_blank" rel="noopener noreferrer" style={style}
+          onMouseEnter={onEnter} onMouseLeave={onLeave}>
           {children}
         </a>
       </li>
@@ -288,9 +200,194 @@ function FooterLink({
   }
   return (
     <li>
-      <Link href={href} className="text-small text-bone/80 hover:text-gold-soft transition-colors">
+      <Link href={href} style={style} onMouseEnter={onEnter} onMouseLeave={onLeave}>
         {children}
       </Link>
     </li>
+  );
+}
+
+/* ── Main Footer ── */
+export function Footer() {
+  return (
+    <footer style={{ background: 'var(--mahogany)', color: 'var(--ivory)' }}>
+      <div className="container-wide" style={{ paddingTop: '6rem', paddingBottom: '3rem' }}>
+
+        {/* Newsletter — hero at top */}
+        <NewsletterForm />
+
+        {/* Brand + four columns */}
+        <div className="grid grid-cols-2 md:grid-cols-12 gap-10 mt-16">
+
+          {/* Brand column (3 cols) */}
+          <div className="col-span-2 md:col-span-3">
+            <span
+              className="font-display block"
+              style={{
+                fontSize: 'clamp(1.4rem, 2.5vw, 1.8rem)',
+                color: 'var(--ivory)',
+                letterSpacing: '0.04em',
+                marginBottom: '0.35rem',
+              }}
+            >
+              Solitaire
+              <span
+                aria-hidden
+                style={{
+                  display: 'inline-block',
+                  width: 5,
+                  height: 5,
+                  background: 'var(--aged-gold)',
+                  borderRadius: '50%',
+                  margin: '0 0.4rem',
+                  verticalAlign: 'middle',
+                }}
+              />
+            </span>
+            <span
+              style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: '0.625rem',
+                textTransform: 'uppercase',
+                letterSpacing: '0.18em',
+                color: 'var(--aged-gold)',
+                display: 'block',
+                marginBottom: '1.25rem',
+              }}
+            >
+              Jewellery Boutique
+            </span>
+            <p
+              style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: '0.875rem',
+                lineHeight: 1.7,
+                color: 'rgba(244,239,227,0.45)',
+                maxWidth: 200,
+              }}
+            >
+              {SITE.address.full}
+              <br />{SITE.hours.weekdays}
+              <br />{SITE.phoneDisplay}
+            </p>
+          </div>
+
+          {/* Col 1 — The Boutique */}
+          <div className="col-span-1 md:col-span-2 md:col-start-5">
+            <FooterCol title="The Boutique">
+              <FooterLink href="/story">Story</FooterLink>
+              <FooterLink href="/craftsmanship">The Atelier</FooterLink>
+              <FooterLink href="/trust">Trust & Certification</FooterLink>
+              <FooterLink href="/bridal">Brides we&rsquo;ve worked with</FooterLink>
+            </FooterCol>
+          </div>
+
+          {/* Col 2 — Collections */}
+          <div className="col-span-1 md:col-span-2">
+            <FooterCol title="Collections">
+              <FooterLink href="/collections/polki">Polki</FooterLink>
+              <FooterLink href="/collections/solitaires">Solitaires</FooterLink>
+              <FooterLink href="/collections/antique-gold">Antique Gold</FooterLink>
+              <FooterLink href="/collections/diamond">Diamond</FooterLink>
+              <FooterLink href="/collections/temple">Temple</FooterLink>
+              <FooterLink href="/collections/bridal">Bridal</FooterLink>
+            </FooterCol>
+          </div>
+
+          {/* Col 3 — Visit */}
+          <div className="col-span-1 md:col-span-2">
+            <FooterCol title="Visit">
+              <FooterLink href="/visit">Swaroop Nagar Boutique</FooterLink>
+              <FooterLink href={SITE.mapsDirectionsUrl} external>Get directions</FooterLink>
+              <FooterLink href="/bridal/book">Book the consultation</FooterLink>
+              <FooterLink href="/contact">Contact</FooterLink>
+            </FooterCol>
+          </div>
+
+          {/* Col 4 — Read */}
+          <div className="col-span-1 md:col-span-3">
+            <FooterCol title="Read">
+              <FooterLink href="/journal">The Journal</FooterLink>
+              <FooterLink href="/journal/polki-vs-kundan-a-buyers-guide">Polki vs Kundan</FooterLink>
+              <FooterLink href="/journal/how-to-verify-a-gia-certified-solitaire">Verify a GIA certificate</FooterLink>
+              <FooterLink href="/journal/wedding-jewellery-checklist-up-bride">The bridal checklist</FooterLink>
+              <FooterLink href="/journal">All articles →</FooterLink>
+            </FooterCol>
+          </div>
+
+        </div>
+
+        {/* Trust line */}
+        <div
+          className="mt-16 pt-8"
+          style={{ borderTop: '1px solid rgba(244,239,227,0.08)' }}
+        >
+          <p
+            className="text-center"
+            style={{
+              fontFamily: 'var(--font-body)',
+              fontSize: 8.5,
+              letterSpacing: '0.18em',
+              textTransform: 'uppercase',
+              color: 'rgba(244,239,227,0.25)',
+            }}
+          >
+            Trusted by 500+ families in Kanpur · Certified by GIA & IGI · BIS Hallmarked
+          </p>
+        </div>
+
+        {/* Bottom bar */}
+        <div
+          className="mt-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4"
+          style={{ borderTop: '1px solid rgba(244,239,227,0.06)', paddingTop: '1.5rem' }}
+        >
+          <p
+            style={{
+              fontFamily: 'var(--font-body)',
+              fontSize: '0.8125rem',
+              color: 'rgba(244,239,227,0.28)',
+            }}
+          >
+            &copy; 2026 Solitaire Jewellery Boutique. All rights reserved.
+          </p>
+
+          <ul
+            className="flex flex-wrap gap-6"
+            style={{ fontFamily: 'var(--font-body)', fontSize: '0.8125rem' }}
+          >
+            {[
+              { href: '/legal/privacy',  label: 'Privacy' },
+              { href: '/legal/terms',    label: 'Terms' },
+              { href: '/legal/cookies',  label: 'Cookies' },
+              { href: '/legal/returns',  label: 'Boutique Policy' },
+            ].map(({ href, label }) => (
+              <li key={href}>
+                <Link
+                  href={href}
+                  style={{ color: 'rgba(244,239,227,0.28)', transition: 'color 0.4s ease' }}
+                  onMouseEnter={e => { e.currentTarget.style.color = 'rgba(244,239,227,0.65)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.color = 'rgba(244,239,227,0.28)'; }}
+                >
+                  {label}
+                </Link>
+              </li>
+            ))}
+            <li>
+              <a
+                href={SITE.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: 'var(--aged-gold)', transition: 'color 0.4s ease' }}
+                onMouseEnter={e => { e.currentTarget.style.color = 'var(--ivory)'; }}
+                onMouseLeave={e => { e.currentTarget.style.color = 'var(--aged-gold)'; }}
+              >
+                Instagram
+              </a>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </footer>
   );
 }

@@ -16,9 +16,9 @@ import {
 
 /* ─────────────────────────── constants ─── */
 const ANNOUNCEMENTS = [
-  'Boutique open Mon–Sat, 11 AM – 8 PM  ·  Swaroop Nagar, Kanpur',
-  'Every piece curated by hand  ·  Every diamond certified',
-  'Private bridal consultations available  ·  Book your appointment',
+  'Est. Kanpur  ·  By appointment  ·  Swaroop Nagar',
+  'GIA & IGI certified  ·  BIS 916 hallmarked  ·  Every certificate travels',
+  'Private bridal consultations  ·  45 minutes  ·  No cost',
 ];
 
 const leftNav  = NAV_PRIMARY.slice(0, 3);
@@ -216,7 +216,7 @@ function MegaMenu({ onClose }: { onClose: () => void }) {
           <div>
             <div className="flex items-center gap-3 mb-6">
               <span aria-hidden style={{ display: 'block', width: 18, height: 1, background: 'var(--gold)', opacity: 0.55 }} />
-              <p className="eyebrow text-ink-muted">All Collections</p>
+              <p className="eyebrow text-ink-muted">Collections</p>
             </div>
 
             <div className="grid grid-cols-3 gap-x-6 gap-y-6">
@@ -262,7 +262,7 @@ function MegaMenu({ onClose }: { onClose: () => void }) {
               style={{ borderTop: '1px solid rgba(216,205,178,0.35)' }}
             >
               <p style={{ fontFamily: 'var(--font-body)', fontSize: 10.5, color: 'var(--ink-muted)', letterSpacing: '0.04em' }}>
-                Polki · Solitaires · Antique Gold · Dubai · Kundan · More
+                Polki · Solitaires · Antique Gold · Temple · Bridal · Everyday
               </p>
               <Link
                 href="/collections"
@@ -279,7 +279,7 @@ function MegaMenu({ onClose }: { onClose: () => void }) {
                 onMouseEnter={e => { e.currentTarget.style.color = 'var(--gold-deep)'; }}
                 onMouseLeave={e => { e.currentTarget.style.color = 'var(--ink)'; }}
               >
-                View All Collections →
+                View all collections →
               </Link>
             </div>
           </div>

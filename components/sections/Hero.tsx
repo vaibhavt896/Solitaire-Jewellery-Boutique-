@@ -1,8 +1,10 @@
 'use client';
 
 import Image from 'next/image';
-import { motion, useReducedMotion } from 'framer-motion';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import gsap from 'gsap';
+
+gsap.config({ force3D: true });
 
 /* ─── Slide data ───────────────────────────────────────────── */
 const SLIDES = [
@@ -13,30 +15,17 @@ const SLIDES = [
   { src: '/Hero-Slider-Images/Slide%205.avif', alt: 'Fine jewellery for every occasion' },
 ] as const;
 
-const N = SLIDES.length;
-
-/*
- * Infinite loop via clones:
- *   vi 0        = clone of last  slide  (for smooth backward loop)
- *   vi 1..N     = real slides 0..N-1
- *   vi N+1      = clone of first slide  (for smooth forward loop)
- *
- * When advancing forward past the last real slide, we animate into
- * vi=N+1 (clone-first), then instantly teleport to vi=1 (real-first).
- * The content is identical so the jump is invisible.
- */
+const N        = SLIDES.length;
 const EXTENDED = [SLIDES[N - 1], ...SLIDES, SLIDES[0]] as const;
 
-const DURATION = 5000;            // ms each slide stays visible
-const GAP      = 10;              // px gap between slides
-const SLIDE_MS = 1000;            // ms for slide transition — slow, cinematic
-const EASE     = '0.65,0,0.35,1'; // sinusoidal ease-in-out — starts gently, lands softly
+const DURATION = 5000;
+const GAP      = 10;
+const SLIDE_MS = 1000;
+const EASE     = '0.65,0,0.35,1';
+const KB_SCALE = 1.065;                    // Ken Burns max zoom
+const KB_DUR   = (DURATION + 400) / 1000; // slightly longer than slide lifetime
 
 export function Hero() {
-  const reduce = useReducedMotion();
-
-  /* idx  = real slide index 0..N-1  (drives dots + progress bar) */
-  /* vIdx = visual track index 0..N+1 (drives opacity)            */
   const [idx,      setIdx]      = useState(0);
   const [vIdx,     setVIdx]     = useState(1);
   const [peek,     setPeek]     = useState(56);
@@ -44,24 +33,33 @@ export function Hero() {
   const [dragging, setDragging] = useState(false);
 
   const idxRef       = useRef(0);
-  const vIdxRef      = useRef(1);   // mirrors vIdx but readable inside callbacks
+  const vIdxRef      = useRef(1);
   const slideWRef    = useRef(0);
+  const sectionRef   = useRef<HTMLElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const trackRef     = useRef<HTMLDivElement>(null);
   const progressRef  = useRef<HTMLDivElement>(null);
-  const startRef     = useRef(0);
-  const rafRef       = useRef(0);
   const timerRef     = useRef<ReturnType<typeof setTimeout>>(undefined);
-  const loopCleanup  = useRef<(() => void) | null>(null); // removes pending transitionend
+  const loopCleanup  = useRef<(() => void) | null>(null);
   const dotRefs      = useRef<(HTMLButtonElement | null)[]>([]);
+  const dotSpanRefs  = useRef<(HTMLSpanElement | null)[]>([]);
+  const imageRefs    = useRef<(HTMLImageElement | null)[]>([]);
+  const kenBurnRef   = useRef<gsap.core.Tween | null>(null);
+  const prevVIdxRef  = useRef<number | null>(null);
+  const reduceRef    = useRef(false);
 
-  /* Drag state — all refs, zero re-renders during drag */
+  /* Pointer drag refs — all zero-state, zero re-renders during drag */
   const pointerDown = useRef(false);
   const ptrStartX   = useRef(0);
   const trackStartX = useRef(0);
   const velX        = useRef(0);
   const lastPtrX    = useRef(0);
   const lastPtrT    = useRef(0);
+
+  /* ── Reduced-motion — must be first effect ─────────────── */
+  useEffect(() => {
+    reduceRef.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }, []);
 
   /* ── Measure container ─────────────────────────────────── */
   useEffect(() => {
@@ -84,39 +82,102 @@ export function Hero() {
     const t  = trackRef.current;
     const sw = slideWRef.current;
     if (!t) return;
-    t.style.transition = (animated && !reduce)
+    t.style.transition = (animated && !reduceRef.current)
       ? `transform ${SLIDE_MS}ms cubic-bezier(${EASE})`
       : 'none';
     t.style.transform = `translateX(${-(vi * (sw + GAP))}px)`;
-  }, [reduce]);
+  }, []);
 
   /* On resize: instant snap to current visual position */
   useEffect(() => {
     if (slideW > 0) setTrack(vIdxRef.current, false);
   }, [slideW, setTrack]);
 
-  /* ── goTo: navigate to a real slide (cancels any pending loop) */
+  /* ── GSAP entrance: section fades + lifts up on mount ─── */
+  useEffect(() => {
+    if (reduceRef.current || !sectionRef.current) return;
+    const tween = gsap.from(sectionRef.current, {
+      opacity:    0,
+      y:          24,
+      duration:   1.3,
+      ease:       'power3.out',
+      clearProps: 'opacity,y',
+      overwrite:  'auto',
+    });
+    return () => { tween.kill(); };
+  }, []);
+
+  /* ── Ken Burns: zoom active image slowly over slide life ─ */
+  useEffect(() => {
+    if (reduceRef.current) return;
+    const img = imageRefs.current[vIdx];
+    if (!img) return;
+
+    /* Smoothly return the exiting slide's image to scale 1 */
+    if (prevVIdxRef.current !== null && prevVIdxRef.current !== vIdx) {
+      const prevImg = imageRefs.current[prevVIdxRef.current];
+      if (prevImg) {
+        gsap.to(prevImg, { scale: 1, duration: 0.9, ease: 'power2.out', overwrite: 'auto' });
+      }
+    }
+    prevVIdxRef.current = vIdx;
+
+    /* Kill old Ken Burns, start fresh on active image */
+    kenBurnRef.current?.kill();
+    kenBurnRef.current = gsap.fromTo(
+      img,
+      { scale: 1.0 },
+      { scale: KB_SCALE, duration: KB_DUR, ease: 'sine.inOut', overwrite: 'auto' }
+    );
+
+    return () => { kenBurnRef.current?.kill(); };
+  }, [vIdx]);
+
+  /* ── Dot pill animations via GSAP ─────────────────────── */
+  useEffect(() => {
+    dotSpanRefs.current.forEach((span, i) => {
+      if (!span) return;
+      gsap.to(span, {
+        width:           i === idx ? 20 : 7,
+        backgroundColor: i === idx ? 'var(--gold)' : 'rgba(26,20,16,0.20)',
+        duration:        0.45,
+        ease:            'power3.out',
+        overwrite:       'auto',
+      });
+    });
+  }, [idx]);
+
+  /* ── GSAP progress bar (replaces RAF) ─────────────────── */
+  useEffect(() => {
+    if (reduceRef.current || dragging || !progressRef.current) return;
+    const bar = progressRef.current;
+    gsap.killTweensOf(bar);
+    gsap.fromTo(bar,
+      { scaleX: 0 },
+      { scaleX: 1, duration: DURATION / 1000, ease: 'none', overwrite: true }
+    );
+    return () => { gsap.killTweensOf(bar); };
+  }, [idx, dragging]);
+
+  /* ── goTo: navigate to a real slide ───────────────────── */
   const goTo = useCallback((realIdx: number, animated = true) => {
     loopCleanup.current?.();
     loopCleanup.current = null;
-
     const vi = realIdx + 1;
     vIdxRef.current = vi;
     idxRef.current  = realIdx;
     setIdx(realIdx);
     setVIdx(vi);
     setTrack(vi, animated);
-    startRef.current = performance.now();
   }, [setTrack]);
 
   /* ── advance: smooth loop via clone slides ─────────────── */
   const advance = useCallback((dir: 1 | -1) => {
     loopCleanup.current?.();
     loopCleanup.current = null;
-
     const cur = idxRef.current;
 
-    /* Forward loop: slide 4 → clone-first → real slide 0 */
+    /* Forward loop: last real → clone-first → real-first */
     if (dir === 1 && cur === N - 1) {
       const cloneVi = N + 1;
       vIdxRef.current = cloneVi;
@@ -124,7 +185,6 @@ export function Hero() {
       setIdx(0);
       setVIdx(cloneVi);
       setTrack(cloneVi, true);
-      startRef.current = performance.now();
 
       const t = trackRef.current;
       if (!t) return;
@@ -141,7 +201,7 @@ export function Hero() {
       return;
     }
 
-    /* Backward loop: slide 0 → clone-last → real slide N-1 */
+    /* Backward loop: first real → clone-last → real-last */
     if (dir === -1 && cur === 0) {
       const cloneVi = 0;
       vIdxRef.current = cloneVi;
@@ -149,7 +209,6 @@ export function Hero() {
       setIdx(N - 1);
       setVIdx(cloneVi);
       setTrack(cloneVi, true);
-      startRef.current = performance.now();
 
       const t = trackRef.current;
       if (!t) return;
@@ -171,27 +230,12 @@ export function Hero() {
 
   /* ── Auto-advance ──────────────────────────────────────── */
   useEffect(() => {
-    if (reduce || dragging) { clearTimeout(timerRef.current); return; }
+    if (reduceRef.current || dragging) { clearTimeout(timerRef.current); return; }
     timerRef.current = setTimeout(() => advance(1), DURATION);
     return () => clearTimeout(timerRef.current);
-  }, [idx, dragging, reduce, advance]);
+  }, [idx, dragging, advance]);
 
-  /* ── RAF progress bar ──────────────────────────────────── */
-  useEffect(() => {
-    if (reduce || dragging || !progressRef.current) return;
-    const bar = progressRef.current;
-    bar.style.transform = 'scaleX(0)';
-    startRef.current = performance.now();
-    const tick = (now: number) => {
-      const pct = Math.min((now - startRef.current) / DURATION, 1);
-      bar.style.transform = `scaleX(${pct})`;
-      if (pct < 1) rafRef.current = requestAnimationFrame(tick);
-    };
-    rafRef.current = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(rafRef.current);
-  }, [idx, reduce, dragging]);
-
-  /* ── Keyboard — skip when focus is inside a text field ── */
+  /* ── Keyboard ──────────────────────────────────────────── */
   useEffect(() => {
     const fn = (e: KeyboardEvent) => {
       const tag = (e.target as HTMLElement)?.tagName;
@@ -205,33 +249,31 @@ export function Hero() {
 
   /* ── Pointer drag ──────────────────────────────────────── */
   const onPointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
-    if (reduce || e.button !== 0) return;
+    if (e.button !== 0) return;
     pointerDown.current = true;
     ptrStartX.current   = e.clientX;
     lastPtrX.current    = e.clientX;
     lastPtrT.current    = e.timeStamp;
     velX.current        = 0;
-    /* start from the visual position, not the clone-adjusted one */
     trackStartX.current = -(vIdxRef.current * (slideWRef.current + GAP));
     const t = trackRef.current;
     if (t) t.style.transition = 'none';
     setDragging(true);
     clearTimeout(timerRef.current);
-    cancelAnimationFrame(rafRef.current);
+    if (progressRef.current) gsap.killTweensOf(progressRef.current);
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
-  }, [reduce]);
+  }, []);
 
   const onPointerMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
     if (!pointerDown.current) return;
     const delta = e.clientX - ptrStartX.current;
     const sw    = slideWRef.current;
     const raw   = trackStartX.current + delta;
-    /* elastic resistance at real slide boundaries */
-    const maxX = -(1 * (sw + GAP));       // real first slide
-    const minX = -(N * (sw + GAP));       // real last slide
-    const tx = raw > maxX ? maxX + (raw - maxX) * 0.18
-             : raw < minX ? minX + (raw - minX) * 0.18
-             : raw;
+    const maxX  = -(1 * (sw + GAP));
+    const minX  = -(N * (sw + GAP));
+    const tx    = raw > maxX ? maxX + (raw - maxX) * 0.18
+                : raw < minX ? minX + (raw - minX) * 0.18
+                : raw;
     const t = trackRef.current;
     if (t) t.style.transform = `translateX(${tx}px)`;
     const dt = e.timeStamp - lastPtrT.current;
@@ -252,7 +294,7 @@ export function Hero() {
   }, [advance, goTo]);
 
   return (
-    <section className="w-full" style={{ paddingTop: 18 }}>
+    <section ref={sectionRef} className="w-full" style={{ paddingTop: 18 }}>
 
       {/* ── Carousel viewport ─────────────────────────────── */}
       <div
@@ -271,8 +313,8 @@ export function Hero() {
             gap:        GAP,
             marginLeft: peek,
             willChange: 'transform',
-            opacity:    slideW > 0 ? 1 : 0,  // hidden until measured (prevents clone flash)
-            transform:  'translateX(0)',       // snapped to correct position by useEffect
+            opacity:    slideW > 0 ? 1 : 0,
+            transform:  'translateX(0)',
           }}
         >
           {EXTENDED.map((s, vi) => (
@@ -286,19 +328,26 @@ export function Hero() {
                 lineHeight:   0,
                 willChange:   Math.abs(vi - vIdx) <= 1 ? 'opacity' : 'auto',
                 opacity:      vi === vIdx ? 1 : 0.68,
-                transition:   reduce ? 'none' : `opacity ${SLIDE_MS}ms cubic-bezier(${EASE})`,
+                transition:   `opacity ${SLIDE_MS}ms cubic-bezier(${EASE})`,
               }}
             >
               <Image
+                ref={(el) => { imageRefs.current[vi] = el; }}
                 src={s.src}
                 alt={s.alt}
                 width={1800}
                 height={1000}
                 sizes="(max-width: 640px) 96vw, (max-width: 1024px) 93vw, 88vw"
                 quality={90}
-                priority={vi === 1}   // only preload the first real slide
+                priority={vi === 1}
                 draggable={false}
-                style={{ width: '100%', height: 'auto', display: 'block' }}
+                style={{
+                  width:           '100%',
+                  height:          'auto',
+                  display:         'block',
+                  transformOrigin: 'center center',
+                  willChange:      'transform',
+                }}
               />
             </div>
           ))}
@@ -308,7 +357,7 @@ export function Hero() {
       {/* ── Navigation ────────────────────────────────────── */}
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, padding: '14px 0 6px' }}>
 
-        {/* Pill dots — only N real slides */}
+        {/* Pill dots — GSAP animated, no Framer Motion */}
         <div
           style={{ display: 'flex', alignItems: 'center', gap: 7 }}
           role="tablist"
@@ -338,20 +387,31 @@ export function Hero() {
               onClick={() => goTo(i)}
               style={{ padding: '18px 14px', background: 'transparent', border: 'none', cursor: 'pointer', lineHeight: 0 }}
             >
-              <motion.span
-                animate={{ width: i === idx ? 20 : 7, backgroundColor: i === idx ? 'var(--gold)' : 'rgba(26,20,16,0.20)' }}
-                transition={{ type: 'spring', stiffness: 420, damping: 32 }}
-                style={{ display: 'block', height: 7, borderRadius: 4 }}
+              <span
+                ref={(el) => { dotSpanRefs.current[i] = el; }}
+                style={{
+                  display:         'block',
+                  width:           i === 0 ? 20 : 7,
+                  height:          7,
+                  borderRadius:    4,
+                  backgroundColor: i === 0 ? 'var(--gold)' : 'rgba(26,20,16,0.20)',
+                }}
               />
             </button>
           ))}
         </div>
 
-        {/* Progress bar */}
+        {/* Progress bar — GSAP driven */}
         <div style={{ width: 96, height: 2, background: 'rgba(26,20,16,0.10)', overflow: 'hidden', borderRadius: 1 }}>
           <div
             ref={progressRef}
-            style={{ height: '100%', background: 'linear-gradient(to right, var(--gold-soft), var(--gold))', transformOrigin: 'left', transform: 'scaleX(0)', willChange: 'transform' }}
+            style={{
+              height:          '100%',
+              background:      'linear-gradient(to right, var(--gold-soft), var(--gold))',
+              transformOrigin: 'left',
+              transform:       'scaleX(0)',
+              willChange:      'transform',
+            }}
           />
         </div>
 

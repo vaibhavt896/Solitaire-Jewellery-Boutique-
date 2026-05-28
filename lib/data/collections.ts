@@ -9,7 +9,7 @@ export const COLLECTIONS: Collection[] = [
     description:
       'Polki is the oldest form of diamond jewellery in India — uncut, unfaceted, set in pure gold. Each Solitaire Polki piece is sourced from Jaipur ateliers and finished by hand.',
     hero: {
-      src: 'https://images.unsplash.com/photo-1599643477877-530eb83abc8e?auto=format&fit=crop&w=1600&q=80',
+      src: '/Homepage images/Polki homee.avif',
       alt: 'Polki bridal necklace with uncut diamonds and emerald drops, Solitaire Boutique Kanpur',
       width: 1600,
       height: 2000,
@@ -25,8 +25,8 @@ export const COLLECTIONS: Collection[] = [
     description:
       'Every solitaire of significance at Solitaire is graded by GIA or IGI. We help you understand the four Cs in language that respects your time and your decision.',
     hero: {
-      src: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=1600&q=80',
-      alt: 'GIA-certified diamond solitaire engagement ring on cream linen, Solitaire Boutique Kanpur',
+      src: '/Homepage images/Solitaire Diamond.avif',
+      alt: 'GIA-certified diamond solitaire engagement ring, Solitaire Boutique Kanpur',
       width: 1600,
       height: 2000,
     },
@@ -41,8 +41,8 @@ export const COLLECTIONS: Collection[] = [
     description:
       'Antique gold pieces in nakshi, jadau, and kundan techniques — finished with the soft matte gleam that sets heritage jewellery apart.',
     hero: {
-      src: 'https://images.unsplash.com/photo-1535632787350-4e68ef0ac584?auto=format&fit=crop&w=1600&q=80',
-      alt: 'Antique gold necklace with traditional jadau work, Solitaire Boutique Kanpur',
+      src: '/Homepage images/kundan-on-gold.avif',
+      alt: 'Kundan-on-gold antique necklace with traditional jadau work, Solitaire Boutique Kanpur',
       width: 1600,
       height: 2000,
     },
@@ -56,8 +56,8 @@ export const COLLECTIONS: Collection[] = [
     description:
       'Diamond rings, pendants, earrings, and bracelets — faceted, set in 18K and 22K gold, each major piece accompanied by an IGI certificate.',
     hero: {
-      src: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=1600&q=80',
-      alt: 'Diamond pendant necklace in 18K gold, Solitaire Boutique Kanpur',
+      src: '/Homepage images/Studded, set.avif',
+      alt: 'Studded diamond set in 18K gold, Solitaire Boutique Kanpur',
       width: 1600,
       height: 2000,
     },
@@ -71,8 +71,8 @@ export const COLLECTIONS: Collection[] = [
     description:
       'Temple jewellery for the South Indian bride, the festive occasion, and the collector. Cast in the traditional motifs of Lakshmi, Durga, and the lotus.',
     hero: {
-      src: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=1600&q=80',
-      alt: 'Temple jewellery necklace with goddess motif, Solitaire Boutique Kanpur',
+      src: '/Homepage images/Temple Jewellery.avif',
+      alt: 'Temple jewellery necklace with traditional goddess motif, Solitaire Boutique Kanpur',
       width: 1600,
       height: 2000,
     },
@@ -86,7 +86,7 @@ export const COLLECTIONS: Collection[] = [
     description:
       'Curated bridal sets — choker plus long-haar, mathapatti, jhumkas, kada — composed for harmony with your lehenga, your ceremony, and your day.',
     hero: {
-      src: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=1600&q=80',
+      src: '/Homepage images/Bridal Jewellery.avif',
       alt: 'Bridal jewellery set with Polki choker and long necklace, Solitaire Boutique Kanpur',
       width: 1600,
       height: 2000,
