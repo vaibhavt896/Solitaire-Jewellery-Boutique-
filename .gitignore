@@ -39,3 +39,14 @@ next-env.d.ts
 # local dev tools
 .agents/
 skills-lock.json
+
+# large raw video originals (use public/Reels/web/ for optimized versions)
+public/Reels/1.mp4
+public/Reels/2.mp4
+public/Reels/3.mp4
+public/Reels/4.mp4
+public/Reels/5.mp4
+
+# screen recordings and test artifacts
+public/Screen\ Recording*.mov
+test-results/
