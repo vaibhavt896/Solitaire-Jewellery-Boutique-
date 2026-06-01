@@ -55,7 +55,7 @@ export function CollectionPieces({
           </p>
           <a
             href={whatsappLinkFor(
-              `Hi Solitaire — I'm browsing your ${collectionTitle} collection. Could you share what's currently in the boutique?`,
+              `Hi Solitaire, I'm browsing your ${collectionTitle} collection. Could you share what's currently in the boutique?`,
             )}
             target="_blank"
             rel="noopener noreferrer"
@@ -70,7 +70,7 @@ export function CollectionPieces({
 
   return (
     <>
-      {/* Filter + sort bar — sticky below header */}
+      {/* Filter + sort bar, sticky below header */}
       <div className="sticky top-[120px] z-20 bg-bone/95 backdrop-blur-md border-y border-line">
         <div className="container-wide flex items-center gap-3 py-4 overflow-x-auto">
           <span
@@ -85,7 +85,7 @@ export function CollectionPieces({
             Filter:
           </span>
 
-          {/* Type pills — only show "All" + types that exist */}
+          {/* Type pills, only show "All" + types that exist */}
           <div className="flex items-center gap-2">
             {(['All', ...availableTypes] as FilterType[]).map((type) => {
               const active = activeType === type;
@@ -146,7 +146,7 @@ export function CollectionPieces({
         <div className="container-wide">
           {filtered.length === 0 ? (
             <p className="text-body text-ink-muted text-center py-20">
-              No pieces match this filter — try{' '}
+              No pieces match this filter, try{' '}
               <button
                 type="button"
                 className="underline hover:text-gold-deep transition-colors"

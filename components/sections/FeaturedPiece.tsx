@@ -1,61 +1,104 @@
 'use client';
 
 /* ──────────────────────────────────────────────────────────
-   FeaturedPiece — Section 05
+   FeaturedPiece, Section 03
    Full-bleed dark Mahogany. Single cinematic image with Ken
    Burns slow zoom. Editorial copy below. Refreshed monthly.
+   GSAP animations for sharper visual impact.
 ────────────────────────────────────────────────────────── */
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { motion, useReducedMotion } from 'framer-motion';
+import { useReducedMotion } from 'framer-motion';
+import { useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { getFeaturedPiece } from '@/lib/data/pieces';
-import { whatsappLinkFor } from '@/lib/site';
+import { PLACEHOLDER } from '@/lib/placeholder-media';
+import { whatsappLinkFor, WHATSAPP_MESSAGES } from '@/lib/site';
 
-const ease = [0.25, 0.46, 0.45, 0.94] as const;
+gsap.registerPlugin(ScrollTrigger);
 
 export function FeaturedPiece() {
   const reduce = useReducedMotion();
+  const imageZoomRef = useRef<HTMLDivElement>(null);
+  const skuTextRef = useRef<HTMLParagraphElement>(null);
   const piece = getFeaturedPiece();
   const main = piece.images[0];
   if (!main) return null;
 
+  useEffect(() => {
+    if (reduce || !imageZoomRef.current) return;
+
+    const ctx = gsap.context(() => {
+      // Ken Burns zoom with sharp easing
+      gsap.fromTo(
+        imageZoomRef.current,
+        { scale: 1.09 },
+        {
+          scale: 1,
+          duration: 8,
+          ease: 'power1.inOut',
+          scrollTrigger: {
+            trigger: imageZoomRef.current,
+            start: 'top 40%',
+            once: true,
+          },
+        }
+      );
+
+      // SKU text fade-in with delay
+      if (skuTextRef.current) {
+        gsap.fromTo(
+          skuTextRef.current,
+          { opacity: 0 },
+          {
+            opacity: 1,
+            duration: 1,
+            delay: 0.6,
+            scrollTrigger: {
+              trigger: imageZoomRef.current,
+              start: 'top 40%',
+              once: true,
+            },
+          }
+        );
+      }
+    });
+
+    return () => ctx.revert();
+  }, [reduce]);
+
   return (
-    <section style={{ background: 'var(--mahogany)' }}>
+    <section style={{ background: 'var(--bone)' }}>
 
       {/* ── Eyebrow strip ── */}
       <div className="container-wide pt-16 pb-10">
-        <motion.div
-          initial={reduce ? {} : { opacity: 0, y: 12 }}
-          whileInView={reduce ? {} : { opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, ease }}
-        >
+        <div>
           <p
             style={{
               fontFamily: 'var(--font-body)',
-              fontSize: 9.5,
+              fontSize: 10,
               letterSpacing: '0.22em',
               textTransform: 'uppercase',
-              color: 'rgba(244,239,227,0.45)',
+              color: 'var(--ink-muted)',
               marginBottom: '0.6rem',
             }}
           >
-            02 — THE PIECE FOR THIS SEASON
+            04 — The Piece
           </p>
           <h2
             className="font-display"
             style={{
               fontSize: 'clamp(2rem, 5vw, 3.8rem)',
-              color: 'var(--ivory)',
+              color: 'var(--ink)',
               lineHeight: 1.05,
               letterSpacing: '-0.025em',
-              fontStyle: 'italic',
             }}
           >
             {piece.title}.
           </h2>
-        </motion.div>
+        </div>
       </div>
 
       {/* ── Cinematic full-width image with Ken Burns ── */}
@@ -68,47 +111,46 @@ export function FeaturedPiece() {
           className="absolute inset-0 z-10"
           style={{
             background:
-              'radial-gradient(ellipse at center, transparent 40%, rgba(58,31,20,0.65) 100%)',
+              'radial-gradient(ellipse at center, transparent 40%, rgba(26,20,16,0.45) 100%)',
             pointerEvents: 'none',
           }}
         />
 
-        <motion.div
+        <div
+          ref={imageZoomRef}
           className="absolute inset-0"
-          initial={reduce ? {} : { scale: 1.08 }}
-          whileInView={reduce ? {} : { scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 9, ease }}
         >
+          {/* PLACEHOLDER: this season's piece needs its own commissioned
+              photograph. Until then we show a labelled placeholder rather
+              than re-using a category image from elsewhere on the page.
+              Swap `PLACEHOLDER.featuredPiece` back to `main.src` once the
+              real shot is in /public. */}
           <Image
-            src={main.src}
+            src={PLACEHOLDER.featuredPiece}
             alt={main.alt}
             fill
             sizes="100vw"
             className="object-cover"
             priority
           />
-        </motion.div>
+        </div>
 
         {/* SKU / provenance line over image */}
-        <motion.p
+        <p
+          ref={skuTextRef}
           className="absolute bottom-6 left-1/2 z-20"
           style={{
             transform: 'translateX(-50%)',
             fontFamily: 'var(--font-body)',
-            fontSize: 9,
+            fontSize: 10,
             letterSpacing: '0.22em',
             textTransform: 'uppercase',
             color: 'rgba(244,239,227,0.45)',
             whiteSpace: 'nowrap',
           }}
-          initial={reduce ? {} : { opacity: 0 }}
-          whileInView={reduce ? {} : { opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1, delay: 0.6, ease }}
         >
           {piece.collectionLabel} · SKU {piece.sku} · Currently in the boutique
-        </motion.p>
+        </p>
       </div>
 
       {/* ── Editorial copy block ── */}
@@ -116,41 +158,29 @@ export function FeaturedPiece() {
         <div className="grid md:grid-cols-12 gap-10 items-start">
 
           {/* Left: editorial paragraph */}
-          <motion.div
-            className="md:col-span-7"
-            initial={reduce ? {} : { opacity: 0, y: 20 }}
-            whileInView={reduce ? {} : { opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.9, ease }}
-          >
+          <div className="md:col-span-7">
             <p
               style={{
                 fontFamily: 'var(--font-body)',
                 fontSize: '1.0625rem',
                 lineHeight: 1.85,
-                color: 'rgba(244,239,227,0.70)',
+                color: 'var(--ink-soft)',
                 maxWidth: 600,
               }}
             >
               {piece.longDescription}
             </p>
-          </motion.div>
+          </div>
 
           {/* Right: CTAs + price */}
-          <motion.div
-            className="md:col-span-5 md:pt-1"
-            initial={reduce ? {} : { opacity: 0, y: 20 }}
-            whileInView={reduce ? {} : { opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.9, delay: 0.12, ease }}
-          >
+          <div className="md:col-span-5 md:pt-1">
             <p
               style={{
                 fontFamily: 'var(--font-body)',
-                fontSize: 9.5,
+                fontSize: 10,
                 letterSpacing: '0.18em',
                 textTransform: 'uppercase',
-                color: 'rgba(244,239,227,0.35)',
+                color: 'var(--ink-muted)',
                 marginBottom: '1.5rem',
               }}
             >
@@ -159,37 +189,21 @@ export function FeaturedPiece() {
 
             <div className="flex flex-col sm:flex-row gap-4">
               <a
-                href={whatsappLinkFor(
-                  `Hello Solitaire — I'd like to enquire about ${piece.title} (SKU ${piece.sku}). When can I view it?`,
-                )}
+                href={whatsappLinkFor(WHATSAPP_MESSAGES.piece(piece.title, piece.sku))}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn"
-                style={{
-                  background: 'var(--aged-gold)',
-                  color: 'var(--ivory)',
-                  border: '1px solid var(--aged-gold)',
-                  fontSize: 10,
-                  letterSpacing: '0.16em',
-                }}
+                className="btn-gold"
               >
-                Enquire on WhatsApp →
+                Ask About This Piece
               </a>
               <Link
                 href={`/piece/${piece.slug}`}
-                className="btn"
-                style={{
-                  background: 'transparent',
-                  color: 'rgba(244,239,227,0.7)',
-                  border: '1px solid rgba(244,239,227,0.2)',
-                  fontSize: 10,
-                  letterSpacing: '0.16em',
-                }}
+                className="btn-secondary"
               >
                 Read the piece&rsquo;s story →
               </Link>
             </div>
-          </motion.div>
+          </div>
 
         </div>
       </div>

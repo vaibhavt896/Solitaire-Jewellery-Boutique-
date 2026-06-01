@@ -13,7 +13,7 @@ export function CopyAddressButton() {
       setCopied(true);
       window.setTimeout(() => setCopied(false), 1800);
     } catch {
-      // ignore — clipboard API not available
+      // ignore, clipboard API not available
     }
   };
 

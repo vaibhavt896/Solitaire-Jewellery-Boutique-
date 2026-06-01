@@ -13,23 +13,23 @@ const PIECE_OPTIONS = [
   'Antique Gold',
   'Bangles',
   'Earrings',
-  'Other',
+  'Not sure yet, help me decide',
 ] as const;
 
 const BUDGET_TIERS = [
-  { label: 'Modest', sub: 'up to 2L' },
-  { label: 'Traditional', sub: '2–5L' },
-  { label: 'Heirloom', sub: '5–10L' },
-  { label: 'Couture', sub: '10L+' },
+  { label: 'A starting range' },
+  { label: 'A mid range' },
+  { label: 'A premium range' },
+  { label: 'Rather discuss in person' },
 ] as const;
 
 const TIME_SLOTS = [
-  'Mon — 11:30 AM',
-  'Mon — 4:00 PM',
-  'Tue — 11:30 AM',
-  'Wed — 4:00 PM',
-  'Sat — 12:00 PM',
-  'Sat — 5:30 PM',
+  'Mon, 11:30 AM',
+  'Mon, 4:00 PM',
+  'Tue, 11:30 AM',
+  'Wed, 4:00 PM',
+  'Sat, 12:00 PM',
+  'Sat, 5:30 PM',
 ];
 
 type Form = {
@@ -71,21 +71,22 @@ export function BridalBookingForm() {
         <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-emerald/10 text-emerald mb-6">
           <IconCheck size={26} />
         </div>
-        <h2 className="font-display text-display mb-4">We've got it.</h2>
+        <h2 className="font-display text-display mb-4">We have got it. Thank you.</h2>
         <p className="text-body text-ink-soft">
-          Aanya from Solitaire will reach out on WhatsApp within the hour to
-          confirm your appointment and answer any questions.
+          We will message you on WhatsApp shortly to confirm the day and time. In
+          the meantime, feel free to send us photos of your outfit, it helps us
+          prepare.
         </p>
         <div className="mt-10 flex flex-wrap justify-center gap-4">
           <a
             href={whatsappLinkFor(
-              `Hi Solitaire — I just booked a bridal consultation. ${form.name}, ${form.slot}.`,
+              `Hello Solitaire, I just requested a bridal sitting. ${form.name}, ${form.slot}.`,
             )}
             target="_blank"
             rel="noopener noreferrer"
             className="btn-primary"
           >
-            Open WhatsApp
+            Message Us on WhatsApp Now
           </a>
           <a href="/" className="btn-secondary">
             Return Home
@@ -134,7 +135,7 @@ export function BridalBookingForm() {
           <div>
             <p className="eyebrow mb-3">Step 01</p>
             <h2 className="font-display text-display mb-8">
-              Let's start with your name.
+              What is your name?
             </h2>
             <input
               type="text"
@@ -160,7 +161,7 @@ export function BridalBookingForm() {
               className="w-full bg-transparent border-b-2 border-line focus:border-gold py-4 text-h2 font-display outline-none transition-colors"
             />
             <p className="mt-3 text-small text-ink-muted">
-              An approximate date is fine. We'll fine-tune in the consultation.
+              An approximate date is fine. We&rsquo;ll fine-tune at your sitting.
             </p>
           </div>
         )}
@@ -169,7 +170,7 @@ export function BridalBookingForm() {
           <div>
             <p className="eyebrow mb-3">Step 03</p>
             <h2 className="font-display text-display mb-8">
-              What pieces are you considering?
+              What are you looking for?
             </h2>
             <div className="flex flex-wrap gap-3">
               {PIECE_OPTIONS.map((p) => {
@@ -197,8 +198,12 @@ export function BridalBookingForm() {
           <div>
             <p className="eyebrow mb-3">Step 04</p>
             <h2 className="font-display text-display mb-8">
-              An indicative budget?
+              A budget range, just to guide us.
             </h2>
+            <p className="text-small text-ink-muted mb-6">
+              This only helps us show you the right pieces. We will never push you
+              past what you are comfortable with.
+            </p>
             <div className="grid grid-cols-2 gap-3">
               {BUDGET_TIERS.map((b) => {
                 const active = form.budget === b.label;
@@ -214,21 +219,10 @@ export function BridalBookingForm() {
                     }`}
                   >
                     <p className="font-display text-h2">{b.label}</p>
-                    <p
-                      className={`text-mono text-micro uppercase tracking-eyebrow mt-1 ${
-                        active ? 'text-bone/70' : 'text-ink-muted'
-                      }`}
-                    >
-                      {b.sub}
-                    </p>
                   </button>
                 );
               })}
             </div>
-            <p className="mt-3 text-small text-ink-muted">
-              We use this only to prepare the right pieces. Nothing is final until
-              you decide.
-            </p>
           </div>
         )}
 
@@ -236,8 +230,11 @@ export function BridalBookingForm() {
           <div>
             <p className="eyebrow mb-3">Step 05</p>
             <h2 className="font-display text-display mb-8">
-              And finally, your number and a slot.
+              How can we reach you?
             </h2>
+            <p className="text-small text-ink-muted mb-6">
+              We will only use this to confirm your sitting. No spam, ever.
+            </p>
             <input
               type="tel"
               value={form.phone}
@@ -245,7 +242,7 @@ export function BridalBookingForm() {
               placeholder="+91 phone number"
               className="w-full bg-transparent border-b-2 border-line focus:border-gold py-4 text-h2 font-display outline-none transition-colors mb-8"
             />
-            <p className="eyebrow mb-3">Pick a preferred slot</p>
+            <p className="eyebrow mb-3">When would you like to come in?</p>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
               {TIME_SLOTS.map((s) => {
                 const active = form.slot === s;
@@ -296,7 +293,7 @@ export function BridalBookingForm() {
             disabled={!canAdvance}
             className="btn-primary disabled:opacity-30 disabled:cursor-not-allowed"
           >
-            Confirm Booking
+            Request My Sitting
           </button>
         )}
       </div>
@@ -305,7 +302,7 @@ export function BridalBookingForm() {
         Or{' '}
         <a
           href={whatsappLinkFor(
-            `Hi Solitaire — I'd like to book a bridal consultation.`,
+            `Hello Solitaire, I am planning my wedding jewellery and would like to book a private sitting.`,
           )}
           target="_blank"
           rel="noopener noreferrer"

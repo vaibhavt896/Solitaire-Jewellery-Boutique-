@@ -4,57 +4,54 @@ import { Reveal } from '@/components/Reveal';
 import { JsonLd } from '@/components/JsonLd';
 import { breadcrumbSchema } from '@/lib/seo/schema';
 import { buildMetadata } from '@/lib/seo/metadata';
+import { MEDIA } from '@/lib/placeholder-media';
 
 export const metadata: Metadata = buildMetadata({
-  title: 'Craftsmanship & Certification',
+  title: 'How a Piece Is Made | Craftsmanship & Certification',
   description:
-    'How a Polki necklace is made, how a diamond gets graded, and how a Solitaire piece is finished — from sketch to certificate to handover.',
+    'How a Polki necklace is drawn, set by hand, and certified, from sketch to the certificate that goes home with you. See it in person in Kanpur.',
   path: '/craftsmanship',
 });
 
 const STEPS = [
   {
     n: '01',
-    title: 'The Sketch',
-    body: 'Every Polki piece begins on paper. A bridal necklace is sketched to scale, with each diamond\'s position marked, and the gold weight estimated. The sketch goes back and forth between the boutique and the atelier until the proportions feel right.',
-    image:
-      'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=1600&q=80',
+    title: 'The drawing',
+    body: 'Every Polki piece begins on paper. A bridal necklace is drawn to size, with the place of each diamond marked and the gold weight worked out. The drawing goes back and forth between us and the workshop until it feels right.',
+    image: MEDIA.gold,
   },
   {
     n: '02',
-    title: 'The Foundation',
-    body: '22-karat gold is shaped to the sketch. Each setting is hammered by hand, not cast in a mould. The foundation is the slowest part — a bridal choker takes a senior craftsman about two weeks before the first stone is set.',
-    image:
-      'https://images.unsplash.com/photo-1620794108219-aedbaded4eea?auto=format&fit=crop&w=1600&q=80',
+    title: 'The gold',
+    body: '22K gold is shaped to the drawing. Each setting is worked by hand, not poured into a mould. This is the slowest step, a bridal choker takes a senior craftsman about two weeks before the first stone is even set.',
+    image: MEDIA.boutique,
   },
   {
     n: '03',
-    title: 'The Setting',
-    body: 'Polki stones are set using the kundan technique — fine gold foil pressed around each stone to hold it in place. The diamonds we use here are uncut, sourced from a single Jaipur supplier we have worked with for a decade.',
-    image:
-      'https://images.unsplash.com/photo-1599643477877-530eb83abc8e?auto=format&fit=crop&w=1600&q=80',
+    title: 'The setting',
+    body: 'The Polki stones are set in the old way, with fine gold pressed around each one to hold it. The uncut diamonds we use come from a single Jaipur supplier we have trusted for over a decade.',
+    image: MEDIA.polki,
   },
   {
     n: '04',
-    title: 'The Finish',
-    body: 'A final hand-polish, the Solitaire authentication card, the certificate of any graded stone, the storage pouch. The piece is photographed for our records and yours, then it leaves the atelier. The first time you see it is at the boutique.',
-    image:
-      'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=1600&q=80',
+    title: 'The finish',
+    body: 'A final hand-polish, the certificate for any graded stone, our own card, and the pouch. The piece is photographed for our records and yours. The first time you see it is here, at the boutique.',
+    image: MEDIA.bridal,
   },
 ];
 
 const CERT = [
   {
     title: 'Sourced',
-    body: 'Diamonds are selected by hand from trusted suppliers in Mumbai and Surat — never bulk-bought, never quota-filled.',
+    body: 'Our diamonds are chosen by hand from suppliers we know in Mumbai and Surat, never bought in bulk to fill a shelf.',
   },
   {
     title: 'Graded',
-    body: 'Stones of significance are sent to GIA or IGI for grading. The lab issues a unique report — colour, clarity, cut, carat, and a laser inscription on the girdle.',
+    body: "Stones of value are sent to GIA or IGI, the world's leading labs. They issue an independent report, colour, clarity, cut, carat, and a tiny laser mark on the stone itself.",
   },
   {
     title: 'Certified',
-    body: 'The certificate travels with every piece. We walk you through the report at handover, and we keep a copy on file for the life of the piece.',
+    body: 'The certificate goes home with the piece. We explain it to you in plain words at handover, and we keep a copy on file for life.',
   },
 ];
 
@@ -72,13 +69,13 @@ export default function CraftsmanshipPage() {
       <section className="bg-bone py-20 md:py-32">
         <div className="container-content">
           <Reveal className="text-center">
-            <p className="eyebrow mb-4">Craftsmanship</p>
+            <p className="eyebrow mb-4">How it is made</p>
             <h1 className="display-page max-w-3xl mx-auto leading-tight">
-              How a Polki necklace becomes a Solitaire piece.
+              Made slowly, the way good jewellery has always been made.
             </h1>
             <p className="body-lead mt-6 max-w-xl mx-auto">
-              Six weeks. Two ateliers. A few thousand decisions. The four steps
-              below describe the process for almost every piece we make.
+              Six weeks. Two workshops. Many pairs of careful hands. Here is how
+              almost every Solitaire piece comes to be.
             </p>
           </Reveal>
         </div>
@@ -98,7 +95,7 @@ export default function CraftsmanshipPage() {
                   <div className="aspect-[4/5] overflow-hidden bg-bone">
                     <img
                       src={s.image}
-                      alt={`${s.title} — Solitaire craftsmanship`}
+                      alt={`${s.title}, Solitaire craftsmanship`}
                       loading="lazy"
                       className="w-full h-full object-cover"
                     />
@@ -121,9 +118,9 @@ export default function CraftsmanshipPage() {
       <section className="section-pad bg-bone">
         <div className="container-wide">
           <Reveal className="max-w-2xl mb-16">
-            <p className="eyebrow">Certification</p>
+            <p className="eyebrow">How you can trust it</p>
             <h2 className="display-page mt-3">
-              How we authenticate every diamond.
+              You should never have to take a stone on faith.
             </h2>
           </Reveal>
 
@@ -146,7 +143,7 @@ export default function CraftsmanshipPage() {
       <section className="bg-bone-deep py-16 md:py-20">
         <div className="container-content text-center">
           <p className="font-display text-h1 leading-snug max-w-2xl mx-auto">
-            See the certificates, hold the pieces, ask the questions.
+            See the certificates. Hold the pieces. Ask anything.
           </p>
           <Link href="/visit" className="btn-primary mt-10 inline-flex">
             Visit the Boutique

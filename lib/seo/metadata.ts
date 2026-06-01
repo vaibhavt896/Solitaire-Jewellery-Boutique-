@@ -12,7 +12,7 @@ export function buildMetadata({
   path?: string;
   image?: string;
 }): Metadata {
-  const fullTitle = `${title} — ${SITE.name}, Kanpur`;
+  const fullTitle = `${title}, ${SITE.name}, Kanpur`;
   const url = `${SITE.url}${path}`;
   const ogImage = image ?? `${SITE.url}/og/default.jpg`;
 

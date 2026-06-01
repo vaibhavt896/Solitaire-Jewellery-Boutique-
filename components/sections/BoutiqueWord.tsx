@@ -1,8 +1,8 @@
 'use client';
 
 /* ──────────────────────────────────────────────────────────
-   BoutiqueWord — Section 03
-   "A Word from the Boutique" — the cover-note section that
+   BoutiqueWord, Section 01
+   "A Word from the Boutique", the cover-note section that
    no competitor does. Sets editorial tone before any product
    is shown. Drop cap, signature, centred single column.
 ────────────────────────────────────────────────────────── */
@@ -60,7 +60,7 @@ export function BoutiqueWord() {
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.1, ease }}
         >
-          01 — A WORD
+          01 — A Word
         </motion.p>
 
         {/* Headline */}
@@ -79,10 +79,10 @@ export function BoutiqueWord() {
           viewport={{ once: true }}
           transition={{ duration: 0.9, delay: 0.18, ease }}
         >
-          If you&rsquo;ve come to look,<br />you&rsquo;ve come to the right place.
+          If you are choosing jewellery,<br />you have come to the right place.
         </motion.h2>
 
-        {/* Body — drop cap paragraph */}
+        {/* Body, drop cap paragraph */}
         <motion.div
           initial={reduce ? {} : { opacity: 0, y: 20 }}
           whileInView={reduce ? {} : { opacity: 1, y: 0 }}
@@ -100,29 +100,10 @@ export function BoutiqueWord() {
               margin: '0 auto',
             }}
           >
-            We are a single boutique in Swaroop Nagar, Kanpur. We have been here long enough
-            to know our families by surname, and our pieces by who finished them. The way a
-            piece arrives at Solitaire is the same as it ever was — a Polki from a craftsman
-            we have known since the early&nbsp;90s, a solitaire pulled from a parcel that
-            arrived from Antwerp last Thursday, an antique-gold piece traced from a sketch
-            the bride&rsquo;s grandmother carried in her own dowry book.
-          </p>
-
-          <p
-            style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: 'clamp(1rem, 1.8vw, 1.125rem)',
-              lineHeight: 1.85,
-              color: 'var(--ink-soft)',
-              maxWidth: 560,
-              margin: '1.6em auto 0',
-            }}
-          >
-            Everything on this site is real, currently in the boutique, and waiting to be
-            seen. Prices are kept off the page on purpose — not to be coy, but because the
-            same Polki necklace is one price for the bride who wants the emerald drops
-            swapped, and another for the bride who wants the original. Write to us. Visit
-            us. Or simply read on.
+            We are a small family boutique, not a big showroom. We keep fewer pieces
+            on purpose, so you can really see each one. We will tell you honestly what
+            a stone is and what it is worth. And if today is only for looking, that is
+            completely fine. Come in when you are ready. We will be glad to see you.
           </p>
         </motion.div>
 
@@ -141,7 +122,7 @@ export function BoutiqueWord() {
           viewport={{ once: true }}
           transition={{ duration: 1, delay: 0.5, ease }}
         >
-          — The Boutique
+         , The Boutique
         </motion.p>
 
         {/* Bottom ornament */}

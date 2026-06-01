@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import { PIECES, getPiece, getRelatedPieces } from '@/lib/data/pieces';
-import { whatsappLinkFor } from '@/lib/site';
+import { whatsappLinkFor, WHATSAPP_MESSAGES } from '@/lib/site';
 import { JsonLd } from '@/components/JsonLd';
 import { breadcrumbSchema, productSchema } from '@/lib/seo/schema';
 import { buildMetadata } from '@/lib/seo/metadata';
@@ -36,7 +36,7 @@ export default async function PiecePage({ params }: Params) {
   if (!piece) notFound();
   const related = getRelatedPieces(piece);
 
-  const whatsappMessage = `Hi Solitaire — I'm interested in ${piece.title} (SKU ${piece.sku}). Could you share availability and a price?`;
+  const whatsappMessage = WHATSAPP_MESSAGES.piece(piece.title, piece.sku);
 
   const hasCertCard =
     piece.certification &&
@@ -111,7 +111,9 @@ export default async function PiecePage({ params }: Params) {
                 Price on Enquiry
               </p>
               <p className="text-body text-ink-soft mt-2 max-w-md">
-                We share photos, video, and a price within the hour on WhatsApp.
+                Photos can only show so much. The real piece, in the right light,
+                is always better, we share photos, video, and a price within the
+                hour on WhatsApp, then you come and see it.
               </p>
 
               <div className="mt-8 flex flex-wrap items-center gap-4">
@@ -121,10 +123,10 @@ export default async function PiecePage({ params }: Params) {
                   rel="noopener noreferrer"
                   className="btn-primary"
                 >
-                  Enquire on WhatsApp
+                  Ask About This Piece
                 </a>
-                <Link href="/bridal/book" className="btn-secondary">
-                  Book a Viewing
+                <Link href="/visit" className="btn-secondary">
+                  Visit to See It
                 </Link>
               </div>
 
@@ -161,7 +163,7 @@ export default async function PiecePage({ params }: Params) {
         </div>
       </section>
 
-      {/* Certificate visualization — GIA / IGI only */}
+      {/* Certificate visualization, GIA / IGI only */}
       {hasCertCard && (
         <section className="bg-bone py-16 md:py-20">
           <div className="container-content">
@@ -303,7 +305,7 @@ export default async function PiecePage({ params }: Params) {
             <p>
               Every piece comes with a Solitaire authentication card and the applicable
               certificate (GIA, IGI, or BIS). Bring the piece in for an annual check-up at
-              no charge — we tighten settings, polish, and re-foil any kundan that has
+              no charge, we tighten settings, polish, and re-foil any kundan that has
               loosened.
             </p>
           </Accordion>
@@ -316,7 +318,7 @@ export default async function PiecePage({ params }: Params) {
         </div>
       </section>
 
-      {/* Related pieces — horizontal scroll carousel */}
+      {/* Related pieces, horizontal scroll carousel */}
       {related.length > 0 && (
         <section className="section-pad bg-bone">
           <div className="container-wide">
@@ -348,11 +350,11 @@ export default async function PiecePage({ params }: Params) {
         <div className="container-content text-center">
           <p className="eyebrow mb-4">Still deciding?</p>
           <h2 className="display-page">
-            Visit us in Swaroop Nagar to try this piece on.
+            Come and see it before you decide.
           </h2>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <Link href="/visit" className="btn-primary">
-              Plan Your Visit
+              Visit the Boutique
             </Link>
             <a
               href={whatsappLinkFor(whatsappMessage)}
@@ -360,7 +362,7 @@ export default async function PiecePage({ params }: Params) {
               rel="noopener noreferrer"
               className="btn-secondary"
             >
-              Speak to Us on WhatsApp
+              Ask About This Piece
             </a>
           </div>
         </div>

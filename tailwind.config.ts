@@ -11,9 +11,9 @@ const config: Config = {
     extend: {
       colors: {
         /* Core new palette */
-        ivory:    { DEFAULT: '#F4EFE3', smoke: '#E8E0D0' },
+        ivory:    { DEFAULT: '#F4EFE3', smoke: '#E8E0D0', raised: '#FBF7EE' },
         obsidian: '#1A1410',
-        'aged-gold': '#B8923A',
+        'aged-gold': '#BD9A45',
         mahogany: '#3A1F14',
         'emerald-w': '#2D4A3E',
         'ruby-w':    '#6B1F2A',
@@ -29,9 +29,10 @@ const config: Config = {
         bone: { DEFAULT: '#F4EFE3', deep: '#E8E0D0' },
         paper: '#FFFFFF',
         gold: {
-          DEFAULT: '#B8923A',
-          deep:    '#8C6A20',
-          soft:    '#C9A84C',
+          DEFAULT: '#BD9A45',
+          light:   '#E4CA80',
+          deep:    '#9A7A2E',
+          soft:    '#CDB063',
           veil:    '#F2EAD0',
         },
         rose:    { DEFAULT: '#C68B7E', soft: '#F5E2DC' },

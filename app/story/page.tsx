@@ -4,11 +4,12 @@ import { Reveal } from '@/components/Reveal';
 import { JsonLd } from '@/components/JsonLd';
 import { breadcrumbSchema } from '@/lib/seo/schema';
 import { buildMetadata } from '@/lib/seo/metadata';
+import { MEDIA } from '@/lib/placeholder-media';
 
 export const metadata: Metadata = buildMetadata({
-  title: 'Our Story',
+  title: 'Our Story | A Small Family Boutique in Swaroop Nagar',
   description:
-    'Solitaire is a family-led jewellery boutique in Swaroop Nagar, Kanpur. Polki, antique gold, and certified solitaires — curated by hand, not by the catalogue.',
+    'Solitaire opened in Swaroop Nagar, Kanpur in 2018 with one idea: put the person wearing the jewellery first. Certified, honest, and made to be kept.',
   path: '/story',
 });
 
@@ -25,17 +26,18 @@ export default function StoryPage() {
       <article className="bg-bone">
         <div className="container-content py-20 md:py-32">
           <Reveal>
-            <p className="eyebrow mb-4">Our Story</p>
+            <p className="eyebrow mb-4">Our story</p>
             <h1 className="display-page leading-tight">
-              Solitaire began with a single observation.
+              We opened a small boutique, on purpose.
             </h1>
           </Reveal>
 
           <Reveal className="mt-12 prose-lg">
             <p className="font-display text-h1 leading-snug text-ink-soft">
-              That a great deal of fine jewellery in this country is sold the
-              way appliances are sold — by feature, by weight, by carat — and
-              the woman wearing it is rarely the centre of the conversation.
+              Solitaire opened in Swaroop Nagar in 2018, on a street that has sold
+              jewellery in Kanpur for over a hundred years. We are younger than our
+              neighbours, and we wanted to do one thing differently: put the person
+              wearing the jewellery back at the centre of it.
             </p>
           </Reveal>
 
@@ -43,17 +45,17 @@ export default function StoryPage() {
             <div className="md:col-span-2 hidden md:block" />
             <Reveal className="md:col-span-10 text-body text-ink-soft space-y-6 max-w-content">
               <p>
-                Solitaire opened in Swaroop Nagar in 2018, on the same street
-                that has held Kanpur's jewellery houses for more than a
-                century. We are newer than our neighbours by design — we
-                wanted to begin with a different conversation.
+                The boutique is small, and we like it that way. We carry fewer
+                pieces than a big showroom, so that when you walk in for a choker,
+                you see four good ones, not forty, and you can actually decide.
+                Choosing should feel calm, not crowded.
               </p>
               <p>
-                The boutique is small. We carry fewer pieces than a department
-                store and more pieces than an atelier. The format is
-                deliberate. A woman who walks in for a Polki choker should be
-                able to see four chokers, not forty, and feel like she is
-                deciding rather than narrowing.
+                We are a family, and a small team. We answer our own phone. We
+                answer our own WhatsApp. When a piece needs a clean six months
+                later, you bring it in and we do it ourselves. When a stone needs
+                re-setting, we send it to the workshop and bring it back to you.
+                This is simply how a boutique should work.
               </p>
             </Reveal>
           </div>
@@ -61,7 +63,7 @@ export default function StoryPage() {
           <Reveal className="my-20">
             <div className="aspect-[16/9] bg-bone-deep overflow-hidden">
               <img
-                src="https://images.unsplash.com/photo-1620794108219-aedbaded4eea?auto=format&fit=crop&w=2000&q=80"
+                src={MEDIA.boutique}
                 alt="The interior of the Solitaire boutique in Swaroop Nagar, Kanpur"
                 loading="lazy"
                 className="w-full h-full object-cover"
@@ -75,24 +77,17 @@ export default function StoryPage() {
               shapes everything we do.
             </p>
             <p className="text-body text-ink-soft">
-              Our Polki comes from two ateliers in Jaipur we have known for a
-              decade. Our diamonds are GIA or IGI certified — we walk you
-              through the report before you decide. Our gold is hallmarked to
-              BIS standard. The certificate goes home with the piece.
-            </p>
-            <p className="text-body text-ink-soft">
-              We are a small team. We answer the phone. We answer WhatsApp.
-              When a piece needs a six-month polish, you bring it in and we
-              do it ourselves. When a piece needs to come back to the atelier
-              for a re-set, we send it and we send it back. This is how a
-              boutique works, and this is the boutique we wanted in Kanpur.
+              Our Polki comes from two workshops in Jaipur we have known for over
+              ten years. Our diamonds are GIA or IGI certified, and we explain the
+              report before you decide anything. Our gold is hallmarked. The
+              certificate always goes home with the piece.
             </p>
           </Reveal>
 
           <Reveal className="my-20 grid md:grid-cols-2 gap-6">
             <div className="aspect-[4/5] overflow-hidden bg-bone-deep">
               <img
-                src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=1200&q=80"
+                src={MEDIA.gold}
                 alt="A craftsman setting a Polki stone in the Solitaire atelier"
                 loading="lazy"
                 className="w-full h-full object-cover"
@@ -100,7 +95,7 @@ export default function StoryPage() {
             </div>
             <div className="aspect-[4/5] overflow-hidden bg-bone-deep mt-12 md:mt-24">
               <img
-                src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=1200&q=80"
+                src={MEDIA.solitaire}
                 alt="A loose certified solitaire on cream cloth, ready for inspection"
                 loading="lazy"
                 className="w-full h-full object-cover"
@@ -110,8 +105,8 @@ export default function StoryPage() {
 
           <Reveal className="text-center mt-20">
             <p className="font-display text-h1 max-w-2xl mx-auto leading-snug">
-              That, in a paragraph, is who we are. The rest of it, we'd rather
-              tell you in person.
+              That, in short, is who we are. The rest, we would rather tell you in
+              person.
             </p>
             <Link href="/visit" className="btn-primary mt-10 inline-flex">
               Visit Us in Swaroop Nagar

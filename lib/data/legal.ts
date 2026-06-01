@@ -11,7 +11,7 @@ export const LEGAL: Record<string, LegalDoc> = {
     slug: 'privacy',
     title: 'Privacy Policy',
     description:
-      'How Solitaire Jewellery Boutique collects, uses, and protects your information — drafted to align with the Indian DPDPA, 2023.',
+      'How Solitaire Jewellery Boutique collects, uses, and protects your information, drafted to align with the Indian DPDPA, 2023.',
     lastUpdated: '1 May 2026',
     body: [
       {
@@ -23,7 +23,7 @@ export const LEGAL: Record<string, LegalDoc> = {
       {
         heading: 'What we collect',
         paragraphs: [
-          'When you submit an enquiry, book a consultation, subscribe to our newsletter, or contact us via WhatsApp, we collect the information you provide — typically your name, phone number, email, wedding date (for bridal consultations), and the details of your enquiry.',
+          'When you submit an enquiry, book a consultation, subscribe to our newsletter, or contact us via WhatsApp, we collect the information you provide, typically your name, phone number, email, wedding date (for bridal consultations), and the details of your enquiry.',
           'Our website uses privacy-first analytics (Plausible) by default. With your consent we also load Google Analytics and Meta Pixel for advertising attribution. You can withdraw consent at any time from the cookie banner.',
         ],
       },
@@ -36,7 +36,7 @@ export const LEGAL: Record<string, LegalDoc> = {
       {
         heading: 'Your rights',
         paragraphs: [
-          'You have the right to access, correct, and delete the personal data we hold about you. You also have the right to withdraw consent and the right to grievance redressal. Email us at hello@solitairejewelleryboutique.com to exercise any of these rights — we will respond within 30 days.',
+          'You have the right to access, correct, and delete the personal data we hold about you. You also have the right to withdraw consent and the right to grievance redressal. Email us at hello@solitairejewelleryboutique.com to exercise any of these rights, we will respond within 30 days.',
         ],
       },
     ],
@@ -51,7 +51,7 @@ export const LEGAL: Record<string, LegalDoc> = {
       {
         heading: 'Use of the website',
         paragraphs: [
-          'This website is provided as a digital storefront for the Solitaire Jewellery Boutique in Swaroop Nagar, Kanpur. It is for informational purposes — pieces shown here are not sold online; transactions take place in-store or via direct contact with our team.',
+          'This website is provided as a digital storefront for the Solitaire Jewellery Boutique in Swaroop Nagar, Kanpur. It is for informational purposes, pieces shown here are not sold online; transactions take place in-store or via direct contact with our team.',
         ],
       },
       {
@@ -99,13 +99,13 @@ export const LEGAL: Record<string, LegalDoc> = {
       {
         heading: 'Authentication',
         paragraphs: [
-          'Every piece sold by Solitaire comes with a Solitaire authentication card. Diamonds of significance carry a GIA or IGI certificate. Gold pieces carry the BIS hallmark. Keep these documents — they are required for resale, exchange, and insurance.',
+          'Every piece sold by Solitaire comes with a Solitaire authentication card. Diamonds of significance carry a GIA or IGI certificate. Gold pieces carry the BIS hallmark. Keep these documents, they are required for resale, exchange, and insurance.',
         ],
       },
       {
         heading: 'After-sales service',
         paragraphs: [
-          'Bring the piece in once a year for a complimentary check-up — we tighten settings, polish the gold, and re-foil any kundan that has loosened. This service is for the life of the piece.',
+          'Bring the piece in once a year for a complimentary check-up, we tighten settings, polish the gold, and re-foil any kundan that has loosened. This service is for the life of the piece.',
         ],
       },
       {

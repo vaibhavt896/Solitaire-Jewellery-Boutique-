@@ -7,9 +7,9 @@ import { breadcrumbSchema } from '@/lib/seo/schema';
 import { buildMetadata } from '@/lib/seo/metadata';
 
 export const metadata: Metadata = buildMetadata({
-  title: 'Collections',
+  title: 'Collections | Polki, Gold & Certified Diamonds',
   description:
-    'Polki, Solitaires, Antique Gold, Diamond, Temple, Bridal, and Dubai Gold Bangles — the eight collections of Solitaire Jewellery Boutique, Kanpur.',
+    'Browse Polki, antique gold, temple, bridal, and certified diamond jewellery, all chosen by hand. Then visit our Swaroop Nagar boutique to see your favourites.',
   path: '/collections',
 });
 
@@ -25,14 +25,14 @@ export default function CollectionsPage() {
       <section className="section-pad bg-bone">
         <div className="container-wide">
           <Reveal className="max-w-3xl mb-16 md:mb-20">
-            <p className="eyebrow mb-4">The Collections</p>
+            <p className="eyebrow mb-4">Our collections</p>
             <h1 className="display-page">
-              Eight worlds of intricate jewellery.
+              Everything here was chosen by hand.
             </h1>
             <p className="body-lead mt-6">
-              Each collection at Solitaire is curated independently — a Polki
-              piece is found differently from a certified solitaire. Browse
-              below, or speak with us for personalised guidance.
+              We do not buy by the catalogue. Each piece is picked because someone
+              here believed in it. Browse online, then come and hold the ones you
+              love, the real choosing happens in the boutique.
             </p>
           </Reveal>
 

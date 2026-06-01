@@ -1,13 +1,14 @@
 import type { Collection } from './types';
+import { MEDIA } from '@/lib/placeholder-media';
 
 export const COLLECTIONS: Collection[] = [
   {
     slug: 'polki',
     title: 'Polki',
-    eyebrow: 'Uncut Diamond Heritage',
-    intro: 'Uncut diamonds, set in untold stories.',
+    eyebrow: 'Uncut diamonds, the original way',
+    intro: 'The oldest form of diamond jewellery in India.',
     description:
-      'Polki is the oldest form of diamond jewellery in India — uncut, unfaceted, set in pure gold. Each Solitaire Polki piece is sourced from Jaipur ateliers and finished by hand.',
+      'Polki is the diamond before it was ever cut, natural, full of character, set in pure gold by hand. Ours comes from two workshops in Jaipur we have known for over a decade. No two pieces are ever quite the same, which is rather the point. Polki is uncut by nature, so each stone is one of a kind, and we will explain exactly what you are looking at, in plain words.',
     hero: {
       src: '/Homepage images/Polki homee.avif',
       alt: 'Polki bridal necklace with uncut diamonds and emerald drops, Solitaire Boutique Kanpur',
@@ -20,10 +21,10 @@ export const COLLECTIONS: Collection[] = [
   {
     slug: 'solitaires',
     title: 'Solitaires',
-    eyebrow: 'GIA & IGI Certified',
-    intro: 'A single stone, certified to its character.',
+    eyebrow: 'GIA & IGI certified',
+    intro: 'One stone. Certified down to its character.',
     description:
-      'Every solitaire of significance at Solitaire is graded by GIA or IGI. We help you understand the four Cs in language that respects your time and your decision.',
+      'A solitaire is a single diamond, and a big decision. So we make it a calm one. Every solitaire of value here is graded by GIA or IGI, and we walk you through the report in simple words, what the four Cs mean, and which ones actually matter for you. The certificate is independent of us. It travels home with the ring, and we keep a copy on file for life.',
     hero: {
       src: '/Homepage images/Solitaire Diamond.avif',
       alt: 'GIA-certified diamond solitaire engagement ring, Solitaire Boutique Kanpur',
@@ -36,10 +37,10 @@ export const COLLECTIONS: Collection[] = [
   {
     slug: 'antique-gold',
     title: 'Antique Gold',
-    eyebrow: 'Old-World Craftsmanship',
-    intro: 'The warmth of gold, finished by hand.',
+    eyebrow: 'Old-world craftsmanship',
+    intro: 'The warm gold of an earlier time.',
     description:
-      'Antique gold pieces in nakshi, jadau, and kundan techniques — finished with the soft matte gleam that sets heritage jewellery apart.',
+      'Hand-finished gold in the old techniques, the soft, matte glow that machine-made pieces never quite catch. These are pieces with weight and history to them, made to be worn often and kept for good. All our gold is hallmarked for purity, so you never have to take our word for it.',
     hero: {
       src: '/Homepage images/kundan-on-gold.avif',
       alt: 'Kundan-on-gold antique necklace with traditional jadau work, Solitaire Boutique Kanpur',
@@ -51,10 +52,10 @@ export const COLLECTIONS: Collection[] = [
   {
     slug: 'diamond',
     title: 'Diamond',
-    eyebrow: 'Faceted Brilliance',
-    intro: 'Modern diamond jewellery, every piece certified.',
+    eyebrow: 'Modern, faceted, certified',
+    intro: 'Diamond pieces for the way you live now.',
     description:
-      'Diamond rings, pendants, earrings, and bracelets — faceted, set in 18K and 22K gold, each major piece accompanied by an IGI certificate.',
+      'Rings, pendants, earrings, and bracelets in faceted diamond, set in 18K and 22K gold. Clean, modern, and easy to wear every day, with the same honest certification as everything else we sell. Every diamond piece of value comes with an IGI certificate, so the brilliance is matched by proof.',
     hero: {
       src: '/Homepage images/Studded, set.avif',
       alt: 'Studded diamond set in 18K gold, Solitaire Boutique Kanpur',
@@ -66,10 +67,10 @@ export const COLLECTIONS: Collection[] = [
   {
     slug: 'temple',
     title: 'Temple',
-    eyebrow: 'South Indian Tradition',
-    intro: 'Temple jewellery, kept exact.',
+    eyebrow: 'A southern tradition, kept exact',
+    intro: 'The old motifs, treated with respect.',
     description:
-      'Temple jewellery for the South Indian bride, the festive occasion, and the collector. Cast in the traditional motifs of Lakshmi, Durga, and the lotus.',
+      'Temple jewellery carries the figures and forms passed down through generations. We keep them exactly as they should be, for the southern bride, the festival, and anyone who loves jewellery with meaning behind it. These are detailed, traditional pieces, and we are happy to explain the motifs and their stories when you visit.',
     hero: {
       src: '/Homepage images/Temple Jewellery.avif',
       alt: 'Temple jewellery necklace with traditional goddess motif, Solitaire Boutique Kanpur',
@@ -81,10 +82,10 @@ export const COLLECTIONS: Collection[] = [
   {
     slug: 'bridal',
     title: 'Bridal',
-    eyebrow: 'For The Wedding Day',
-    intro: 'Pieces for the most photographed day of her life.',
+    eyebrow: 'For the wedding day',
+    intro: 'Everything for the big day, in one harmony.',
     description:
-      'Curated bridal sets — choker plus long-haar, mathapatti, jhumkas, kada — composed for harmony with your lehenga, your ceremony, and your day.',
+      'A bride wears more than one piece, and they all have to sing together, the choker, the long necklace, the earrings, the head piece, the bangles. We compose the full set around you, your outfit, and your day, so nothing fights and nothing is forgotten. This is what our free private sitting is for: we plan the whole look with you, calmly, weeks before the day.',
     hero: {
       src: '/Homepage images/Bridal Jewellery.avif',
       alt: 'Bridal jewellery set with Polki choker and long necklace, Solitaire Boutique Kanpur',
@@ -96,14 +97,14 @@ export const COLLECTIONS: Collection[] = [
   },
   {
     slug: 'dubai-gold-bangles',
-    title: 'Dubai Gold Bangles',
-    eyebrow: 'Imported · 22K',
-    intro: 'Bangles from the Gold Souk, brought to Swaroop Nagar.',
+    title: 'Gold Bangles',
+    eyebrow: '22K · hand-picked',
+    intro: 'Bangles worth keeping, brought to Swaroop Nagar.',
     description:
-      'Hand-picked from Dubai. 22K gold bangles in modern and classical patterns. Tested for purity and finished to wear daily or save for occasions.',
+      'A hand-picked selection of 22K gold bangles, in both classic and modern patterns. Some are made for daily wear, some for the big occasions. All are tested for purity and chosen for how they feel on the wrist. Every bangle is hallmarked, ask us and we will show you exactly where to look.',
     hero: {
-      src: 'https://images.unsplash.com/photo-1535632787350-4e68ef0ac584?auto=format&fit=crop&w=1600&q=80',
-      alt: 'Dubai gold bangles in 22K, Solitaire Boutique Kanpur',
+      src: MEDIA.gold,
+      alt: 'Gold bangles in 22K, Solitaire Boutique Kanpur',
       width: 1600,
       height: 2000,
     },
@@ -111,14 +112,14 @@ export const COLLECTIONS: Collection[] = [
   },
   {
     slug: 'fashion',
-    title: 'Fashion Accessories',
-    eyebrow: 'Curated Bags',
-    intro: 'A small, careful selection of evening bags.',
+    title: 'Evening Bags',
+    eyebrow: 'A small, careful edit',
+    intro: 'The right finish for the evening.',
     description:
-      'Bags chosen as a complement — rarely the centrepiece, always the right finish. Limited stock; pieces rotate.',
+      'A small, changing selection of evening bags, chosen to complete a look, never to steal from it. Limited in number, and they rotate, so what you see today may not be here next month. If you have your eye on one, message us to check it is still in.',
     hero: {
-      src: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=1600&q=80',
-      alt: 'Curated evening clutch bag, Solitaire Boutique Kanpur',
+      src: MEDIA.diamond,
+      alt: 'Evening clutch bag, Solitaire Boutique Kanpur',
       width: 1600,
       height: 2000,
     },

@@ -33,8 +33,8 @@ const mono = DM_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
-    default: `${SITE.name} — Polki, Diamond & Solitaires, Swaroop Nagar Kanpur`,
-    template: `%s — ${SITE.name}, Kanpur`,
+    default: `${SITE.name} | Polki, Diamond & Solitaires, Swaroop Nagar Kanpur`,
+    template: `%s | ${SITE.name}, Kanpur`,
   },
   description: SITE.description,
   keywords: [
@@ -52,17 +52,16 @@ export const metadata: Metadata = {
     locale: 'en_IN',
     url: SITE.url,
     siteName: SITE.name,
-    title: `${SITE.name} — An ultimate destination for intricate jewellery`,
+    title: `${SITE.name} | Polki & Certified Diamonds, Kanpur`,
     description: SITE.description,
   },
   robots: { index: true, follow: true },
-  icons: { icon: '/favicon.svg' },
 };
 
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#FBF7EE',
+  themeColor: '#F4EFE3',
 };
 
 export default function RootLayout({

@@ -1,7 +1,7 @@
 'use client';
 
 /* ──────────────────────────────────────────────────────────
-   Footer — "inside back cover of a magazine"
+   Footer, "inside back cover of a magazine"
    Dark Mahogany background. Newsletter hero at top.
    4 editorial columns. Generous vertical space.
 ────────────────────────────────────────────────────────── */
@@ -35,14 +35,14 @@ function NewsletterForm() {
         <p
           style={{
             fontFamily: 'var(--font-body)',
-            fontSize: 9.5,
+            fontSize: 10,
             letterSpacing: '0.22em',
             textTransform: 'uppercase',
             color: 'rgba(244,239,227,0.35)',
             marginBottom: '0.75rem',
           }}
         >
-          A Monthly Letter
+          A Quiet Note
         </p>
         <h3
           className="font-display"
@@ -55,7 +55,7 @@ function NewsletterForm() {
             marginBottom: '1.25rem',
           }}
         >
-          Nothing more than once a month.
+          A quiet note, now and then.
         </h3>
         <p
           style={{
@@ -66,9 +66,8 @@ function NewsletterForm() {
             maxWidth: 380,
           }}
         >
-          New pieces, occasional notes on craftsmanship, and a heads-up before each
-          Akshaya Tritiya and Dhanteras. We don&rsquo;t sell your email and we
-          don&rsquo;t write more than once a month.
+          New pieces, the festival edits, and a little on how to choose well.
+          No noise.
         </p>
       </div>
 
@@ -122,7 +121,7 @@ function NewsletterForm() {
                   border: 'none',
                   padding: '13px 22px',
                   fontFamily: 'var(--font-body)',
-                  fontSize: 9.5,
+                  fontSize: 10,
                   letterSpacing: '0.16em',
                   textTransform: 'uppercase',
                   cursor: 'pointer',
@@ -133,19 +132,19 @@ function NewsletterForm() {
                 onMouseEnter={e => { if (status !== 'loading') (e.currentTarget as HTMLButtonElement).style.background = 'var(--mahogany)'; }}
                 onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'var(--aged-gold)'; }}
               >
-                {status === 'loading' ? '…' : 'Send the letter'}
+                {status === 'loading' ? '…' : 'Keep Me Posted'}
               </button>
             </div>
             <p
               style={{
                 fontFamily: 'var(--font-body)',
-                fontSize: 9.5,
+                fontSize: 10,
                 color: 'rgba(244,239,227,0.28)',
                 marginTop: '0.75rem',
                 letterSpacing: '0.04em',
               }}
             >
-              Currently going to 2,400+ readers across India, Dubai, London, and Singapore.
+              We don&rsquo;t sell your email, and we don&rsquo;t write more than once a month.
             </p>
           </form>
         )}
@@ -161,7 +160,7 @@ function FooterCol({ title, children }: { title: string; children: React.ReactNo
       <p
         style={{
           fontFamily: 'var(--font-body)',
-          fontSize: 9,
+          fontSize: 10,
           letterSpacing: '0.22em',
           textTransform: 'uppercase',
           color: 'var(--aged-gold)',
@@ -213,7 +212,7 @@ export function Footer() {
     <footer style={{ background: 'var(--mahogany)', color: 'var(--ivory)' }}>
       <div className="container-wide" style={{ paddingTop: '6rem', paddingBottom: '3rem' }}>
 
-        {/* Newsletter — hero at top */}
+        {/* Newsletter, hero at top */}
         <NewsletterForm />
 
         {/* Brand + four columns */}
@@ -272,39 +271,40 @@ export function Footer() {
             </p>
           </div>
 
-          {/* Col 1 — The Boutique */}
+          {/* Col 1, The Boutique */}
           <div className="col-span-1 md:col-span-2 md:col-start-5">
             <FooterCol title="The Boutique">
-              <FooterLink href="/story">Story</FooterLink>
-              <FooterLink href="/craftsmanship">The Atelier</FooterLink>
+              <FooterLink href="/story">Our Story</FooterLink>
+              <FooterLink href="/craftsmanship">Craftsmanship</FooterLink>
               <FooterLink href="/trust">Trust & Certification</FooterLink>
-              <FooterLink href="/bridal">Brides we&rsquo;ve worked with</FooterLink>
+              <FooterLink href="/bridal">Bridal</FooterLink>
             </FooterCol>
           </div>
 
-          {/* Col 2 — Collections */}
+          {/* Col 2, Collections */}
           <div className="col-span-1 md:col-span-2">
             <FooterCol title="Collections">
               <FooterLink href="/collections/polki">Polki</FooterLink>
-              <FooterLink href="/collections/solitaires">Solitaires</FooterLink>
+              <FooterLink href="/collections/solitaires">Certified Solitaires</FooterLink>
               <FooterLink href="/collections/antique-gold">Antique Gold</FooterLink>
               <FooterLink href="/collections/diamond">Diamond</FooterLink>
               <FooterLink href="/collections/temple">Temple</FooterLink>
-              <FooterLink href="/collections/bridal">Bridal</FooterLink>
+              <FooterLink href="/collections/bridal">Bridal Sets</FooterLink>
+              <FooterLink href="/collections/dubai-gold-bangles">Gold Bangles</FooterLink>
             </FooterCol>
           </div>
 
-          {/* Col 3 — Visit */}
+          {/* Col 3, Visit */}
           <div className="col-span-1 md:col-span-2">
             <FooterCol title="Visit">
               <FooterLink href="/visit">Swaroop Nagar Boutique</FooterLink>
-              <FooterLink href={SITE.mapsDirectionsUrl} external>Get directions</FooterLink>
-              <FooterLink href="/bridal/book">Book the consultation</FooterLink>
+              <FooterLink href={SITE.mapsDirectionsUrl} external>Get Directions</FooterLink>
+              <FooterLink href="/bridal/book">Book a Private Sitting</FooterLink>
               <FooterLink href="/contact">Contact</FooterLink>
             </FooterCol>
           </div>
 
-          {/* Col 4 — Read */}
+          {/* Col 4, Read */}
           <div className="col-span-1 md:col-span-3">
             <FooterCol title="Read">
               <FooterLink href="/journal">The Journal</FooterLink>
@@ -326,13 +326,13 @@ export function Footer() {
             className="text-center"
             style={{
               fontFamily: 'var(--font-body)',
-              fontSize: 8.5,
+              fontSize: 10,
               letterSpacing: '0.18em',
               textTransform: 'uppercase',
               color: 'rgba(244,239,227,0.25)',
             }}
           >
-            Trusted by 500+ families in Kanpur · Certified by GIA & IGI · BIS Hallmarked
+            Trusted by Kanpur families · GIA & IGI certified diamonds · BIS hallmarked gold
           </p>
         </div>
 
@@ -348,7 +348,7 @@ export function Footer() {
               color: 'rgba(244,239,227,0.28)',
             }}
           >
-            &copy; 2026 Solitaire Jewellery Boutique. All rights reserved.
+            &copy; Solitaire Jewellery Boutique, Kanpur. Made to be kept.
           </p>
 
           <ul

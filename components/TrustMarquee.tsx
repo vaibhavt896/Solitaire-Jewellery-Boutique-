@@ -13,9 +13,9 @@ const ITEMS_A = [
   { text: 'Solitaires',                  serif: false },
   { text: 'BIS 916 Hallmarked',          serif: true  },
   { text: 'Antique Gold',                serif: false },
-  { text: 'Every Certificate Travels',   serif: true  },
+  { text: 'The Certificate Goes Home With You', serif: true  },
   { text: 'Temple Jewellery',            serif: false },
-  { text: '500+ Families Trusted',       serif: true  },
+  { text: 'Trusted by Kanpur Families',  serif: true  },
   { text: 'Bridal',                      serif: false },
   { text: 'Curated by Hand',             serif: true  },
   { text: 'Diamond',                     serif: false },
@@ -26,9 +26,9 @@ const ITEMS_B = [
   { text: 'Kundan',                                      serif: false },
   { text: 'Since the Boutique Opened',                   serif: true  },
   { text: 'Jadau',                                       serif: false },
-  { text: "North India's Most Precise Boutique",         serif: true  },
+  { text: 'A Small Family Boutique',                     serif: true  },
   { text: 'By Appointment',                              serif: false },
-  { text: 'Polki Set the Way Polki Should Be Set',       serif: true  },
+  { text: 'No Pressure to Buy',                          serif: true  },
   { text: 'Handcrafted Pieces',                          serif: false },
   { text: 'Swaroop Nagar · Kanpur',                      serif: true  },
 ];
@@ -173,11 +173,11 @@ function MarqueeRow({
                 style={{
                   display:       'inline-block',
                   fontFamily:    'var(--font-body)',
-                  fontSize:      '0.5875rem',
-                  letterSpacing: '0.28em',
+                  fontSize:      '0.66rem',
+                  letterSpacing: '0.24em',
                   textTransform: 'uppercase',
                   fontWeight:    600,
-                  color:         'rgba(244,239,227,0.30)',
+                  color:         'rgba(244,239,227,0.34)',
                   cursor:        'default',
                 }}
                 onMouseEnter={(e) =>

@@ -7,21 +7,22 @@ import { breadcrumbSchema, jewelryStoreSchema } from '@/lib/seo/schema';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { IconPin } from '@/components/icons/Icon';
 import { CopyAddressButton } from '@/components/CopyAddressButton';
+import { MEDIA } from '@/lib/placeholder-media';
 
 export const metadata: Metadata = buildMetadata({
-  title: 'Visit Us — Swaroop Nagar, Kanpur',
+  title: 'Visit Us | Swaroop Nagar, Kanpur',
   description:
-    'Solitaire Jewellery Boutique is on Swaroop Nagar, Kanpur. Open Mon–Sat, 11 AM – 8 PM. By appointment on Sunday. WhatsApp +91 8957 804 161.',
+    'Find Solitaire Jewellery Boutique behind Hotel Royal Cliff, Khalasi Line, Swaroop Nagar, Kanpur. Open Monday to Saturday. Walk in, or message us first.',
   path: '/visit',
 });
 
 const GALLERY = [
-  'https://images.unsplash.com/photo-1620794108219-aedbaded4eea?auto=format&fit=crop&w=1200&q=80',
-  'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=1200&q=80',
-  'https://images.unsplash.com/photo-1599643477877-530eb83abc8e?auto=format&fit=crop&w=1200&q=80',
-  'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=1200&q=80',
-  'https://images.unsplash.com/photo-1535632787350-4e68ef0ac584?auto=format&fit=crop&w=1200&q=80',
-  'https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=1200&q=80',
+  MEDIA.boutique,
+  MEDIA.gold,
+  MEDIA.polki,
+  MEDIA.solitaire,
+  MEDIA.bridal,
+  MEDIA.diamond,
 ];
 
 export default function VisitPage() {
@@ -84,17 +85,19 @@ export default function VisitPage() {
       <section className="section-pad bg-bone">
         <div className="container-wide">
           <Reveal className="max-w-2xl mb-16">
-            <p className="eyebrow">Visit Solitaire</p>
-            <h1 className="display-page mt-3">Find us, before you find a piece.</h1>
+            <p className="eyebrow">Come and see us</p>
+            <h1 className="display-page mt-3">Find us first. The right piece comes after.</h1>
           </Reveal>
 
           <div className="grid md:grid-cols-2 gap-10 lg:gap-20">
             <Reveal>
-              <h2 className="eyebrow mb-3">The Boutique</h2>
+              <h2 className="eyebrow mb-3">The boutique</h2>
               <p className="font-display text-h1 leading-snug">
-                Swaroop Nagar
+                Lane of Skin Mantraa, 113/65B
                 <br />
-                Kanpur, UP 208002
+                Behind Hotel Royal Cliff, Khalasi Line
+                <br />
+                Swaroop Nagar, Kanpur 208002
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <a
@@ -132,7 +135,7 @@ export default function VisitPage() {
                   rel="noopener noreferrer"
                   className="link-underline text-ink"
                 >
-                  Tap to message us on WhatsApp
+                  Message Us on WhatsApp
                 </a>
               </p>
             </Reveal>
@@ -144,8 +147,8 @@ export default function VisitPage() {
       <section className="section-pad bg-bone-deep">
         <div className="container-wide">
           <Reveal className="mb-16">
-            <p className="eyebrow">Inside the Boutique</p>
-            <h2 className="display-page mt-3">A small room, considered carefully.</h2>
+            <p className="eyebrow">Inside the boutique</p>
+            <h2 className="display-page mt-3">A small room, looked after with care.</h2>
           </Reveal>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-5">
             {GALLERY.map((src, i) => (
@@ -161,7 +164,7 @@ export default function VisitPage() {
                 >
                   <img
                     src={src}
-                    alt={`Inside the Solitaire boutique, Kanpur — view ${i + 1}`}
+                    alt={`Inside the Solitaire boutique, Kanpur, view ${i + 1}`}
                     loading="lazy"
                     className="w-full h-full object-cover"
                   />
@@ -177,15 +180,14 @@ export default function VisitPage() {
         <div className="container-content">
           <Reveal>
             <p className="eyebrow">Coming from Lucknow?</p>
-            <h2 className="display-page mt-3">90 minutes on the Agra Expressway.</h2>
+            <h2 className="display-page mt-3">About 90 minutes down the expressway.</h2>
             <p className="body-lead mt-6">
-              Many of our customers visit on a half-day trip — a morning
-              appointment, lunch in Civil Lines, and home by evening. Schedule
-              a Bridal Consultation in advance and we'll have your curation
-              ready when you arrive.
+              Many of our customers make a half-day of it, a morning sitting with
+              us, lunch in Civil Lines, and home by evening. Message us before you
+              set off and we will have your selection ready when you arrive.
             </p>
             <Link href="/bridal/book" className="btn-primary mt-10 inline-flex">
-              Plan Your Lucknow Visit
+              Plan Your Visit
             </Link>
           </Reveal>
         </div>
@@ -195,14 +197,16 @@ export default function VisitPage() {
       <section className="section-pad bg-bone-deep">
         <div className="container-content">
           <Reveal>
-            <p className="eyebrow">Walk-ins Welcome</p>
-            <h2 className="display-page mt-3">No appointment needed for browsing.</h2>
+            <p className="eyebrow">What to expect</p>
+            <h2 className="display-page mt-3">Walk in any time. No appointment needed just to look.</h2>
             <p className="body-lead mt-6">
-              For solitaire consultations, bridal sets, or large-set viewings,
-              an appointment ensures your pieces are ready when you arrive.
+              You will be welcomed, offered a seat, and given time. We will show you
+              what you ask for, explain anything you want explained, and we will not
+              crowd you. If you are here for a bridal set or a solitaire, a quick
+              message ahead means your pieces will be ready and waiting.
             </p>
             <Link href="/bridal/book" className="btn-secondary mt-10 inline-flex">
-              Book an Appointment
+              Book a Private Sitting
             </Link>
           </Reveal>
         </div>

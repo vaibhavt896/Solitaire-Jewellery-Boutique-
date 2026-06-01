@@ -35,7 +35,7 @@ export function PieceCard({ piece }: { piece: Piece }) {
           </span>
         )}
 
-        {/* Primary image — fades out on hover when secondary exists */}
+        {/* Primary image, fades out on hover when secondary exists */}
         <Image
           src={primary.src}
           alt={primary.alt}
@@ -46,7 +46,7 @@ export function PieceCard({ piece }: { piece: Piece }) {
           }`}
         />
 
-        {/* Secondary image — crossfades in on hover */}
+        {/* Secondary image, crossfades in on hover */}
         {secondary && (
           <Image
             src={secondary.src}

@@ -1,17 +1,19 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
+import { whatsappLinkFor, WHATSAPP_MESSAGES } from '@/lib/site';
 
 gsap.config({ force3D: true });
 
 /* ─── Slide data ───────────────────────────────────────────── */
 const SLIDES = [
-  { src: '/Hero-Slider-Images/slide%201.avif', alt: 'Curated solitaire jewellery — Swaroop Nagar Kanpur' },
-  { src: '/Hero-Slider-Images/Slide%202.avif', alt: 'Bridal jewellery — timeless elegance' },
-  { src: '/Hero-Slider-Images/slide%203.avif', alt: 'Heritage gold — Polki, Kundan, antique gold' },
-  { src: '/Hero-Slider-Images/Slide%204.avif', alt: 'Certified diamond solitaires — GIA & IGI' },
+  { src: '/Hero-Slider-Images/slide%201.avif', alt: 'Curated solitaire jewellery, Swaroop Nagar Kanpur' },
+  { src: '/Hero-Slider-Images/Slide%202.avif', alt: 'Bridal jewellery, timeless elegance' },
+  { src: '/Hero-Slider-Images/slide%203.avif', alt: 'Heritage gold, Polki, Kundan, antique gold' },
+  { src: '/Hero-Slider-Images/Slide%204.avif', alt: 'Certified diamond solitaires, GIA & IGI' },
   { src: '/Hero-Slider-Images/Slide%205.avif', alt: 'Fine jewellery for every occasion' },
 ] as const;
 
@@ -19,9 +21,8 @@ const N        = SLIDES.length;
 const EXTENDED = [SLIDES[N - 1], ...SLIDES, SLIDES[0]] as const;
 
 const DURATION = 5000;
-const GAP      = 10;
-const SLIDE_MS = 1000;
-const EASE     = '0.65,0,0.35,1';
+const GAP      = 16;
+const SLIDE_MS = 750;
 const KB_SCALE = 1.065;                    // Ken Burns max zoom
 const KB_DUR   = (DURATION + 400) / 1000; // slightly longer than slide lifetime
 
@@ -30,6 +31,8 @@ export function Hero() {
   const [vIdx,     setVIdx]     = useState(1);
   const [peek,     setPeek]     = useState(56);
   const [slideW,   setSlideW]   = useState(0);
+  const [slideH,   setSlideH]   = useState(0);
+  const [pb,       setPb]       = useState(24);
   const [dragging, setDragging] = useState(false);
 
   const idxRef       = useRef(0);
@@ -38,17 +41,17 @@ export function Hero() {
   const sectionRef   = useRef<HTMLElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const trackRef     = useRef<HTMLDivElement>(null);
-  const progressRef  = useRef<HTMLDivElement>(null);
   const timerRef     = useRef<ReturnType<typeof setTimeout>>(undefined);
   const loopCleanup  = useRef<(() => void) | null>(null);
   const dotRefs      = useRef<(HTMLButtonElement | null)[]>([]);
   const dotSpanRefs  = useRef<(HTMLSpanElement | null)[]>([]);
   const imageRefs    = useRef<(HTMLImageElement | null)[]>([]);
+  const slideRefs    = useRef<(HTMLDivElement | null)[]>([]);
   const kenBurnRef   = useRef<gsap.core.Tween | null>(null);
   const prevVIdxRef  = useRef<number | null>(null);
   const reduceRef    = useRef(false);
 
-  /* Pointer drag refs — all zero-state, zero re-renders during drag */
+  /* Pointer drag refs, all zero-state, zero re-renders during drag */
   const pointerDown = useRef(false);
   const ptrStartX   = useRef(0);
   const trackStartX = useRef(0);
@@ -56,7 +59,7 @@ export function Hero() {
   const lastPtrX    = useRef(0);
   const lastPtrT    = useRef(0);
 
-  /* ── Reduced-motion — must be first effect ─────────────── */
+  /* ── Reduced-motion, must be first effect ─────────────── */
   useEffect(() => {
     reduceRef.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   }, []);
@@ -65,11 +68,49 @@ export function Hero() {
   useEffect(() => {
     const measure = () => {
       const vw = window.innerWidth;
-      const pk = vw < 640 ? 14 : vw < 1024 ? 36 : 56;
-      const sw = (containerRef.current?.offsetWidth ?? vw) - pk * 2;
+      const vh = window.innerHeight;
+      const cw = containerRef.current?.offsetWidth || vw;
+      /* Hero height constraints to keep all slider and buttons above the fold */
+      const CHROME  = 128;
+      const NAV     = vw < 640 ? 128 : 118;
+      const avail   = vh - CHROME - NAV;
+
+      const isDesktop = vw >= 768;
+      const minPeek = vw < 640 ? 10 : vw < 1024 ? 14 : 16;
+      
+      let sw = cw - minPeek * 2;
+      let pk = minPeek;
+      let slideH = Math.max(220, Math.round(avail * 0.80));
+      let targetPb = 24;
+
+      if (isDesktop) {
+        const maxHForFold = Math.round(avail * 0.98);
+        const targetSw = Math.round(maxHForFold * 2.7424);
+        
+        if (targetSw < cw - minPeek * 2) {
+          sw = targetSw;
+          slideH = maxHForFold;
+          pk = Math.round((cw - sw) / 2);
+        } else {
+          sw = cw - minPeek * 2;
+          slideH = Math.round(sw / 2.7424);
+          pk = minPeek;
+        }
+
+        const contentHeight = 12 + slideH + NAV;
+        const extraSpace = (vh - CHROME) - contentHeight;
+        targetPb = Math.max(16, extraSpace);
+      } else {
+        const contentHeight = 12 + slideH + NAV;
+        const extraSpace = (vh - CHROME) - contentHeight;
+        targetPb = Math.max(16, extraSpace);
+      }
+
       slideWRef.current = sw;
       setPeek(pk);
       setSlideW(sw);
+      setSlideH(slideH);
+      setPb(targetPb);
     };
     measure();
     const ro = new ResizeObserver(measure);
@@ -77,15 +118,55 @@ export function Hero() {
     return () => ro.disconnect();
   }, []);
 
-  /* ── Set track transform directly on the DOM ───────────── */
+  /* ── Set track transform directly via GSAP ─────────────── */
   const setTrack = useCallback((vi: number, animated: boolean) => {
     const t  = trackRef.current;
     const sw = slideWRef.current;
     if (!t) return;
-    t.style.transition = (animated && !reduceRef.current)
-      ? `transform ${SLIDE_MS}ms cubic-bezier(${EASE})`
-      : 'none';
-    t.style.transform = `translateX(${-(vi * (sw + GAP))}px)`;
+    const targetX = -(vi * (sw + GAP));
+
+    if (animated && !reduceRef.current) {
+      // Animate track using GSAP
+      gsap.to(t, {
+        x: targetX,
+        duration: SLIDE_MS / 1000,
+        ease: 'power4.out',
+        overwrite: 'auto',
+      });
+
+      // Animate slide card scales, opacities, and box-shadows concurrently
+      slideRefs.current.forEach((slide, idx) => {
+        if (!slide) return;
+        const isActive = idx === vi;
+        gsap.to(slide, {
+          scale: isActive ? 1.0 : 0.96,
+          opacity: isActive ? 1.0 : 0.68,
+          boxShadow: isActive
+            ? '0 24px 60px -8px rgba(26,20,16,0.18), 0 8px 24px -4px rgba(26,20,16,0.12)'
+            : '0 4px 12px rgba(26,20,16,0.04)',
+          duration: SLIDE_MS / 1000,
+          ease: 'power4.out',
+          overwrite: 'auto',
+        });
+      });
+    } else {
+      // Snap instantly without animation
+      gsap.killTweensOf(t);
+      gsap.set(t, { x: targetX });
+
+      slideRefs.current.forEach((slide, idx) => {
+        if (!slide) return;
+        const isActive = idx === vi;
+        gsap.killTweensOf(slide);
+        gsap.set(slide, {
+          scale: isActive ? 1.0 : 0.96,
+          opacity: isActive ? 1.0 : 0.68,
+          boxShadow: isActive
+            ? '0 24px 60px -8px rgba(26,20,16,0.18), 0 8px 24px -4px rgba(26,20,16,0.12)'
+            : '0 4px 12px rgba(26,20,16,0.04)',
+        });
+      });
+    }
   }, []);
 
   /* On resize: instant snap to current visual position */
@@ -122,7 +203,7 @@ export function Hero() {
     }
     prevVIdxRef.current = vIdx;
 
-    /* Kill old Ken Burns, start fresh on active image */
+    /* Start fresh Ken Burns on active image */
     kenBurnRef.current?.kill();
     kenBurnRef.current = gsap.fromTo(
       img,
@@ -147,18 +228,6 @@ export function Hero() {
     });
   }, [idx]);
 
-  /* ── GSAP progress bar (replaces RAF) ─────────────────── */
-  useEffect(() => {
-    if (reduceRef.current || dragging || !progressRef.current) return;
-    const bar = progressRef.current;
-    gsap.killTweensOf(bar);
-    gsap.fromTo(bar,
-      { scaleX: 0 },
-      { scaleX: 1, duration: DURATION / 1000, ease: 'none', overwrite: true }
-    );
-    return () => { gsap.killTweensOf(bar); };
-  }, [idx, dragging]);
-
   /* ── goTo: navigate to a real slide ───────────────────── */
   const goTo = useCallback((realIdx: number, animated = true) => {
     loopCleanup.current?.();
@@ -171,11 +240,13 @@ export function Hero() {
     setTrack(vi, animated);
   }, [setTrack]);
 
-  /* ── advance: smooth loop via clone slides ─────────────── */
+  /* ── advance: smooth loop via GSAP callbacks ──────────── */
   const advance = useCallback((dir: 1 | -1) => {
     loopCleanup.current?.();
     loopCleanup.current = null;
     const cur = idxRef.current;
+    const sw  = slideWRef.current;
+    const t   = trackRef.current;
 
     /* Forward loop: last real → clone-first → real-first */
     if (dir === 1 && cur === N - 1) {
@@ -184,20 +255,45 @@ export function Hero() {
       idxRef.current  = 0;
       setIdx(0);
       setVIdx(cloneVi);
-      setTrack(cloneVi, true);
 
-      const t = trackRef.current;
-      if (!t) return;
-      const onEnd = () => {
-        t.removeEventListener('transitionend', onEnd);
-        const sw = slideWRef.current;
-        t.style.transition = 'none';
-        t.style.transform  = `translateX(${-(1 * (sw + GAP))}px)`;
-        vIdxRef.current = 1;
-        setVIdx(1);
-      };
-      t.addEventListener('transitionend', onEnd);
-      loopCleanup.current = () => t.removeEventListener('transitionend', onEnd);
+      if (t) {
+        gsap.to(t, {
+          x: -(cloneVi * (sw + GAP)),
+          duration: SLIDE_MS / 1000,
+          ease: 'power4.out',
+          overwrite: 'auto',
+          onComplete: () => {
+            gsap.set(t, { x: -(1 * (sw + GAP)) });
+            vIdxRef.current = 1;
+            setVIdx(1);
+          }
+        });
+
+        slideRefs.current.forEach((slide, idx) => {
+          if (!slide) return;
+          const isActive = idx === cloneVi;
+          gsap.to(slide, {
+            scale: isActive ? 1.0 : 0.96,
+            opacity: isActive ? 1.0 : 0.68,
+            boxShadow: isActive
+              ? '0 24px 60px -8px rgba(26,20,16,0.18), 0 8px 24px -4px rgba(26,20,16,0.12)'
+              : '0 4px 12px rgba(26,20,16,0.04)',
+            duration: SLIDE_MS / 1000,
+            ease: 'power4.out',
+            overwrite: 'auto',
+            onComplete: () => {
+              const isFirst = idx === 1;
+              gsap.set(slide, {
+                scale: isFirst ? 1.0 : 0.96,
+                opacity: isFirst ? 1.0 : 0.68,
+                boxShadow: isFirst
+                  ? '0 24px 60px -8px rgba(26,20,16,0.18), 0 8px 24px -4px rgba(26,20,16,0.12)'
+                  : '0 4px 12px rgba(26,20,16,0.04)',
+              });
+            }
+          });
+        });
+      }
       return;
     }
 
@@ -208,25 +304,50 @@ export function Hero() {
       idxRef.current  = N - 1;
       setIdx(N - 1);
       setVIdx(cloneVi);
-      setTrack(cloneVi, true);
 
-      const t = trackRef.current;
-      if (!t) return;
-      const onEnd = () => {
-        t.removeEventListener('transitionend', onEnd);
-        const sw = slideWRef.current;
-        t.style.transition = 'none';
-        t.style.transform  = `translateX(${-(N * (sw + GAP))}px)`;
-        vIdxRef.current = N;
-        setVIdx(N);
-      };
-      t.addEventListener('transitionend', onEnd);
-      loopCleanup.current = () => t.removeEventListener('transitionend', onEnd);
+      if (t) {
+        gsap.to(t, {
+          x: -(cloneVi * (sw + GAP)),
+          duration: SLIDE_MS / 1000,
+          ease: 'power4.out',
+          overwrite: 'auto',
+          onComplete: () => {
+            gsap.set(t, { x: -(N * (sw + GAP)) });
+            vIdxRef.current = N;
+            setVIdx(N);
+          }
+        });
+
+        slideRefs.current.forEach((slide, idx) => {
+          if (!slide) return;
+          const isActive = idx === cloneVi;
+          gsap.to(slide, {
+            scale: isActive ? 1.0 : 0.96,
+            opacity: isActive ? 1.0 : 0.68,
+            boxShadow: isActive
+              ? '0 24px 60px -8px rgba(26,20,16,0.18), 0 8px 24px -4px rgba(26,20,16,0.12)'
+              : '0 4px 12px rgba(26,20,16,0.04)',
+            duration: SLIDE_MS / 1000,
+            ease: 'power4.out',
+            overwrite: 'auto',
+            onComplete: () => {
+              const isLast = idx === N;
+              gsap.set(slide, {
+                scale: isLast ? 1.0 : 0.96,
+                opacity: isLast ? 1.0 : 0.68,
+                boxShadow: isLast
+                  ? '0 24px 60px -8px rgba(26,20,16,0.18), 0 8px 24px -4px rgba(26,20,16,0.12)'
+                  : '0 4px 12px rgba(26,20,16,0.04)',
+              });
+            }
+          });
+        });
+      }
       return;
     }
 
     goTo(cur + dir);
-  }, [goTo, setTrack]);
+  }, [goTo]);
 
   /* ── Auto-advance ──────────────────────────────────────── */
   useEffect(() => {
@@ -255,12 +376,18 @@ export function Hero() {
     lastPtrX.current    = e.clientX;
     lastPtrT.current    = e.timeStamp;
     velX.current        = 0;
-    trackStartX.current = -(vIdxRef.current * (slideWRef.current + GAP));
-    const t = trackRef.current;
-    if (t) t.style.transition = 'none';
+    
+    // Kill any active slide/track tweens to prevent fighting the drag
+    if (trackRef.current) gsap.killTweensOf(trackRef.current);
+    slideRefs.current.forEach(slide => {
+      if (slide) gsap.killTweensOf(slide);
+    });
+
+    const currentX = trackRef.current ? gsap.getProperty(trackRef.current, 'x') as number : 0;
+    trackStartX.current = currentX || -(vIdxRef.current * (slideWRef.current + GAP));
+
     setDragging(true);
     clearTimeout(timerRef.current);
-    if (progressRef.current) gsap.killTweensOf(progressRef.current);
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
   }, []);
 
@@ -275,7 +402,9 @@ export function Hero() {
                 : raw < minX ? minX + (raw - minX) * 0.18
                 : raw;
     const t = trackRef.current;
-    if (t) t.style.transform = `translateX(${tx}px)`;
+    if (t) {
+      gsap.set(t, { x: tx });
+    }
     const dt = e.timeStamp - lastPtrT.current;
     if (dt > 0) velX.current = (e.clientX - lastPtrX.current) / dt * 1000;
     lastPtrX.current = e.clientX;
@@ -294,7 +423,7 @@ export function Hero() {
   }, [advance, goTo]);
 
   return (
-    <section ref={sectionRef} className="w-full" style={{ paddingTop: 18 }}>
+    <section ref={sectionRef} className="w-full" style={{ paddingTop: 12, paddingBottom: pb }}>
 
       {/* ── Carousel viewport ─────────────────────────────── */}
       <div
@@ -320,33 +449,81 @@ export function Hero() {
           {EXTENDED.map((s, vi) => (
             <div
               key={vi}
+              ref={(el) => { slideRefs.current[vi] = el; }}
               style={{
                 width:        slideW || 0,
+                height:       slideH || undefined,
                 flexShrink:   0,
                 overflow:     'hidden',
-                borderRadius: 10,
+                borderRadius: 12,
                 lineHeight:   0,
-                willChange:   Math.abs(vi - vIdx) <= 1 ? 'opacity' : 'auto',
+                position:     'relative',
+                background:   'var(--ivory)',
+                willChange:   'transform, opacity',
                 opacity:      vi === vIdx ? 1 : 0.68,
-                transition:   `opacity ${SLIDE_MS}ms cubic-bezier(${EASE})`,
+                transform:    vi === vIdx ? 'scale(1)' : 'scale(0.96)',
+                boxShadow:    vi === vIdx
+                  ? '0 24px 60px -8px rgba(26,20,16,0.18), 0 8px 24px -4px rgba(26,20,16,0.12)'
+                  : '0 4px 12px rgba(26,20,16,0.04)',
               }}
             >
+              {/* Blurred fill */}
+              <div
+                aria-hidden
+                style={{
+                  position:           'absolute',
+                  inset:              '-12px',
+                  backgroundImage:    `url('${s.src}')`,
+                  backgroundSize:     'cover',
+                  backgroundPosition: 'center',
+                  filter:             'blur(22px)',
+                  opacity:            0.45,
+                  zIndex:             0,
+                }}
+              />
               <Image
                 ref={(el) => { imageRefs.current[vi] = el; }}
                 src={s.src}
                 alt={s.alt}
-                width={1800}
-                height={1000}
-                sizes="(max-width: 640px) 96vw, (max-width: 1024px) 93vw, 88vw"
+                width={2076}
+                height={757}
+                sizes="(max-width: 768px) 96vw, 90vw"
                 quality={90}
                 priority={vi === 1}
                 draggable={false}
                 style={{
                   width:           '100%',
-                  height:          'auto',
+                  height:          '100%',
                   display:         'block',
+                  objectFit:       'contain',
+                  objectPosition:  'center center',
                   transformOrigin: 'center center',
                   willChange:      'transform',
+                  position:        'relative',
+                  zIndex:          1,
+                }}
+              />
+              {/* Inset gold frame */}
+              <div
+                aria-hidden
+                style={{
+                  position:      'absolute',
+                  inset:         0,
+                  border:        '0.5px solid rgba(184, 146, 58, 0.22)',
+                  borderRadius:  12,
+                  pointerEvents: 'none',
+                  zIndex:        2,
+                }}
+              />
+              {/* Cinematic vignette */}
+              <div
+                aria-hidden
+                style={{
+                  position:      'absolute',
+                  inset:         0,
+                  background:    'radial-gradient(ellipse at center, transparent 55%, rgba(26,20,16,0.15) 100%)',
+                  pointerEvents: 'none',
+                  zIndex:        2,
                 }}
               />
             </div>
@@ -355,11 +532,11 @@ export function Hero() {
       </div>
 
       {/* ── Navigation ────────────────────────────────────── */}
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, padding: '14px 0 6px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, padding: '16px 0 0' }}>
 
-        {/* Pill dots — GSAP animated, no Framer Motion */}
+        {/* Pill dots */}
         <div
-          style={{ display: 'flex', alignItems: 'center', gap: 7 }}
+          style={{ display: 'flex', alignItems: 'center', gap: 6 }}
           role="tablist"
           aria-label="Slide navigation"
           onKeyDown={(e) => {
@@ -385,35 +562,45 @@ export function Hero() {
               aria-selected={i === idx}
               aria-label={`Go to slide ${i + 1}`}
               onClick={() => goTo(i)}
-              style={{ padding: '18px 14px', background: 'transparent', border: 'none', cursor: 'pointer', lineHeight: 0 }}
+              style={{ padding: '8px 6px', background: 'transparent', border: 'none', cursor: 'pointer', lineHeight: 0 }}
             >
               <span
                 ref={(el) => { dotSpanRefs.current[i] = el; }}
                 style={{
                   display:         'block',
-                  width:           i === 0 ? 20 : 7,
-                  height:          7,
-                  borderRadius:    4,
-                  backgroundColor: i === 0 ? 'var(--gold)' : 'rgba(26,20,16,0.20)',
+                  width:           i === idx ? 20 : 7,
+                  height:          6,
+                  borderRadius:    3,
+                  backgroundColor: i === idx ? 'var(--gold)' : 'rgba(26,20,16,0.20)',
                 }}
               />
             </button>
           ))}
         </div>
 
-        {/* Progress bar — GSAP driven */}
-        <div style={{ width: 96, height: 2, background: 'rgba(26,20,16,0.10)', overflow: 'hidden', borderRadius: 1 }}>
-          <div
-            ref={progressRef}
-            style={{
-              height:          '100%',
-              background:      'linear-gradient(to right, var(--gold-soft), var(--gold))',
-              transformOrigin: 'left',
-              transform:       'scaleX(0)',
-              willChange:      'transform',
-            }}
-          />
+        {/* Buttons row */}
+        <div className="flex flex-wrap items-center justify-center gap-4">
+          <Link href="/visit" className="cta cta--gold">
+            <span>Visit the Boutique</span>
+          </Link>
+          <a
+            href={whatsappLinkFor(WHATSAPP_MESSAGES.general)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="cta cta--ink"
+          >
+            <span>Message Us on WhatsApp</span>
+          </a>
         </div>
+
+        {/* Custom global styling to completely clear track transforms on drag */}
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            .carousel-dragging * {
+              user-select: none !important;
+            }
+          `
+        }} />
 
       </div>
     </section>

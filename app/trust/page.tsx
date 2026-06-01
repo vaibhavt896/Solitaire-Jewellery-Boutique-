@@ -6,32 +6,44 @@ import { breadcrumbSchema } from '@/lib/seo/schema';
 import { buildMetadata } from '@/lib/seo/metadata';
 
 export const metadata: Metadata = buildMetadata({
-  title: 'Trust & Certification',
+  title: 'Trust & Certification | Honest Answers',
   description:
-    'GIA, IGI, BIS Hallmark — every Solitaire piece is documented, every diamond of significance is certified. How we authenticate, and what to ask any jeweller.',
+    'GIA and IGI certified diamonds, hallmarked gold, and clear answers on purity, price, and returns. No pressure, ever. Visit us in Swaroop Nagar, Kanpur.',
   path: '/trust',
 });
 
 const FAQS = [
   {
-    q: 'How can I verify my GIA certificate?',
-    a: 'Every GIA report has a unique number. Visit gia.edu/report-check on your phone, enter the number, and confirm the carat, cut, colour, and clarity match what is on the certificate. We do this with you in person at handover.',
+    q: 'Is your gold really the purity you say?',
+    a: 'Yes, and you do not have to take our word for it. All our gold is hallmarked to BIS standard, which is an independent stamp of purity. We will show you the mark and explain what it means.',
   },
   {
-    q: 'What does the IGI report tell me?',
-    a: 'An IGI report grades the same four Cs (cut, colour, clarity, carat), notes any treatments, and includes a unique report number. IGI is the leading lab in India and is used widely for bridal-grade diamonds. The report is verifiable at igi.org.',
+    q: 'What do GIA and IGI actually mean?',
+    a: "They are the world's most respected diamond labs. They grade a stone independently of any seller, including us, and issue a report on its colour, clarity, cut, and carat. It is the closest thing there is to an honest second opinion.",
   },
   {
-    q: 'Do you offer buy-back?',
-    a: 'Yes, on pieces purchased from us. Gold is bought back at the prevailing day rate, less making. Diamonds are bought back at a percentage of the original price. Bring the certificate and the piece — we handle the rest.',
+    q: 'Do I get the certificate to keep?',
+    a: 'Always. The certificate goes home with the piece. We also keep a copy on file for the life of the piece, so you are covered if it is ever misplaced.',
   },
   {
-    q: 'What is your authentication policy?',
-    a: 'Every piece comes with a Solitaire authentication card and the applicable certificate (GIA, IGI, or BIS). We keep a copy on file for the life of the piece. Bring the piece in for a yearly check-up at no charge.',
+    q: 'Will someone pressure me to spend more?',
+    a: 'No. This is the heart of how we work. We show you what fits your budget and your taste, and we are genuinely happy if you come just to look. A relaxed customer makes a better choice, and comes back.',
   },
   {
-    q: 'Why is BIS hallmarking important?',
-    a: 'BIS hallmarking has been mandatory in India for gold jewellery since 16 June 2021. The hallmark on a piece confirms its purity (22K, 18K, etc.) and that the gold is from a registered source. Insist on it from any seller.',
+    q: 'Can I come in just to browse?',
+    a: 'Please do. There is no appointment needed to look around, and no obligation to buy. For bridal sets or solitaire viewings, a quick appointment just means your pieces are ready when you arrive.',
+  },
+  {
+    q: 'Do you make custom or made-to-order pieces?',
+    a: 'Yes. Much of our Polki and bridal work is made specially. We start with a drawing, agree on it together, and send you photos as it is made. Come in and tell us what you have in mind.',
+  },
+  {
+    q: 'Do you repair and clean pieces you have sold?',
+    a: 'For the life of the piece, and at no cost for a clean or a check. Bring it in any time. Re-fitting and re-setting are done at fair, clear prices, told to you in advance.',
+  },
+  {
+    q: 'Can I exchange or return a piece?',
+    a: 'Yes, within our policy, which we explain clearly before you buy, never in the fine print. Ask us and we will tell you exactly how it works for your piece.',
   },
 ];
 
@@ -60,14 +72,13 @@ export default function TrustPage() {
       <section className="bg-bone py-20 md:py-32">
         <div className="container-content">
           <Reveal>
-            <p className="eyebrow mb-4">Trust</p>
+            <p className="eyebrow mb-4">Why you can trust us</p>
             <h1 className="display-page leading-tight">
-              Every piece, accountable.
+              The honest answers, before you ask.
             </h1>
             <p className="body-lead mt-6">
-              At Solitaire, every diamond and gemstone of significance carries a
-              certificate. Every gold piece is hallmarked. Every transaction is
-              documented. This is how we keep our promise.
+              A big purchase deserves straight talk. Here is exactly what you can
+              expect from us, and what goes home with you.
             </p>
           </Reveal>
         </div>
@@ -159,8 +170,8 @@ export default function TrustPage() {
       <section className="section-pad bg-bone-deep">
         <div className="container-content">
           <Reveal className="mb-12">
-            <p className="eyebrow">Common Questions</p>
-            <h2 className="display-page mt-3">What buyers ask us most.</h2>
+            <p className="eyebrow">The questions people really ask</p>
+            <h2 className="display-page mt-3">The answers, in plain language.</h2>
           </Reveal>
 
           <Reveal>

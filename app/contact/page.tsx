@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { SITE, whatsappLinkFor } from '@/lib/site';
+import { SITE, whatsappLinkFor, WHATSAPP_MESSAGES } from '@/lib/site';
 import { Reveal } from '@/components/Reveal';
 import { JsonLd } from '@/components/JsonLd';
 import { breadcrumbSchema } from '@/lib/seo/schema';
@@ -13,9 +13,9 @@ import {
 } from '@/components/icons/Icon';
 
 export const metadata: Metadata = buildMetadata({
-  title: 'Contact',
+  title: 'Contact Solitaire | Swaroop Nagar, Kanpur',
   description:
-    'WhatsApp, call, email, or visit Solitaire Jewellery Boutique in Swaroop Nagar, Kanpur. We respond within the hour.',
+    'Message us on WhatsApp, call the boutique, book a private sitting, or get directions to Swaroop Nagar, Kanpur. We usually reply within the hour.',
   path: '/contact',
 });
 
@@ -24,7 +24,7 @@ const ROUTES = [
     Icon: IconWhatsApp,
     label: 'WhatsApp',
     helper: 'Within the hour',
-    href: whatsappLinkFor("Hi Solitaire — I'd like to ask a question."),
+    href: whatsappLinkFor("Hi Solitaire, I'd like to ask a question."),
     cta: 'Open WhatsApp',
     external: true,
   },
@@ -67,12 +67,11 @@ export default function ContactPage() {
       <section className="section-pad bg-bone">
         <div className="container-content">
           <Reveal className="text-center mb-16">
-            <p className="eyebrow mb-4">Contact</p>
-            <h1 className="display-page">Let's talk on your channel.</h1>
+            <p className="eyebrow mb-4">Get in touch</p>
+            <h1 className="display-page">Reach us the way that suits you.</h1>
             <p className="body-lead mt-6 max-w-xl mx-auto">
-              We respond to WhatsApp within the hour. Call us at the boutique
-              directly. Or visit us in Swaroop Nagar, where the conversation is
-              best.
+              Message, call, book a sitting, or simply drop by. Whatever is
+              easiest, we are happy to hear from you.
             </p>
           </Reveal>
 
@@ -112,13 +111,16 @@ export default function ContactPage() {
 
           <Reveal className="mt-16 text-center">
             <p className="text-small text-ink-muted">
-              Or write to us at{' '}
+              Prefer to write? The quickest way to reach us is{' '}
               <a
-                href={`mailto:${SITE.email}`}
+                href={whatsappLinkFor(WHATSAPP_MESSAGES.general)}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="link-underline text-ink"
               >
-                {SITE.email}
+                on WhatsApp
               </a>
+              .
             </p>
           </Reveal>
         </div>

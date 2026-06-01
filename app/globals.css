@@ -4,9 +4,10 @@
 
 :root {
   /* ── Core palette ──────────────────────────────────── */
-  --ivory:         #F4EFE3;   /* Primary background */
+  --ivory:         #F4EFE3;   /* Primary background — the single page ivory */
+  --ivory-raised:  #FBF7EE;   /* Elevated surfaces only (menus, popovers) */
   --obsidian:      #1A1410;   /* Primary text */
-  --aged-gold:     #B8923A;   /* Accent */
+  --aged-gold:     #BD9A45;   /* Accent — enriched, treated gold */
   --mahogany:      #3A1F14;   /* Dark sections, footer, transitions */
   --emerald-w:     #2D4A3E;   /* Polki section accent */
   --ruby-w:        #6B1F2A;   /* Antique gold accent */
@@ -27,9 +28,13 @@
   --bone-deep:     var(--ivory-smoke);
   --paper:         #FFFFFF;
   --gold:          var(--aged-gold);
-  --gold-deep:     #8C6A20;
-  --gold-soft:     #C9A84C;
+  --gold-light:    #E4CA80;            /* Foil highlight for metallic treatment */
+  --gold-deep:     #9A7A2E;            /* Darker shade of the SAME hue (was olive #8C6A20) */
+  --gold-soft:     #CDB063;
   --gold-veil:     #F2EAD0;
+  /* Treated metallic gold — foil → gold → deep. Use on signature accents,
+     hairlines and the wordmark so gold reads as metal, not flat brown. */
+  --gold-metallic: linear-gradient(135deg, #E4CA80 0%, #BD9A45 46%, #9A7A2E 100%);
   --rose:          #C68B7E;
   --rose-soft:     #F5E2DC;
   --emerald:       var(--emerald-w);
@@ -83,6 +88,18 @@
     color: var(--aged-gold);
   }
 
+  /* ── Treated metallic gold — foil sheen for signature accents ── */
+  .gold-metallic-text {
+    background: var(--gold-metallic);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+  .gold-rule {
+    background-image: var(--gold-metallic);
+  }
+
   /* ── Display ── */
   .display-hero    { @apply font-display text-mega font-medium; }
   .display-page    { @apply font-display text-display font-medium; }
@@ -101,19 +118,52 @@
 
   /* ── Buttons ── */
   .btn {
-    @apply inline-flex items-center justify-center text-small font-medium tracking-button uppercase whitespace-nowrap;
+    @apply relative inline-flex items-center justify-center overflow-hidden text-small font-medium tracking-button uppercase whitespace-nowrap;
     padding: 1rem 2rem;
     min-height: 44px;
-    transition: all 700ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    z-index: 0;
+    transition: color 380ms ease, box-shadow 380ms ease, transform 380ms cubic-bezier(0.16,1,0.3,1), border-color 380ms ease;
   }
-  .btn-primary   { @apply btn; background: var(--obsidian); color: var(--ivory); }
-  .btn-primary:hover { background: var(--mahogany); }
-  .btn-secondary {
-    @apply btn bg-transparent;
-    border: 1px solid var(--ivory-smoke);
+  /* Shared fill layer for all .btn variants */
+  .btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    transform: translateX(-101%);
+    transition: transform 560ms cubic-bezier(0.16,1,0.3,1);
+  }
+  .btn:hover::before,
+  .btn:focus-visible::before { transform: translateX(0); }
+
+  /* Outlined obsidian — primary action, fills from left */
+  .btn-primary {
+    @apply btn;
+    background: transparent;
+    border: 1px solid var(--obsidian);
     color: var(--obsidian);
   }
-  .btn-secondary:hover { background: var(--gold-veil); border-color: var(--aged-gold); }
+  .btn-primary::before { background: var(--obsidian); }
+  .btn-primary:hover,
+  .btn-primary:focus-visible {
+    color: var(--ivory);
+    box-shadow: 0 8px 28px rgba(26,20,16,0.22);
+    transform: translateY(-2px);
+  }
+
+  /* Outlined subtle — secondary action, fills with warm wash */
+  .btn-secondary {
+    @apply btn;
+    background: transparent;
+    border: 1px solid rgba(26,20,16,0.2);
+    color: var(--ink-soft);
+  }
+  .btn-secondary::before { background: var(--gold-veil); }
+  .btn-secondary:hover,
+  .btn-secondary:focus-visible {
+    color: var(--aged-gold);
+    border-color: var(--aged-gold);
+  }
 
   .btn-ghost {
     @apply inline-flex items-center text-small font-medium tracking-button uppercase relative;
@@ -131,13 +181,89 @@
   }
   .btn-ghost:hover::after { transform-origin: left; transform: scaleX(1); }
 
-  /* ── Gold CTA (aged gold border/text, fills on hover) ── */
+  /* Outlined gold — fills from left with aged gold */
   .btn-gold {
-    @apply btn bg-transparent;
+    @apply btn;
+    background: transparent;
     border: 1px solid var(--aged-gold);
     color: var(--aged-gold);
   }
-  .btn-gold:hover { background: var(--aged-gold); color: var(--ivory); }
+  .btn-gold::before { background: var(--aged-gold); }
+  .btn-gold:hover,
+  .btn-gold:focus-visible {
+    color: var(--obsidian);
+    box-shadow: 0 8px 28px rgba(154,122,46,0.3);
+    transform: translateY(-2px);
+  }
+
+  /* ── Hero CTAs — pill-shaped, outlined, each fills a different direction ── */
+  .cta {
+    @apply relative inline-flex items-center justify-center overflow-hidden text-small font-medium tracking-button uppercase whitespace-nowrap;
+    padding: 1.05rem 2.6rem;
+    min-height: 54px;
+    border-radius: 999px;
+    background: transparent;
+    z-index: 0;
+    transition: color 380ms ease,
+                box-shadow 560ms cubic-bezier(0.16,1,0.3,1),
+                transform 560ms cubic-bezier(0.16,1,0.3,1);
+  }
+  .cta > span { position: relative; z-index: 2; }
+  .cta::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  /* Gold pill — fills from left */
+  .cta--gold {
+    color: var(--aged-gold);
+    border: 1px solid var(--aged-gold);
+    box-shadow: 0 4px 14px rgba(154,122,46,0.12);
+  }
+  .cta--gold::before {
+    background: var(--aged-gold);
+    transform: translateX(-101%);
+    transition: transform 580ms cubic-bezier(0.16,1,0.3,1);
+  }
+  .cta--gold:hover,
+  .cta--gold:focus-visible {
+    color: var(--obsidian);
+    transform: translateY(-3px);
+    box-shadow: 0 14px 36px rgba(154,122,46,0.38);
+  }
+  .cta--gold:hover::before,
+  .cta--gold:focus-visible::before { transform: translateX(0); }
+
+  /* Ink pill — fills from bottom (distinct direction) */
+  .cta--ink {
+    color: var(--ink);
+    border: 1px solid rgba(26,20,16,0.45);
+    box-shadow: 0 4px 14px rgba(26,20,16,0.08);
+  }
+  .cta--ink::before {
+    background: var(--ink);
+    transform: translateY(101%);
+    transition: transform 580ms cubic-bezier(0.16,1,0.3,1);
+  }
+  .cta--ink:hover,
+  .cta--ink:focus-visible {
+    color: var(--ivory);
+    transform: translateY(-3px);
+    box-shadow: 0 14px 36px rgba(26,20,16,0.26);
+  }
+  .cta--ink:hover::before,
+  .cta--ink:focus-visible::before { transform: translateY(0); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn::before,
+    .cta::before { transition: none; }
+    .btn:hover, .btn:focus-visible,
+    .cta:hover, .cta:focus-visible { transform: none; }
+  }
 
   /* ── Link underline ── */
   .link-underline { @apply relative inline-block; }
@@ -189,16 +315,22 @@
 
   /* ── Editorial number counter ── */
   .counter-num {
-    font-family: var(--font-mono), ui-monospace, monospace;
-    font-variant-numeric: tabular-nums;
-    color: var(--aged-gold);
+    font-family: var(--font-body), sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    background: var(--gold-metallic);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    display: inline-block;
   }
 
   /* ── Section number ── */
   .section-num {
     font-family: var(--font-body);
-    font-size: 9px;
-    letter-spacing: 0.22em;
+    font-size: 10.5px;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--aged-gold);
     opacity: 0.65;

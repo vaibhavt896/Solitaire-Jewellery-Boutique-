@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const collection = getCollection(slug);
   if (!collection) return { title: 'Collection not found' };
   return buildMetadata({
-    title: `${collection.title} Jewellery — Kanpur`,
+    title: `${collection.title} Jewellery | Kanpur`,
     description: collection.description,
     path: `/collections/${slug}`,
     image: collection.hero.src,
@@ -75,7 +75,7 @@ export default async function CollectionPage({ params }: Params) {
         </div>
       </section>
 
-      {/* Pieces with functional filters — client component */}
+      {/* Pieces with functional filters, client component */}
       <CollectionPieces pieces={pieces} collectionTitle={collection.title} />
     </>
   );

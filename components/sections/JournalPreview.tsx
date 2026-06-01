@@ -1,8 +1,8 @@
 /* ──────────────────────────────────────────────────────────
-   JournalPreview — Section 09
+   JournalPreview, Section 07
    Magazine table-of-contents layout.
    One featured article (large, left) + three secondary
-   (text-led, stacked right). No card frames — editorial.
+   (text-led, stacked right). No card frames, editorial.
 ────────────────────────────────────────────────────────── */
 
 import Link from 'next/link';
@@ -17,23 +17,22 @@ export function JournalPreview() {
   if (!featured) return null;
 
   return (
-    <section style={{ background: 'var(--stone-100)' }} className="section-pad">
+    <section style={{ background: 'var(--ivory)' }} className="section-pad">
       <div className="container-wide">
 
         {/* Header row */}
         <Reveal className="flex items-end justify-between gap-8 mb-16 flex-wrap">
           <div>
-            <p className="eyebrow mb-4">06 — THE JOURNAL</p>
+            <p className="eyebrow mb-4">08 — The Journal</p>
             <h2
               className="font-display"
               style={{
                 fontSize: 'clamp(2rem, 4.5vw, 3.4rem)',
                 lineHeight: 1.05,
                 letterSpacing: '-0.022em',
-                fontStyle: 'italic',
               }}
             >
-              Read before you buy.
+              A little help, before you buy.
             </h2>
             <p
               style={{
@@ -43,7 +42,8 @@ export function JournalPreview() {
                 marginTop: '0.75rem',
               }}
             >
-              The long-form library for the discerning buyer. Updated every fortnight.
+              Honest guides on Polki, diamonds, and how to choose well, written to
+              help you, not to sell to you.
             </p>
           </div>
           <Link
@@ -51,14 +51,14 @@ export function JournalPreview() {
             className="btn-ghost shrink-0"
             style={{ color: 'var(--aged-gold)', fontSize: 10.5, letterSpacing: '0.16em' }}
           >
-            All articles →
+            Read the Journal →
           </Link>
         </Reveal>
 
         {/* Magazine two-column layout */}
         <div className="grid md:grid-cols-12 gap-10 lg:gap-16">
 
-          {/* Featured article — left, 7 columns */}
+          {/* Featured article, left, 7 columns */}
           <Reveal className="md:col-span-7">
             <Link href={`/journal/${featured.slug}`} className="group block">
 
@@ -79,7 +79,7 @@ export function JournalPreview() {
                   className="absolute top-5 left-5"
                   style={{
                     fontFamily: 'var(--font-body)',
-                    fontSize: 8.5,
+                    fontSize: 10,
                     letterSpacing: '0.18em',
                     textTransform: 'uppercase',
                     color: 'var(--aged-gold)',
@@ -97,7 +97,7 @@ export function JournalPreview() {
               <p
                 style={{
                   fontFamily: 'var(--font-body)',
-                  fontSize: 9,
+                  fontSize: 10,
                   letterSpacing: '0.18em',
                   textTransform: 'uppercase',
                   color: 'var(--ink-muted)',
@@ -142,7 +142,7 @@ export function JournalPreview() {
             </Link>
           </Reveal>
 
-          {/* Secondary articles — right, 5 columns, stacked */}
+          {/* Secondary articles, right, 5 columns, stacked */}
           <div className="md:col-span-5 flex flex-col">
             {secondary.map((a, i) => (
               <Reveal key={a.slug} delay={i * 0.08}>
@@ -174,7 +174,7 @@ export function JournalPreview() {
                     <p
                       style={{
                         fontFamily: 'var(--font-body)',
-                        fontSize: 9,
+                        fontSize: 10,
                         letterSpacing: '0.16em',
                         textTransform: 'uppercase',
                         color: 'var(--aged-gold)',
@@ -197,7 +197,7 @@ export function JournalPreview() {
                     <span
                       style={{
                         fontFamily: 'var(--font-body)',
-                        fontSize: 9.5,
+                        fontSize: 10,
                         letterSpacing: '0.12em',
                         textTransform: 'uppercase',
                         color: 'var(--ink-muted)',

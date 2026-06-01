@@ -1,26 +1,59 @@
 'use client';
 
 /* ──────────────────────────────────────────────────────────
-   TheAtelier — Section 06 (NEW — no competitor has this)
+   TheAtelier, Section 04 (NEW, no competitor has this)
    Black-and-white documentary aesthetic. Full-bleed image,
    sepia-tone filter, named makers, editorial copy.
-   Addresses Instagram audit's "missing BTS content" gap.
+   GSAP animations for sharper visual impact.
 ────────────────────────────────────────────────────────── */
 
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion, useReducedMotion } from 'framer-motion';
+import { useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { MEDIA } from '@/lib/placeholder-media';
 
-const ease = [0.25, 0.46, 0.45, 0.94] as const;
+gsap.registerPlugin(ScrollTrigger);
 
+/* ⚠️ PLACEHOLDER: swap `src` for a real commissioned behind-the-scenes
+   shot from one of our ateliers. Caption kept honest (no invented names)
+   until the real image and its real maker are confirmed. */
 const ATELIER_IMAGE = {
-  src: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=2000&q=85',
-  alt: 'Craftsman at work in the Jaipur atelier — Mehul Bhai of Johri Bazaar',
-  caption: 'The Jaipur atelier. Mehul Bhai\'s workshop, Johri Bazaar.',
+  src: MEDIA.atelier,
+  alt: 'Inside the boutique, pieces from our atelier network, Swaroop Nagar',
+  caption: 'From the ateliers we work with, to the boutique table.',
 };
 
 export function TheAtelier() {
   const reduce = useReducedMotion();
+  const imageContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (reduce || !imageContainerRef.current) return;
+
+    const ctx = gsap.context(() => {
+      // Clip-path reveal with sharp timing
+      gsap.fromTo(
+        imageContainerRef.current,
+        { clipPath: 'inset(0 0 100% 0)', scale: 1.04 },
+        {
+          clipPath: 'inset(0 0 0% 0)',
+          scale: 1,
+          duration: 1.4,
+          ease: 'power2.inOut',
+          scrollTrigger: {
+            trigger: imageContainerRef.current,
+            start: 'top 50%',
+            once: true,
+          },
+        }
+      );
+    });
+
+    return () => ctx.revert();
+  }, [reduce]);
 
   return (
     <section
@@ -30,18 +63,12 @@ export function TheAtelier() {
       <div className="container-wide">
 
         {/* Eyebrow */}
-        <motion.p
-          className="eyebrow mb-5"
-          initial={reduce ? {} : { opacity: 0, y: 12 }}
-          whileInView={reduce ? {} : { opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, ease }}
-        >
-          03 — THE ATELIER
-        </motion.p>
+        <p className="eyebrow mb-5">
+          05 — The Atelier
+        </p>
 
         {/* Headline */}
-        <motion.h2
+        <h2
           className="font-display"
           style={{
             fontSize: 'clamp(2rem, 4.5vw, 3.6rem)',
@@ -51,25 +78,18 @@ export function TheAtelier() {
             maxWidth: 700,
             marginBottom: '3.5rem',
           }}
-          initial={reduce ? {} : { opacity: 0, y: 18 }}
-          whileInView={reduce ? {} : { opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.9, delay: 0.08, ease }}
         >
-          The pieces don&rsquo;t come from us.<br />They come through us.
-        </motion.h2>
+          Made slowly, by people we know by name.
+        </h2>
 
         {/* Full-bleed image with film grain overlay */}
-        <motion.div
+        <div
+          ref={imageContainerRef}
           className="relative w-full overflow-hidden"
           style={{
             height: 'clamp(320px, 58vh, 680px)',
             marginBottom: '3rem',
           }}
-          initial={reduce ? {} : { clipPath: 'inset(0 0 100% 0)', scale: 1.04 }}
-          whileInView={reduce ? {} : { clipPath: 'inset(0 0 0% 0)', scale: 1 }}
-          viewport={{ once: true, margin: '-5%' }}
-          transition={{ duration: 1.4, ease }}
         >
           <Image
             src={ATELIER_IMAGE.src}
@@ -103,7 +123,7 @@ export function TheAtelier() {
             <p
               style={{
                 fontFamily: 'var(--font-body)',
-                fontSize: 9.5,
+                fontSize: 10,
                 letterSpacing: '0.16em',
                 textTransform: 'uppercase',
                 color: 'rgba(244,239,227,0.55)',
@@ -113,37 +133,26 @@ export function TheAtelier() {
               {ATELIER_IMAGE.caption}
             </p>
           </div>
-        </motion.div>
+        </div>
 
         {/* Two-column editorial body */}
         <div className="grid md:grid-cols-2 gap-12 lg:gap-20">
 
-          <motion.p
+          <p
             style={{
               fontFamily: 'var(--font-body)',
               fontSize: 'clamp(1rem, 1.6vw, 1.0625rem)',
               lineHeight: 1.85,
               color: 'var(--ink-soft)',
             }}
-            initial={reduce ? {} : { opacity: 0, y: 20 }}
-            whileInView={reduce ? {} : { opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.9, ease }}
           >
-            Solitaire is not a manufacturer. We don&rsquo;t have machines in the back of
-            the boutique. What we have is a network — eleven ateliers spread across Jaipur,
-            Vadasery, Nagercoil, and Kanpur — each finishing the technique their family has
-            finished for generations. Polki comes from one address in Johri Bazaar. Temple
-            jewellery from one family in Tamil Nadu. Antique gold from a master in Old
-            Kanpur who works out of his living room with three apprentices.
-          </motion.p>
+            Our Polki comes from two workshops in Jaipur we have worked with for
+            more than ten years. Each piece is drawn, shaped, and set by hand,
+            one stone at a time. Slow is the whole point, it is what gives a
+            piece the weight and warmth that machine work never quite catches.
+          </p>
 
-          <motion.div
-            initial={reduce ? {} : { opacity: 0, y: 20 }}
-            whileInView={reduce ? {} : { opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.9, delay: 0.12, ease }}
-          >
+          <div>
             <p
               style={{
                 fontFamily: 'var(--font-body)',
@@ -153,9 +162,9 @@ export function TheAtelier() {
                 marginBottom: '2rem',
               }}
             >
-              We visit each atelier at least twice a year. We pay in full, in advance, in
-              cash, the day the piece is taken from the workshop. That is why these ateliers
-              work with us, and not always with the larger names.
+              We work directly with the people who make our pieces, visit them
+              through the year, and bring each finished piece back to the boutique
+              ourselves. You meet the work, and the care behind it, in one place.
             </p>
 
             <Link
@@ -163,31 +172,27 @@ export function TheAtelier() {
               className="btn-ghost"
               style={{ color: 'var(--aged-gold)', fontSize: 10.5, letterSpacing: '0.18em' }}
             >
-              Meet the ateliers →
+              See How a Piece Is Made →
             </Link>
-          </motion.div>
+          </div>
 
         </div>
 
-        {/* Three atelier names — small, typewritten */}
-        <motion.div
+        {/* Three atelier names, small, typewritten */}
+        <div
           className="mt-16 pt-10 flex flex-wrap gap-x-12 gap-y-4"
           style={{ borderTop: '1px solid var(--ivory-smoke)' }}
-          initial={reduce ? {} : { opacity: 0 }}
-          whileInView={reduce ? {} : { opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1, delay: 0.2, ease }}
         >
           {[
-            { name: 'Mehul Patel & Sons', place: 'Johri Bazaar, Jaipur', spec: 'Polki & Kundan' },
-            { name: 'Pandey Sonarkhana', place: 'Old Kanpur',            spec: 'Antique Gold' },
-            { name: 'Two families (named on request)', place: 'Vadasery & Nagercoil', spec: 'Temple Jewellery' },
+            { name: 'Polki & Kundan',     place: 'Two workshops, Jaipur', spec: '10+ years together' },
+            { name: 'Antique & Temple Gold', place: 'Hand-finished',      spec: 'The old techniques' },
+            { name: 'Certified Diamonds', place: 'Mumbai & Surat',        spec: 'GIA / IGI graded' },
           ].map((a) => (
             <div key={a.name}>
               <p
                 style={{
                   fontFamily: 'var(--font-body)',
-                  fontSize: 9.5,
+                  fontSize: 10,
                   letterSpacing: '0.06em',
                   color: 'var(--obsidian)',
                   fontWeight: 500,
@@ -199,7 +204,7 @@ export function TheAtelier() {
               <p
                 style={{
                   fontFamily: 'var(--font-body)',
-                  fontSize: 9,
+                  fontSize: 10,
                   letterSpacing: '0.14em',
                   textTransform: 'uppercase',
                   color: 'var(--ink-muted)',
@@ -209,7 +214,7 @@ export function TheAtelier() {
               </p>
             </div>
           ))}
-        </motion.div>
+        </div>
 
       </div>
     </section>

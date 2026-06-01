@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" width="1200" height="1200" role="img" aria-label="Behind-the-scenes — placeholder">
+  <rect width="1200" height="1200" fill="#F1EBDC"/>
+  <rect x="40" y="40" width="1120" height="1120" fill="none" stroke="#A8841C" stroke-opacity="0.45" stroke-width="2" stroke-dasharray="10 12"/>
+  <g transform="translate(600 470)" fill="none" stroke="#A8841C" stroke-opacity="0.7" stroke-width="6" stroke-linejoin="round">
+    <path d="M-70 -34 L-40 -74 L40 -74 L70 -34 L0 64 Z"/>
+    <path d="M-70 -34 L70 -34 M-40 -74 L-12 -34 L0 64 M40 -74 L12 -34 L0 64 M-12 -34 L12 -34"/>
+  </g>
+  <text x="600" y="620" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="34" letter-spacing="8" fill="#A8841C">THE ATELIER</text>
+  <text x="600" y="700" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-style="italic" font-size="62" fill="#1A1410">Behind-the-scenes</text>
+  <text x="600" y="772" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="24" letter-spacing="6" fill="#6B5D4A">IMAGE OR VIDEO TO BE ADDED</text>
+  <line x1="540" y1="812" x2="660" y2="812" stroke="#A8841C" stroke-opacity="0.5" stroke-width="2"/>
+</svg>

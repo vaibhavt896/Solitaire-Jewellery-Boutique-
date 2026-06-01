@@ -1,7 +1,7 @@
 'use client';
 
 /* ──────────────────────────────────────────────────────────
-   Collections (SignatureCategories) — Section 04
+   Collections (SignatureCategories), Section 02
    Editorial alternating rows. Each collection: image 8-col,
    text 4-col, massive numbered, scroll-triggered reveal.
    Cursor changes to "View collection →" on image hover.
@@ -18,44 +18,44 @@ const COLLECTION_ITEMS = [
   {
     slug:     'polki',
     num:      '01',
-    headline: 'The setting that’s older than the diamond.',
-    body:     'Polki is uncut diamond, set in foil, behind gold. The technique pre-dates the brilliant cut by four centuries. We work with a single atelier in Jaipur for every Polki piece in this boutique — set the way it was meant to be set, finished in 22kt.',
-    cta:      'See the Polki pieces',
+    headline: 'The oldest form of diamond jewellery in India.',
+    body:     'Polki is the diamond before it was ever cut, natural, full of character, set in pure gold by hand. Ours comes from two workshops in Jaipur we have known for over a decade. No two pieces are ever quite the same, which is rather the point.',
+    cta:      'See the Collection',
   },
   {
     slug:     'solitaires',
     num:      '02',
-    headline: 'Every stone here has paper.',
-    body:     'Every solitaire of significance at Solitaire is graded by GIA, IGI, or both. The certificate travels with the piece. We will show you the report before we show you the stone — that is the only correct order.',
-    cta:      'See the solitaires',
+    headline: 'One stone. Certified, so you never have to wonder.',
+    body:     'A solitaire is a single diamond, and a big decision. So we make it a calm one. Every solitaire of value here is graded by GIA or IGI, and we walk you through the report in simple words, what the four Cs mean, and which ones actually matter for you.',
+    cta:      'See the Collection',
   },
   {
     slug:     'antique-gold',
     num:      '03',
-    headline: 'For the woman who already has the modern things.',
-    body:     'Jadau, meenakari, kundan-on-gold, temple-influence. Antique gold is what a serious wardrobe builds towards, not begins with. Each piece is hand-finished in 22kt and BIS hallmarked.',
-    cta:      'See the antique gold',
+    headline: 'The warm gold of an earlier time.',
+    body:     'Hand-finished gold in the old techniques, the soft, matte glow that machine-made pieces never quite catch. These are pieces with weight and history to them, made to be worn often and kept for good. All our gold is hallmarked for purity.',
+    cta:      'See the Collection',
   },
   {
     slug:     'diamond',
     num:      '04',
-    headline: 'Studded, set, and entirely your call.',
-    body:     'Day pieces, mangalsutras, light necklaces, tennis bracelets, everyday studs. The diamond category is the most personal — and the one we recommend you come in to see, because diamond on screen is never diamond in hand.',
-    cta:      'See the diamond pieces',
+    headline: 'Diamond pieces for the way you live now.',
+    body:     'Rings, pendants, earrings, and bracelets in faceted diamond, set in 18K and 22K gold. Clean, modern, and easy to wear every day, with the same honest certification as everything else we sell.',
+    cta:      'See the Collection',
   },
   {
     slug:     'temple',
     num:      '05',
-    headline: 'The South, finished in the North.',
-    body:     'Temple jewellery is a Tamil and Kerala tradition we hold in deep respect. Our temple pieces are sourced from the same families in Vadasery and Nagercoil that have been finishing them for generations. We are the agents, not the makers.',
-    cta:      'See the temple pieces',
+    headline: 'The old motifs, treated with respect.',
+    body:     'Temple jewellery carries the figures and forms passed down through generations. We keep them exactly as they should be, for the southern bride, the festival, and anyone who loves jewellery with meaning behind it.',
+    cta:      'See the Collection',
   },
   {
     slug:     'bridal',
     num:      '06',
-    headline: 'The day you’ll show your daughter, in fifteen years.',
-    body:     'The bridal category is not a category — it’s a consultation. We bring the lehenga reference, you bring the family, and we work towards the set that fits both the night and the years afterwards.',
-    cta:      'Begin the bridal consultation',
+    headline: 'Everything for the big day, in one harmony.',
+    body:     'A bride wears more than one piece, and they all have to sing together, the choker, the long necklace, the earrings, the bangles. We compose the full set around you, your outfit, and your day, so nothing fights and nothing is forgotten.',
+    cta:      'Book a Private Sitting',
   },
 ];
 
@@ -81,7 +81,7 @@ function CollectionRow({
       viewport={{ once: true, margin: '-6%' }}
       transition={{ duration: 0.9, delay: 0.05 * index, ease }}
     >
-      {/* Massive section number — always first on mobile */}
+      {/* Massive section number, always first on mobile */}
       <div
         className={`hidden md:flex md:col-span-1 ${flip ? 'md:order-3' : 'md:order-1'} items-end justify-center pb-2`}
       >
@@ -102,63 +102,72 @@ function CollectionRow({
         </span>
       </div>
 
-      {/* Image — 7 columns */}
+      {/* Image, 7 columns, luxury rounded corners */}
       <div
         className={`md:col-span-7 ${flip ? 'md:order-2' : 'md:order-2'}`}
         style={{
-          borderRadius: '4px',
-          boxShadow: '0 40px 90px rgba(26,20,16,0.22), 0 12px 32px rgba(26,20,16,0.12), 0 2px 8px rgba(26,20,16,0.06)',
+          borderRadius: '24px',
+          boxShadow: '0 28px 70px -6px rgba(26,20,16,0.14), 0 8px 24px rgba(26,20,16,0.07)',
         }}
       >
-        <div className="overflow-hidden group cursor-none relative" style={{ borderRadius: '4px' }}>
+        <div className="overflow-hidden group cursor-none relative" style={{ borderRadius: '24px' }}>
           <motion.div
-            initial={reduce ? {} : { scale: 1.06 }}
+            initial={reduce ? {} : { scale: 1.07 }}
             whileInView={reduce ? {} : { scale: 1 }}
             viewport={{ once: true, margin: '-6%' }}
-            transition={{ duration: 1.4, ease }}
+            transition={{ duration: 1.8, ease }}
           >
             <Image
               src={collection.hero.src}
               alt={collection.hero.alt}
               width={collection.hero.width || 1600}
               height={collection.hero.height || 2000}
-              sizes="(max-width: 768px) 100vw, 60vw"
+              sizes="(max-width: 768px) 100vw, 58vw"
               style={{ width: '100%', height: 'auto', display: 'block' }}
-              className="transition-transform duration-[1200ms] ease-out group-hover:scale-[1.04]"
+              className="transition-transform duration-[1400ms] ease-out group-hover:scale-[1.04]"
+              priority={index === 0}
             />
           </motion.div>
 
+          {/* Warm depth vignette, always present, adds richness */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background: 'radial-gradient(ellipse at center, transparent 50%, rgba(26,20,16,0.22) 100%)',
+            }}
+          />
+
           {/* Dark overlay on hover */}
-          <div className="absolute inset-0 bg-obsidian/0 group-hover:bg-obsidian/20 transition-colors duration-700" />
+          <div className="absolute inset-0 bg-obsidian/0 group-hover:bg-obsidian/22 transition-colors duration-700 pointer-events-none" />
 
           {/* Hover label */}
-          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
             <span
               style={{
                 fontFamily: 'var(--font-body)',
                 fontSize: 10,
-                letterSpacing: '0.22em',
+                letterSpacing: '0.24em',
                 textTransform: 'uppercase',
                 color: 'var(--ivory)',
                 border: '1px solid rgba(244,239,227,0.5)',
-                padding: '10px 22px',
-                background: 'rgba(26,20,16,0.45)',
-                backdropFilter: 'blur(4px)',
+                padding: '11px 26px',
+                background: 'rgba(26,20,16,0.50)',
+                backdropFilter: 'blur(8px)',
               }}
             >
               View collection →
             </span>
           </div>
 
-          {/* Thin inset gold frame — luxury finish */}
+          {/* Inset gold frame */}
           <div
             className="absolute inset-0 pointer-events-none"
-            style={{ boxShadow: 'inset 0 0 0 1px rgba(184,146,58,0.18)', borderRadius: '4px' }}
+            style={{ boxShadow: 'inset 0 0 0 1px rgba(184,146,58,0.20)', borderRadius: '24px' }}
           />
         </div>
       </div>
 
-      {/* Text — 4 columns */}
+      {/* Text, 4 columns */}
       <motion.div
         className={`md:col-span-4 ${flip ? 'md:order-1 md:pr-12 lg:pr-20' : 'md:order-3 md:pl-12 lg:pl-20'} pt-8 md:pt-0`}
         initial={reduce ? {} : { opacity: 0, x: flip ? -24 : 24 }}
@@ -169,29 +178,44 @@ function CollectionRow({
         {/* Mobile number */}
         <span
           aria-hidden
-          className="md:hidden block mb-4"
+          className="md:hidden block mb-3"
           style={{
             fontFamily: 'var(--font-display)',
-            fontSize: '4rem',
-            fontWeight: 400,
+            fontSize: '3.5rem',
             lineHeight: 1,
             color: 'var(--aged-gold)',
-            opacity: 0.25,
+            opacity: 0.18,
             letterSpacing: '-0.04em',
           }}
         >
           {item.num}
         </span>
 
+        {/* Eyebrow */}
+        <p
+          style={{
+            fontFamily: 'var(--font-body)',
+            fontSize: 10,
+            letterSpacing: '0.28em',
+            textTransform: 'uppercase',
+            color: 'var(--aged-gold)',
+            marginBottom: '1.1rem',
+          }}
+        >
+          Collection {item.num}
+        </p>
+
+        {/* Gold rule, typographic anchor */}
+        <div style={{ width: 30, height: 1.5, background: 'var(--aged-gold)', opacity: 0.65, marginBottom: '1.4rem' }} />
+
         <h3
           className="font-display"
           style={{
-            fontSize: 'clamp(1.4rem, 2.8vw, 2rem)',
-            lineHeight: 1.15,
-            letterSpacing: '-0.015em',
-            fontStyle: 'italic',
+            fontSize: 'clamp(2rem, 3.6vw, 3.1rem)',
+            lineHeight: 1.04,
+            letterSpacing: '-0.022em',
             color: 'var(--obsidian)',
-            marginBottom: '1.25rem',
+            marginBottom: '1.4rem',
           }}
         >
           {item.headline}
@@ -201,9 +225,9 @@ function CollectionRow({
           style={{
             fontFamily: 'var(--font-body)',
             fontSize: '1rem',
-            lineHeight: 1.8,
+            lineHeight: 1.88,
             color: 'var(--ink-soft)',
-            marginBottom: '2rem',
+            marginBottom: '2.2rem',
           }}
         >
           {item.body}
@@ -240,7 +264,7 @@ export function SignatureCategories() {
           viewport={{ once: true }}
           transition={{ duration: 0.8, ease }}
         >
-          <p className="eyebrow mb-4">02 — COLLECTIONS</p>
+          <p className="eyebrow mb-4">03 — Collections</p>
           <h2
             className="font-display"
             style={{
@@ -250,7 +274,7 @@ export function SignatureCategories() {
               maxWidth: 680,
             }}
           >
-            Currently in the boutique.
+            A few things, chosen well.
           </h2>
         </motion.div>
 
@@ -273,7 +297,7 @@ export function SignatureCategories() {
           transition={{ duration: 0.8, ease }}
         >
           <Link href="/collections" className="btn-gold">
-            View all collections →
+            See the Collections →
           </Link>
         </motion.div>
 

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { NAV_PRIMARY, SITE, whatsappLinkFor } from '@/lib/site';
+import { NAV_PRIMARY, SITE, whatsappLinkFor, WHATSAPP_MESSAGES } from '@/lib/site';
 import { COLLECTIONS } from '@/lib/data/collections';
 import { Logo } from '@/components/Logo';
 import {
@@ -16,9 +16,9 @@ import {
 
 /* ─────────────────────────── constants ─── */
 const ANNOUNCEMENTS = [
-  'Est. Kanpur  ·  By appointment  ·  Swaroop Nagar',
-  'GIA & IGI certified  ·  BIS 916 hallmarked  ·  Every certificate travels',
-  'Private bridal consultations  ·  45 minutes  ·  No cost',
+  'Swaroop Nagar, Kanpur  ·  Open Monday to Saturday  ·  Visits by appointment welcome',
+  'Every diamond GIA or IGI certified  ·  Gold hallmarked  ·  The certificate goes home with you',
+  'Free private bridal sittings  ·  45 minutes  ·  No pressure to buy',
 ];
 
 const leftNav  = NAV_PRIMARY.slice(0, 3);
@@ -103,9 +103,9 @@ function AnnouncementBar() {
 /* ─────────────────────────── Book dropdown ─── */
 function BookDropdown({ onClose }: { onClose: () => void }) {
   const items = [
-    { label: 'Bridal Consultation',  sub: '45-minute private appointment',   href: '/bridal/book' },
-    { label: 'Engagement Ring',      sub: 'For the solitaire selection',      href: '/bridal/book?type=engagement' },
-    { label: 'Visit the Boutique',   sub: 'Swaroop Nagar, Kanpur',           href: '/visit' },
+    { label: 'Book a Private Sitting', sub: '45 minutes, free and unhurried',   href: '/bridal/book' },
+    { label: 'For an Engagement',      sub: 'Certified solitaires, chosen with care', href: '/bridal/book?type=engagement' },
+    { label: 'Visit the Boutique',     sub: 'Swaroop Nagar, Kanpur',            href: '/visit' },
   ];
   return (
     <motion.div
@@ -189,7 +189,7 @@ function MegaMenu({ onClose }: { onClose: () => void }) {
             />
             <div className="relative" style={{ paddingTop: '130%' }} />
             <div className="absolute inset-x-0 bottom-0 p-5">
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--gold-soft)', marginBottom: 5 }}>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--gold-soft)', marginBottom: 5 }}>
                 Featured
               </p>
               <p className="font-display text-bone leading-tight" style={{ fontSize: '1.25rem' }}>
@@ -198,7 +198,7 @@ function MegaMenu({ onClose }: { onClose: () => void }) {
               <p
                 style={{
                   fontFamily: 'var(--font-body)',
-                  fontSize: 9,
+                  fontSize: 10,
                   letterSpacing: '0.16em',
                   textTransform: 'uppercase',
                   color: 'rgba(251,247,238,0.55)',
@@ -477,7 +477,7 @@ export function Header() {
         className="sticky top-0 z-40"
         style={{
           height: 80,
-          background: 'rgba(251,247,238,0.97)',
+          background: 'rgba(244,239,227,0.88)',
           backdropFilter: 'blur(24px)',
           WebkitBackdropFilter: 'blur(24px)',
           borderBottom: '1px solid rgba(216,205,178,0.38)',
@@ -499,12 +499,12 @@ export function Header() {
             <IconMenu />
           </button>
 
-          <Link href="/" aria-label="Solitaire — home">
+          <Link href="/" aria-label="Solitaire, home">
             <Logo light={false} />
           </Link>
 
           <a
-            href={whatsappLinkFor("Hello Solitaire — I'd like to enquire.")}
+            href={whatsappLinkFor(WHATSAPP_MESSAGES.general)}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="WhatsApp us"
@@ -536,7 +536,7 @@ export function Header() {
           </nav>
 
           {/* CENTRE LOGO */}
-          <Link href="/" aria-label="Solitaire — home" className="flex items-center justify-center px-16">
+          <Link href="/" aria-label="Solitaire, home" className="flex items-center justify-center px-16">
             <Logo light={false} />
           </Link>
 
@@ -561,7 +561,7 @@ export function Header() {
             </NavIcon>
 
             <NavIcon
-              href={whatsappLinkFor("Hello Solitaire — I'd like to know more about visiting your boutique.")}
+              href={whatsappLinkFor(WHATSAPP_MESSAGES.general)}
               external
               ariaLabel="WhatsApp Solitaire"
             >
@@ -703,7 +703,7 @@ export function Header() {
                 </button>
               </div>
 
-              {/* Nav links — staggered in */}
+              {/* Nav links, staggered in */}
               <nav className="px-6 pt-8 pb-6 flex flex-col" aria-label="Mobile navigation">
                 {NAV_PRIMARY.map((item, i) => (
                   <motion.div
@@ -750,7 +750,7 @@ export function Header() {
                     className="mt-8 inline-block"
                     style={{
                       fontFamily: 'var(--font-body)',
-                      fontSize: 9.5,
+                      fontSize: 10,
                       letterSpacing: '0.22em',
                       textTransform: 'uppercase',
                       fontWeight: 600,
@@ -768,7 +768,7 @@ export function Header() {
                       e.currentTarget.style.borderColor = 'rgba(201,168,76,0.40)';
                     }}
                   >
-                    Book Appointment
+                    Book a Private Sitting
                   </Link>
                 </motion.div>
 

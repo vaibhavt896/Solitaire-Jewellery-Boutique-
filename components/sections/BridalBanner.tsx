@@ -1,83 +1,150 @@
 'use client';
 
 /* ──────────────────────────────────────────────────────────
-   BridalBanner — Section 08
+   BridalBanner, Section 06
    "Bring your mother. We'll bring the pieces."
    Two-column: image left (60%), text right (40%).
    Rich editorial copy, consultation details, no urgency.
+   GSAP animations for image with sharper edges.
 ────────────────────────────────────────────────────────── */
 
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion, useReducedMotion } from 'framer-motion';
-import { whatsappLinkFor } from '@/lib/site';
+import { useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { whatsappLinkFor, WHATSAPP_MESSAGES } from '@/lib/site';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const ease = [0.25, 0.46, 0.45, 0.94] as const;
 
 export function BridalBanner() {
   const reduce = useReducedMotion();
+  const imageContainerRef = useRef<HTMLDivElement>(null);
+  const imageZoomRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (reduce || !imageContainerRef.current || !imageZoomRef.current) return;
+
+    const ctx = gsap.context(() => {
+      // Container entrance with sharper left-to-right translate
+      gsap.fromTo(
+        imageContainerRef.current,
+        { opacity: 0, x: -32 },
+        {
+          opacity: 1,
+          x: 0,
+          duration: 1.1,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: imageContainerRef.current,
+            start: 'top 70%',
+            once: true,
+          },
+        }
+      );
+
+      // Ken Burns zoom with sharp deceleration
+      gsap.fromTo(
+        imageZoomRef.current,
+        { scale: 1.08 },
+        {
+          scale: 1,
+          duration: 1.9,
+          ease: 'power1.inOut',
+          scrollTrigger: {
+            trigger: imageContainerRef.current,
+            start: 'top 70%',
+            once: true,
+          },
+        }
+      );
+    });
+
+    return () => ctx.revert();
+  }, [reduce]);
 
   return (
     <section
       style={{ background: 'var(--ivory)' }}
-      className="overflow-hidden"
+      className="section-pad"
     >
-      <div className="container-wide grid md:grid-cols-12 gap-0 items-stretch">
+      <div className="container-wide grid md:grid-cols-12 gap-10 lg:gap-16 items-center">
 
         {/* ── Image column (left, 7/12) ── */}
-        <motion.div
-          className="md:col-span-7 relative overflow-hidden"
-          style={{ minHeight: 480, aspectRatio: '4/5' }}
-          initial={reduce ? {} : { opacity: 0, x: -20 }}
-          whileInView={reduce ? {} : { opacity: 1, x: 0 }}
-          viewport={{ once: true, amount: 0.15 }}
-          transition={{ duration: 1.1, ease }}
+        <div
+          ref={imageContainerRef}
+          className="md:col-span-7 relative overflow-hidden group cursor-none"
+          style={{
+            borderRadius: 24,
+            boxShadow: '0 28px 70px -6px rgba(26,20,16,0.14), 0 8px 24px rgba(26,20,16,0.07)',
+            aspectRatio: '4/3',
+            width: '100%',
+          }}
         >
           <motion.div
-            className="absolute inset-0"
-            initial={reduce ? {} : { scale: 1.06 }}
+            ref={imageZoomRef}
+            initial={reduce ? {} : { scale: 1.07 }}
             whileInView={reduce ? {} : { scale: 1 }}
-            viewport={{ once: true, amount: 0.15 }}
-            transition={{ duration: 1.9, ease }}
+            viewport={{ once: true, margin: '-6%' }}
+            transition={{ duration: 1.8, ease }}
+            className="absolute inset-0"
           >
             <Image
               src="/bridal-consultation-boutique.avif"
-              alt="A bridal consultation at Solitaire — pieces laid out on the boutique table"
+              alt="A bridal consultation at Solitaire, pieces laid out on the boutique table"
               fill
               sizes="(max-width: 768px) 100vw, 58vw"
-              className="object-cover object-center"
+              className="object-cover object-center transition-transform duration-[1400ms] ease-out group-hover:scale-[1.04]"
               priority
             />
           </motion.div>
 
+          {/* Warm vignette */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background: 'radial-gradient(ellipse at center, transparent 50%, rgba(26,20,16,0.22) 100%)',
+              zIndex: 2,
+            }}
+          />
+
+          {/* Inset gold frame */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              boxShadow: 'inset 0 0 0 1px rgba(184,146,58,0.20)',
+              borderRadius: 24,
+              zIndex: 2,
+            }}
+          />
+
           {/* Eyebrow overlay on image */}
-          <div className="absolute top-8 left-8">
+          <div className="absolute top-6 left-6 z-10">
             <span
               style={{
                 fontFamily: 'var(--font-body)',
-                fontSize: 9,
+                fontSize: 10,
                 letterSpacing: '0.22em',
                 textTransform: 'uppercase',
-                color: 'rgba(244,239,227,0.6)',
-                border: '1px solid rgba(244,239,227,0.2)',
+                color: 'rgba(244,239,227,0.85)',
+                border: '1px solid rgba(244,239,227,0.25)',
                 padding: '5px 12px',
-                background: 'rgba(26,20,16,0.35)',
-                backdropFilter: 'blur(4px)',
+                background: 'rgba(26,20,16,0.5)',
+                backdropFilter: 'blur(6px)',
+                borderRadius: '4px',
               }}
             >
-              05 — FOR THE BRIDE
+              Planning a wedding?
             </span>
           </div>
-        </motion.div>
+        </div>
 
         {/* ── Text column (right, 5/12) ── */}
-        <motion.div
-          className="md:col-span-5 flex flex-col justify-center px-6 md:px-14 lg:px-20 py-16 md:py-24"
-          initial={reduce ? {} : { opacity: 0, x: 24 }}
-          whileInView={reduce ? {} : { opacity: 1, x: 0 }}
-          viewport={{ once: true, amount: 0.15 }}
-          transition={{ duration: 0.9, delay: 0.18, ease }}
-        >
+        <div className="md:col-span-5 flex flex-col justify-center py-6 md:py-0">
+          <p className="eyebrow mb-4">07 — For the Bride</p>
           <h2
             className="font-display"
             style={{
@@ -100,27 +167,23 @@ export function BridalBanner() {
               marginBottom: '2rem',
             }}
           >
-            The Solitaire Bridal Consultation is a private 45-minute appointment held in
-            the boutique&rsquo;s back room. We close the door. We lay the pieces out on
-            the table. You bring your mother, your sister, your husband-to-be — whoever
-            you&rsquo;d like — and a reference image of the lehenga, if you have one.
+            A private sitting is 45 minutes, free, and completely unhurried. We
+            listen first, your outfit, your day, your budget, and then we show
+            you only what truly fits. Bring your mother, your sister, whoever you
+            trust most.
           </p>
 
           {/* What to expect list */}
           <ul className="space-y-3 mb-10">
             {[
-              'We pre-curate 12–18 pieces based on your lehenga colour and preferences',
-              'We show you the certificates first, the pieces second',
-              'We take photographs of you in the pieces, for your records',
-              'We hold any piece for up to 14 days on a refundable token',
+              'We listen first, your outfit, your ceremonies, your budget',
+              'We bring out six to ten pieces, chosen for you, not the whole shop',
+              'We size, set, or make each piece to suit you',
+              'And we care for it for life, long after the day',
             ].map((item, i) => (
-              <motion.li
+              <li
                 key={i}
                 className="flex items-start gap-3"
-                initial={reduce ? {} : { opacity: 0, x: 12 }}
-                whileInView={reduce ? {} : { opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7, delay: 0.3 + i * 0.07, ease }}
               >
                 <span
                   aria-hidden
@@ -143,21 +206,21 @@ export function BridalBanner() {
                 >
                   {item}
                 </span>
-              </motion.li>
+              </li>
             ))}
           </ul>
 
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Link href="/bridal/book" className="btn-primary">
-              Book the consultation →
+          <div className="flex flex-col sm:flex-row md:flex-col gap-4 w-full max-w-[420px]">
+            <Link href="/bridal/book" className="btn-primary w-full text-center justify-center">
+              <span>Book a Private Sitting →</span>
             </Link>
             <a
-              href={whatsappLinkFor("Hello Solitaire — I'd like to enquire about the bridal consultation.")}
+              href={whatsappLinkFor(WHATSAPP_MESSAGES.bridal)}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-secondary"
+              className="btn-secondary w-full text-center justify-center"
             >
-              Write on WhatsApp
+              <span>Message Us on WhatsApp</span>
             </a>
           </div>
 
@@ -170,9 +233,9 @@ export function BridalBanner() {
               marginTop: '1.25rem',
             }}
           >
-            The consultation is at no cost. Sundays by request.
+            A private sitting is free. Sundays by request.
           </p>
-        </motion.div>
+        </div>
 
       </div>
     </section>

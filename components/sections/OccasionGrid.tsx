@@ -1,80 +1,115 @@
+'use client';
+
 import Link from 'next/link';
 import Image from 'next/image';
-import { Reveal } from '@/components/Reveal';
+import { useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { MEDIA } from '@/lib/placeholder-media';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const OCCASIONS = [
   {
     label: 'For the Bride',
-    eyebrow: 'Polki · Kundan · Bridal Sets',
+    eyebrow: 'Polki, Kundan, and full bridal sets',
     href: '/collections/bridal',
-    image:
-      'https://images.unsplash.com/photo-1599643477877-530eb83abc8e?auto=format&fit=crop&w=1200&q=80',
+    image: MEDIA.bridal,
   },
   {
-    label: 'For the Engagement',
-    eyebrow: 'GIA & IGI Certified Solitaires',
+    label: 'For an Engagement',
+    eyebrow: 'Certified solitaires, chosen with care',
     href: '/collections/solitaires',
-    image:
-      'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=1200&q=80',
+    image: MEDIA.solitaire,
   },
   {
     label: 'For a Gift',
-    eyebrow: 'Pieces That Last Forever',
+    eyebrow: 'Something they will keep for years',
     href: '/collections',
-    image:
-      'https://images.unsplash.com/photo-1535632787350-4e68ef0ac584?auto=format&fit=crop&w=1200&q=80',
+    image: MEDIA.diamond,
   },
   {
     label: 'For Every Day',
-    eyebrow: 'Antique Gold · Light Wear',
+    eyebrow: 'Light gold and antique pieces, made to actually wear',
     href: '/collections/antique-gold',
-    image:
-      'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=1200&q=80',
+    image: MEDIA.gold,
   },
 ];
 
 export function OccasionGrid() {
+  const gridRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!gridRef.current) return;
+
+    const ctx = gsap.context(() => {
+      const tiles = gridRef.current?.querySelectorAll('[data-tile]');
+      if (!tiles) return;
+
+      tiles.forEach((tile, i) => {
+        gsap.fromTo(
+          tile,
+          { opacity: 0, y: 20 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            delay: i * 0.08,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: gridRef.current,
+              start: 'top 65%',
+              once: true,
+            },
+          }
+        );
+      });
+    });
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section className="bg-ink">
+    <section className="bg-bone-deep">
       {/* Section header */}
       <div className="container-wide pt-16 pb-10 md:pt-20 md:pb-12">
-        <Reveal>
+        <div>
           <p
             style={{
               fontFamily: 'var(--font-body)',
-              fontSize: 9,
+              fontSize: 10,
               letterSpacing: '0.22em',
               textTransform: 'uppercase',
-              color: 'var(--gold-soft)',
+              color: 'var(--ink-muted)',
               marginBottom: '0.75rem',
             }}
           >
-            Shop by Occasion
+            What brings you in?
           </p>
           <h2
             className="font-display"
             style={{
               fontSize: 'clamp(2rem, 4.5vw, 3.4rem)',
-              color: 'var(--bone)',
+              color: 'var(--ink)',
               lineHeight: 1.05,
               fontWeight: 400,
             }}
           >
-            Find the right piece for the right moment.
+            What brings you in today?
           </h2>
-        </Reveal>
+        </div>
       </div>
 
       {/* 4-tile grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4">
+      <div ref={gridRef} className="grid grid-cols-2 lg:grid-cols-4">
         {OCCASIONS.map((tile, i) => (
-          <Reveal key={tile.label} delay={i * 0.07}>
+          <div key={tile.label} data-tile>
             <Link
               href={tile.href}
               className="group relative overflow-hidden bg-ink flex items-end"
               style={{ aspectRatio: '3/4' }}
             >
-              {/* Background image — opacity transitions on hover via CSS */}
+              {/* Background image, opacity transitions on hover via CSS */}
               <Image
                 src={tile.image}
                 alt={tile.label}
@@ -103,7 +138,7 @@ export function OccasionGrid() {
                 <p
                   style={{
                     fontFamily: 'var(--font-body)',
-                    fontSize: 8.5,
+                    fontSize: 10,
                     letterSpacing: '0.20em',
                     textTransform: 'uppercase',
                     color: 'var(--gold-soft)',
@@ -121,7 +156,7 @@ export function OccasionGrid() {
                 <span
                   className="mt-3 inline-block text-bone/40 group-hover:text-gold-soft/80 transition-colors duration-400 translate-y-1 group-hover:translate-y-0"
                   style={{
-                    fontSize: 9.5,
+                    fontSize: 10,
                     letterSpacing: '0.16em',
                     textTransform: 'uppercase',
                     fontFamily: 'var(--font-body)',
@@ -133,7 +168,7 @@ export function OccasionGrid() {
                 </span>
               </div>
             </Link>
-          </Reveal>
+          </div>
         ))}
       </div>
     </section>

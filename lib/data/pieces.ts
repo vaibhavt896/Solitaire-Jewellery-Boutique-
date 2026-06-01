@@ -1,11 +1,8 @@
 import type { Piece } from './types';
+import { PIECE_GALLERY } from '@/lib/placeholder-media';
 
-const polkiBridalNecklaceImages = [
-  'https://images.unsplash.com/photo-1599643477877-530eb83abc8e?auto=format&fit=crop&w=1200&q=80',
-  'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=1200&q=80',
-  'https://images.unsplash.com/photo-1535632787350-4e68ef0ac584?auto=format&fit=crop&w=1200&q=80',
-  'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=1200&q=80',
-];
+/* Placeholder gallery, local owned imagery (see lib/placeholder-media.ts) */
+const polkiBridalNecklaceImages = [...PIECE_GALLERY];
 
 export const PIECES: Piece[] = [
   {
@@ -16,13 +13,13 @@ export const PIECES: Piece[] = [
     collectionLabel: 'Polki',
     images: polkiBridalNecklaceImages.map((src, i) => ({
       src,
-      alt: `Polki bridal necklace with emerald drops — view ${i + 1}, Solitaire Boutique Kanpur`,
+      alt: `Polki bridal necklace with emerald drops, view ${i + 1}, Solitaire Boutique Kanpur`,
       width: 1200,
       height: 1500,
     })),
     description: 'Uncut diamonds, emerald drops, hand-set in 22K gold.',
     longDescription:
-      'This Polki bridal necklace was finished by an atelier in Jaipur over the course of six weeks. The uncut diamonds catch light differently from faceted stones — softer, with the warmth of an heirloom. The emerald drops are Zambian, hand-selected for their saturation. Designed for the bridal day, but worn well at a reception or formal occasion in any year that follows.',
+      'This Polki bridal necklace was finished by an atelier in Jaipur over the course of six weeks. The uncut diamonds catch light differently from faceted stones, softer, with the warmth of an heirloom. The emerald drops are Zambian, hand-selected for their saturation. Designed for the bridal day, but worn well at a reception or formal occasion in any year that follows.',
     specifications: [
       { label: 'Weight', value: '42.5 g' },
       { label: 'Stones', value: '24 polki, 12 emeralds' },
@@ -32,7 +29,7 @@ export const PIECES: Piece[] = [
     materials: ['22K Gold', 'Polki (uncut diamond)', 'Zambian Emerald'],
     certification: { type: 'BIS Hallmark' },
     careInstructions:
-      'Store in a soft pouch, away from other jewellery. Avoid contact with perfume, lotion, and chlorinated water. Polish only with a soft dry cloth — never an ultrasonic cleaner.',
+      'Store in a soft pouch, away from other jewellery. Avoid contact with perfume, lotion, and chlorinated water. Polish only with a soft dry cloth, never an ultrasonic cleaner.',
     isFeatured: true,
     related: [
       'polki-choker-with-pearl-line',
@@ -49,13 +46,13 @@ export const PIECES: Piece[] = [
     collectionLabel: 'Polki',
     images: polkiBridalNecklaceImages.map((src, i) => ({
       src,
-      alt: `Polki choker with pearl line — view ${i + 1}, Solitaire Boutique Kanpur`,
+      alt: `Polki choker with pearl line, view ${i + 1}, Solitaire Boutique Kanpur`,
       width: 1200,
       height: 1500,
     })),
     description: 'Three-row Polki choker, finished with a baroque pearl line.',
     longDescription:
-      'A choker that sits close at the throat — three rows of polki framed by a single line of natural baroque pearls. Best worn with a high-neck blouse, a single jhumka, and a bare wrist.',
+      'A choker that sits close at the throat, three rows of polki framed by a single line of natural baroque pearls. Best worn with a high-neck blouse, a single jhumka, and a bare wrist.',
     specifications: [
       { label: 'Weight', value: '38.2 g' },
       { label: 'Stones', value: '36 polki, baroque pearl strand' },
@@ -65,7 +62,7 @@ export const PIECES: Piece[] = [
     materials: ['22K Gold', 'Polki', 'Baroque Pearl'],
     certification: { type: 'BIS Hallmark' },
     careInstructions:
-      'Pearls are softer than gemstones — clean with a damp cloth only. Never wear in shower or pool.',
+      'Pearls are softer than gemstones, clean with a damp cloth only. Never wear in shower or pool.',
     related: [
       'polki-bridal-necklace-with-emerald-drops',
       'polki-jhumka-earrings',
@@ -81,7 +78,7 @@ export const PIECES: Piece[] = [
     collectionLabel: 'Solitaires',
     images: polkiBridalNecklaceImages.map((src, i) => ({
       src,
-      alt: `GIA-certified 1.02 carat solitaire engagement ring — view ${i + 1}, Solitaire Boutique Kanpur`,
+      alt: `GIA-certified 1.02 carat solitaire engagement ring, view ${i + 1}, Solitaire Boutique Kanpur`,
       width: 1200,
       height: 1500,
     })),
@@ -116,7 +113,7 @@ export const PIECES: Piece[] = [
     collectionLabel: 'Solitaires',
     images: polkiBridalNecklaceImages.map((src, i) => ({
       src,
-      alt: `IGI-certified 0.50 carat solitaire pendant — view ${i + 1}, Solitaire Boutique Kanpur`,
+      alt: `IGI-certified 0.50 carat solitaire pendant, view ${i + 1}, Solitaire Boutique Kanpur`,
       width: 1200,
       height: 1500,
     })),
@@ -148,13 +145,13 @@ export const PIECES: Piece[] = [
     collectionLabel: 'Antique Gold',
     images: polkiBridalNecklaceImages.map((src, i) => ({
       src,
-      alt: `Antique gold temple haar with Lakshmi motif — view ${i + 1}, Solitaire Boutique Kanpur`,
+      alt: `Antique gold temple haar with Lakshmi motif, view ${i + 1}, Solitaire Boutique Kanpur`,
       width: 1200,
       height: 1500,
     })),
     description: 'Long temple haar in 22K gold, Lakshmi motif clasp.',
     longDescription:
-      'A long haar in 22K gold, finished in the antique manner — soft matte, no high polish. Lakshmi motif at the clasp. Best worn over the temple necklace as the second tier of a bridal layering.',
+      'A long haar in 22K gold, finished in the antique manner, soft matte, no high polish. Lakshmi motif at the clasp. Best worn over the temple necklace as the second tier of a bridal layering.',
     specifications: [
       { label: 'Weight', value: '76.4 g' },
       { label: 'Length', value: '32 inches' },
@@ -178,20 +175,20 @@ export const PIECES: Piece[] = [
     collectionLabel: 'Polki',
     images: polkiBridalNecklaceImages.map((src, i) => ({
       src,
-      alt: `Polki jhumka earrings with pearl drops — view ${i + 1}, Solitaire Boutique Kanpur`,
+      alt: `Polki jhumka earrings with pearl drops, view ${i + 1}, Solitaire Boutique Kanpur`,
       width: 1200,
       height: 1500,
     })),
     description: 'Polki jhumka earrings, pearl drops.',
     longDescription:
-      'Classic jhumka silhouette — Polki rosettes around a 22K gold dome, finished with natural pearl drops. Substantial enough to balance a heavy bridal necklace.',
+      'Classic jhumka silhouette, Polki rosettes around a 22K gold dome, finished with natural pearl drops. Substantial enough to balance a heavy bridal necklace.',
     specifications: [
       { label: 'Weight', value: '18.6 g (pair)' },
       { label: 'Drop', value: '2.4 inches' },
     ],
     materials: ['22K Gold', 'Polki', 'Natural Pearl'],
     certification: { type: 'BIS Hallmark' },
-    careInstructions: 'Store hung, never flat — protects the pearl drops.',
+    careInstructions: 'Store hung, never flat, protects the pearl drops.',
     related: [
       'polki-bridal-necklace-with-emerald-drops',
       'polki-choker-with-pearl-line',
@@ -207,7 +204,7 @@ export const PIECES: Piece[] = [
     collectionLabel: 'Diamond',
     images: polkiBridalNecklaceImages.map((src, i) => ({
       src,
-      alt: `3-carat diamond tennis bracelet — view ${i + 1}, Solitaire Boutique Kanpur`,
+      alt: `3-carat diamond tennis bracelet, view ${i + 1}, Solitaire Boutique Kanpur`,
       width: 1200,
       height: 1500,
     })),
@@ -233,7 +230,7 @@ export const PIECES: Piece[] = [
     collectionLabel: 'Temple',
     images: polkiBridalNecklaceImages.map((src, i) => ({
       src,
-      alt: `Temple necklace with goddess motifs — view ${i + 1}, Solitaire Boutique Kanpur`,
+      alt: `Temple necklace with goddess motifs, view ${i + 1}, Solitaire Boutique Kanpur`,
       width: 1200,
       height: 1500,
     })),

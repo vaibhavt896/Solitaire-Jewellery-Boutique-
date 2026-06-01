@@ -1,32 +1,28 @@
 import Image from 'next/image';
 
-/*
- * Three logo variants, all 4004×1391px RGBA:
- *  NEW3 — black    → default, for cream/bone/light backgrounds
- *  NEW2 — white    → for dark backgrounds (bg-ink sections)
- *  NEW1 — purple   → brand color version (available if needed)
- *
- * Usage:
- *  <Logo />              → black logo  (light backgrounds)
- *  <Logo light />        → white logo  (dark backgrounds)
- */
+/* Logo, Solitaire wordmark using the provided brand asset.
+   We use a whitespace-trimmed copy (the supplied PNG was a 2000×2000
+   square with ~690px of transparent padding top & bottom, which made
+   the mark render tiny in an 80px navbar). The trimmed file is a tight
+   1776×684 crop (≈2.6:1), so it fills the bar at a legible size.
+   `light` inverts the mark to near-white for dark backgrounds. */
 
 type Props = { className?: string; light?: boolean };
 
 export function Logo({ className, light }: Props) {
-  const src = light
-    ? '/SOLITAIRE LOGO/SOLI LOGO NEW2.png'
-    : '/SOLITAIRE LOGO/SOLI LOGO NEW3.png';
-
   return (
     <Image
-      src={src}
+      src="/solitaire-logo-trimmed.png"
       alt="Solitaire Jewellery Boutique"
-      width={4004}
-      height={1391}
+      width={1776}
+      height={684}
       priority
       className={className}
-      style={{ height: 44, width: 'auto' }}
+      style={{
+        height: 42,
+        width: 'auto',
+        filter: light ? 'brightness(0) invert(1)' : undefined,
+      }}
     />
   );
 }

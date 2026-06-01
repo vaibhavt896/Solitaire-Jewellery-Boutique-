@@ -7,9 +7,9 @@ import { breadcrumbSchema } from '@/lib/seo/schema';
 import { buildMetadata } from '@/lib/seo/metadata';
 
 export const metadata: Metadata = buildMetadata({
-  title: 'The Journal',
+  title: 'The Journal | How to Choose Jewellery Well',
   description:
-    'Buying guides, craft notes, heritage and bridal stories from Solitaire Jewellery Boutique, Swaroop Nagar Kanpur.',
+    'Honest, simple guides on Polki, diamonds, certificates, and bridal planning, written to help you buy well, not to sell to you.',
   path: '/journal',
 });
 
@@ -32,11 +32,14 @@ export default function JournalPage() {
       <section className="section-pad bg-bone">
         <div className="container-wide">
           <Reveal className="max-w-3xl mb-16">
-            <p className="eyebrow mb-4">The Journal</p>
+            <p className="eyebrow mb-4">The journal</p>
             <h1 className="display-page">
-              On jewellery, certification, craftsmanship, and the moments
-              between.
+              How to choose well, from people who do it every day.
             </h1>
+            <p className="body-lead mt-6">
+              No sales talk. Just honest, simple guides on diamonds, gold, and the
+              pieces that matter most.
+            </p>
           </Reveal>
 
           {featured && (

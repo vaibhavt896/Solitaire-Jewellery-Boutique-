@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { SITE, whatsappLinkFor } from '@/lib/site';
+import { SITE, whatsappLinkFor, WHATSAPP_MESSAGES } from '@/lib/site';
 import {
   IconCalendar,
   IconPhone,
@@ -33,7 +33,7 @@ export function MobileBar() {
     >
       <div className="grid grid-cols-4 h-14">
         <a
-          href={whatsappLinkFor("Hi Solitaire — I'd like to enquire about a piece.")}
+          href={whatsappLinkFor(WHATSAPP_MESSAGES.general)}
           target="_blank"
           rel="noopener noreferrer"
           className="flex flex-col items-center justify-center gap-1 hover:bg-gold-veil transition-colors"

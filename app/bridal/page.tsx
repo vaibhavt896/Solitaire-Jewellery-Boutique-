@@ -6,34 +6,35 @@ import { breadcrumbSchema } from '@/lib/seo/schema';
 import { buildMetadata } from '@/lib/seo/metadata';
 import { getPiecesInCollection } from '@/lib/data/pieces';
 import { PieceCard } from '@/components/PieceCard';
+import { MEDIA } from '@/lib/placeholder-media';
 
 export const metadata: Metadata = buildMetadata({
-  title: 'Bridal Consultation',
+  title: 'Bridal Jewellery in Kanpur | Free Private Sittings',
   description:
-    'A private 45-minute consultation to curate the pieces of your wedding day. Polki, antique gold, certified solitaires — at the Solitaire boutique in Swaroop Nagar, Kanpur.',
+    'Bridal sets composed around you, your outfit, and your budget. Book a free, unhurried 45-minute sitting at our Swaroop Nagar boutique in Kanpur.',
   path: '/bridal',
 });
 
 const STEPS = [
   {
     n: '01',
-    title: 'Consultation',
-    body: 'We meet at Swaroop Nagar to understand your day — the lehenga, the ceremony, the family heirlooms already in the picture.',
+    title: 'We listen.',
+    body: 'We meet at the boutique and talk about your day, your outfit, your ceremonies, the pieces your family may already be bringing in. We listen before we show you anything.',
   },
   {
     n: '02',
-    title: 'Curation',
-    body: 'We curate from our collection and our atelier — six to ten pieces, mapped to your day, your spend, and your vision.',
+    title: 'We curate for you.',
+    body: 'We bring out six to ten pieces, chosen for your face, your look, and your budget. Not the whole shop. Only what truly fits.',
   },
   {
     n: '03',
-    title: 'Crafting',
-    body: 'Pieces are made or selected to fit. Where a piece is being commissioned, we share progress photographs week by week.',
+    title: 'We make it fit.',
+    body: 'Pieces are sized, set, or made to suit you. If something is being made specially, we send you photos as it comes along, so there are no surprises.',
   },
   {
     n: '04',
-    title: 'Heirloom',
-    body: 'You wear it. And one day, your daughter does. We service every piece for the life of the piece.',
+    title: 'You keep it for life.',
+    body: 'You wear it on your day. And one day, perhaps your daughter does. We care for every piece for as long as it stays in your family.',
   },
 ];
 
@@ -52,9 +53,9 @@ export default function BridalPage() {
       />
 
       {/* Hero */}
-      <section className="relative h-[85svh] min-h-[600px] bg-ink overflow-hidden">
+      <section className="relative h-[85svh] min-h-[600px] bg-bone-deep overflow-hidden">
         <img
-          src="https://images.unsplash.com/photo-1599643477877-530eb83abc8e?auto=format&fit=crop&w=2400&q=80"
+          src={MEDIA.bridal}
           alt="A bride in Solitaire jewellery, photographed in natural light"
           className="absolute inset-0 w-full h-full object-cover opacity-90"
         />
@@ -65,19 +66,19 @@ export default function BridalPage() {
               className="eyebrow mb-5"
               style={{ color: 'var(--gold-soft)' }}
             >
-              For The Bride
+              For the bride
             </p>
             <h1
               className="font-display text-mega font-medium leading-[1.05] max-w-4xl"
               style={{ color: 'var(--bone)' }}
             >
-              The pieces of your most photographed day.
+              The pieces of the day you will never forget.
             </h1>
             <Link
               href="/bridal/book"
-              className="bg-bone text-ink px-8 py-4 text-small uppercase tracking-button font-medium hover:bg-gold-soft transition-colors mt-10 inline-block"
+              className="cta cta--gold mt-10"
             >
-              Book Consultation
+              <span>Book a Private Sitting</span>
             </Link>
           </Reveal>
         </div>
@@ -87,9 +88,9 @@ export default function BridalPage() {
       <section className="section-pad bg-bone">
         <div className="container-wide">
           <Reveal className="max-w-2xl mb-16 md:mb-20">
-            <p className="eyebrow mb-4">Our Process</p>
+            <p className="eyebrow mb-4">How it works</p>
             <h2 className="display-page">
-              How a Solitaire bridal set comes to be.
+              From first sitting to the final piece.
             </h2>
           </Reveal>
 
@@ -113,8 +114,8 @@ export default function BridalPage() {
       <section className="section-pad bg-bone-deep">
         <div className="container-wide">
           <Reveal className="mb-16">
-            <p className="eyebrow">The Bridal Edit</p>
-            <h2 className="display-page mt-3">Six pieces from this season.</h2>
+            <p className="eyebrow">The bridal edit</p>
+            <h2 className="display-page mt-3">A few pieces from this season.</h2>
           </Reveal>
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
             {featured.slice(0, 6).map((p, i) => (
@@ -127,7 +128,7 @@ export default function BridalPage() {
       </section>
 
       {/* Testimonial */}
-      <section className="section-pad bg-rose-soft">
+      <section className="section-pad bg-bone">
         <Reveal className="container-content text-center">
           <p
             className="font-display text-display leading-tight"
@@ -139,7 +140,7 @@ export default function BridalPage() {
             will be hers."
           </p>
           <p className="mt-8 text-mono text-small uppercase tracking-eyebrow text-rose">
-            — A Solitaire bride, 2024
+            A Solitaire bride
           </p>
         </Reveal>
       </section>
@@ -147,16 +148,16 @@ export default function BridalPage() {
       {/* Final CTA */}
       <section className="section-pad bg-bone">
         <Reveal className="container-content text-center">
-          <p className="eyebrow mb-4">Ready to begin?</p>
+          <p className="eyebrow mb-4">Whenever you are ready</p>
           <h2 className="display-page max-w-3xl mx-auto leading-tight">
-            A consultation is 45 minutes.
+            A sitting is 45 minutes, free, and completely yours.
           </h2>
           <p className="body-lead mt-6 max-w-xl mx-auto">
-            We meet you in our Swaroop Nagar boutique with a curated selection
-            based on what you tell us.
+            We will have a curated selection ready, based on what you tell us. Come
+            alone, or bring the people whose opinion you trust most.
           </p>
           <Link href="/bridal/book" className="btn-primary mt-10 inline-flex">
-            Book Your Consultation
+            Book a Private Sitting
           </Link>
         </Reveal>
       </section>
