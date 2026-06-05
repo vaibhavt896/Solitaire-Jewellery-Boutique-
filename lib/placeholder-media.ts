@@ -25,13 +25,14 @@ export const PLACEHOLDER = {
 } as const;
 
 export const MEDIA = {
-  polki:      '/Homepage images/Polki homee.avif',
-  solitaire:  '/Homepage images/Solitaire Diamond.avif',
-  gold:       '/Homepage images/kundan-on-gold.avif',
-  diamond:    '/Homepage images/Studded, set.avif',
-  temple:     '/Homepage images/Temple Jewellery.avif',
-  bridal:     '/Homepage images/Bridal Jewellery.avif',
-  boutique:   '/bridal-consultation-boutique.avif',
+  polki:         '/Homepage images/Polki homee.avif',
+  solitaire:     '/Homepage images/Solitaire Diamond.avif',
+  gold:          '/Homepage images/kundan-on-gold.avif',
+  diamond:       '/Homepage images/Studded, set.avif',
+  temple:        '/Homepage images/Temple Jewellery.avif',
+  bridal:        '/Homepage images/Bridal Jewellery.avif',
+  boutique:      '/bridal-consultation-boutique.avif',
+  featuredPiece: '/Polki Bridal Necklace with Emerald Drops..png',
   /* Behind-the-scenes / atelier, no real asset yet, so this points at
      a clearly-labelled placeholder instead of re-using the boutique
      photo (which already appears in the Bridal section). Drop the real

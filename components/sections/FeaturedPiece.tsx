@@ -14,7 +14,6 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { getFeaturedPiece } from '@/lib/data/pieces';
-import { PLACEHOLDER } from '@/lib/placeholder-media';
 import { whatsappLinkFor, WHATSAPP_MESSAGES } from '@/lib/site';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -120,17 +119,12 @@ export function FeaturedPiece() {
           ref={imageZoomRef}
           className="absolute inset-0"
         >
-          {/* PLACEHOLDER: this season's piece needs its own commissioned
-              photograph. Until then we show a labelled placeholder rather
-              than re-using a category image from elsewhere on the page.
-              Swap `PLACEHOLDER.featuredPiece` back to `main.src` once the
-              real shot is in /public. */}
           <Image
-            src={PLACEHOLDER.featuredPiece}
+            src={main.src}
             alt={main.alt}
             fill
             sizes="100vw"
-            className="object-cover"
+            className="object-cover object-center"
             priority
           />
         </div>

@@ -1,8 +1,7 @@
 import type { Piece } from './types';
-import { PIECE_GALLERY } from '@/lib/placeholder-media';
+import { PIECE_GALLERY, MEDIA } from '@/lib/placeholder-media';
 
-/* Placeholder gallery, local owned imagery (see lib/placeholder-media.ts) */
-const polkiBridalNecklaceImages = [...PIECE_GALLERY];
+const polkiBridalNecklaceImages = [MEDIA.featuredPiece, ...PIECE_GALLERY];
 
 export const PIECES: Piece[] = [
   {
