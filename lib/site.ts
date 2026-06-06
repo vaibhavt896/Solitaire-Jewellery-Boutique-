@@ -51,7 +51,6 @@ export const NAV_PRIMARY: readonly NavItem[] = [
   { label: 'Collections', href: '/collections', hasMega: true },
   { label: 'Bridal',      href: '/bridal' },
   { label: 'Our Story',   href: '/story' },
-  { label: 'Craftsmanship', href: '/craftsmanship' },
   { label: 'Visit Us',    href: '/visit' },
 ];
 

@@ -7,6 +7,7 @@
 ────────────────────────────────────────────────────────── */
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState } from 'react';
 import { SITE } from '@/lib/site';
 
@@ -275,7 +276,6 @@ export function Footer() {
           <div className="col-span-1 md:col-span-2 md:col-start-5">
             <FooterCol title="The Boutique">
               <FooterLink href="/story">Our Story</FooterLink>
-              <FooterLink href="/craftsmanship">Craftsmanship</FooterLink>
               <FooterLink href="/trust">Trust & Certification</FooterLink>
               <FooterLink href="/bridal">Bridal</FooterLink>
             </FooterCol>
@@ -317,11 +317,28 @@ export function Footer() {
 
         </div>
 
-        {/* Trust line */}
+        {/* Trust line with certification logos */}
         <div
-          className="mt-16 pt-8"
+          className="mt-16 pt-8 flex flex-col items-center gap-5"
           style={{ borderTop: '1px solid rgba(244,239,227,0.08)' }}
         >
+          <div className="flex items-center gap-6">
+            <Image
+              src="/GIA Logo.png"
+              alt="GIA Certified"
+              width={56}
+              height={28}
+              style={{ objectFit: 'contain', filter: 'brightness(0) invert(1)', opacity: 0.55 }}
+            />
+            <span aria-hidden style={{ display: 'block', width: 1, height: 20, background: 'rgba(244,239,227,0.12)' }} />
+            <Image
+              src="/IGI logo.jpg"
+              alt="IGI Certified"
+              width={56}
+              height={28}
+              style={{ objectFit: 'contain', filter: 'brightness(0) invert(1)', opacity: 0.55 }}
+            />
+          </div>
           <p
             className="text-center"
             style={{

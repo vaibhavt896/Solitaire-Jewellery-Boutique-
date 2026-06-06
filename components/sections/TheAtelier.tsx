@@ -7,9 +7,8 @@
    GSAP animations for sharper visual impact.
 ────────────────────────────────────────────────────────── */
 
-import Link from 'next/link';
 import Image from 'next/image';
-import { motion, useReducedMotion } from 'framer-motion';
+import { useReducedMotion } from 'framer-motion';
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -167,13 +166,6 @@ export function TheAtelier() {
               ourselves. You meet the work, and the care behind it, in one place.
             </p>
 
-            <Link
-              href="/craftsmanship"
-              className="btn-ghost"
-              style={{ color: 'var(--aged-gold)', fontSize: 10.5, letterSpacing: '0.18em' }}
-            >
-              See How a Piece Is Made →
-            </Link>
           </div>
 
         </div>

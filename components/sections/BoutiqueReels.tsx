@@ -11,15 +11,19 @@ import gsap from 'gsap';
 gsap.config({ force3D: true });
 
 /* ─── Data ───────────────────────────────────────────────── */
+/* Add new reels to the TOP of this array — they will always play first */
 const REELS = [
-  { src: '/Reels/web/1.mp4', caption: 'Inside the boutique.',  label: 'Swaroop Nagar · Kanpur'  },
-  { src: '/Reels/web/2.mp4', caption: 'The pieces, up close.', label: 'Collections · By hand'   },
-  { src: '/Reels/web/3.mp4', caption: 'Set by hand, in gold.', label: 'Craftsmanship'            },
-  { src: '/Reels/web/4.mp4', caption: 'For the bride.',        label: 'Bridal · Private sitting' },
-  { src: '/Reels/web/5.mp4', caption: 'A stone worth seeing.', label: 'Solitaires · Certified'  },
+  { src: '/Reels/web/navratna-polki.mp4', caption: 'Colour and heritage, by hand.', label: 'Navratna · Polki'          },
+  { src: '/Reels/web/emerald-ruby.mp4',   caption: 'Emerald greens, ruby pinks.',   label: 'Colour · Timeless'         },
+  { src: '/Reels/web/bird-inspired.mp4',  caption: 'Graceful and luminous.',        label: 'Fine Craft · Nature'       },
+  { src: '/Reels/web/1.mp4',              caption: 'Inside the boutique.',           label: 'Swaroop Nagar · Kanpur'   },
+  { src: '/Reels/web/2.mp4',              caption: 'The pieces, up close.',          label: 'Collections · By hand'    },
+  { src: '/Reels/web/3.mp4',              caption: 'Set by hand, in gold.',          label: 'Gold · By hand'           },
+  { src: '/Reels/web/4.mp4',              caption: 'For the bride.',                 label: 'Bridal · Private sitting' },
+  { src: '/Reels/web/5.mp4',              caption: 'A stone worth seeing.',          label: 'Solitaires · Certified'   },
 ] as const;
 
-const REEL_HUES = ['#B8923A', '#6B7FA8', '#C9A84C', '#C48A8A', '#4E8B7E'] as const;
+const REEL_HUES = ['#8B6AAE', '#4A7C5E', '#4A8B7E', '#B8923A', '#6B7FA8', '#C9A84C', '#C48A8A', '#4E8B7E'] as const;
 
 const GRAIN = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E")`;
 
