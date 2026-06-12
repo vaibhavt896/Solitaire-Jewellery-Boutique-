@@ -49,4 +49,12 @@ public/Reels/5.mp4
 
 # screen recordings and test artifacts
 public/Screen\ Recording*.mov
+public/.Screen\ Recording*.mov.icloud
 test-results/
+
+# iCloud eviction stubs
+**/.*.icloud
+
+# claude internal
+.claude/
+CLAUDE.md
