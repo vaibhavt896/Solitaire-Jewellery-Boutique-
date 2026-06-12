@@ -102,7 +102,7 @@ export function VisitPreview() {
                 aspectRatio: '4/3',
                 background: 'var(--stone-100)',
                 border: '1px solid var(--ivory-smoke)',
-                borderRadius: '24px',
+                borderRadius: 'var(--radius-lg)',
                 boxShadow: '0 28px 70px -6px rgba(26,20,16,0.14), 0 8px 24px rgba(26,20,16,0.07)',
               }}
             >
@@ -260,7 +260,7 @@ export function VisitPreview() {
                 className="absolute inset-0 pointer-events-none"
                 style={{
                   boxShadow: 'inset 0 0 0 1px rgba(184,146,58,0.20)',
-                  borderRadius: '24px',
+                  borderRadius: 'var(--radius-lg)',
                   zIndex: 25,
                 }}
               />

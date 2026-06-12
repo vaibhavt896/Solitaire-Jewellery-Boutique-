@@ -106,11 +106,11 @@ function CollectionRow({
       <div
         className={`md:col-span-7 ${flip ? 'md:order-2' : 'md:order-2'}`}
         style={{
-          borderRadius: '24px',
+          borderRadius: 'var(--radius-lg)',
           boxShadow: '0 28px 70px -6px rgba(26,20,16,0.14), 0 8px 24px rgba(26,20,16,0.07)',
         }}
       >
-        <div className="overflow-hidden group cursor-none relative" style={{ borderRadius: '24px' }}>
+        <div className="overflow-hidden group cursor-none relative" style={{ borderRadius: 'var(--radius-lg)' }}>
           <motion.div
             initial={reduce ? {} : { scale: 1.07 }}
             whileInView={reduce ? {} : { scale: 1 }}
@@ -162,7 +162,7 @@ function CollectionRow({
           {/* Inset gold frame */}
           <div
             className="absolute inset-0 pointer-events-none"
-            style={{ boxShadow: 'inset 0 0 0 1px rgba(184,146,58,0.20)', borderRadius: '24px' }}
+            style={{ boxShadow: 'inset 0 0 0 1px rgba(184,146,58,0.20)', borderRadius: 'var(--radius-lg)' }}
           />
         </div>
       </div>

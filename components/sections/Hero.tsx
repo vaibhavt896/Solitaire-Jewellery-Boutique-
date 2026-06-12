@@ -33,6 +33,7 @@ export function Hero() {
   const [slideW,   setSlideW]   = useState(0);
   const [slideH,   setSlideH]   = useState(0);
   const [pb,       setPb]       = useState(24);
+  const [coverFit, setCoverFit] = useState(false);
   const [dragging, setDragging] = useState(false);
 
   const idxRef       = useRef(0);
@@ -70,23 +71,26 @@ export function Hero() {
       const vw = window.innerWidth;
       const vh = window.innerHeight;
       const cw = containerRef.current?.offsetWidth || vw;
-      /* Hero height constraints to keep all slider and buttons above the fold */
-      const CHROME  = 128;
-      const NAV     = vw < 640 ? 128 : 118;
-      const avail   = vh - CHROME - NAV;
+      /* Hero height constraints to keep all slider and buttons above the fold.
+         NAV reserves the lower cluster: dots + CTA buttons. */
+      const CHROME = 128;
+      const NAV    = vw < 640 ? 128 : 118;
+      const avail  = vh - CHROME - NAV;
 
       const isDesktop = vw >= 768;
       const minPeek = vw < 640 ? 10 : vw < 1024 ? 14 : 16;
-      
+
       let sw = cw - minPeek * 2;
       let pk = minPeek;
-      let slideH = Math.max(220, Math.round(avail * 0.80));
+      /* Mobile: taller card than the image's native aspect; the image
+         cover-fills it (slight side crop) so slides read bigger */
+      let slideH = Math.min(Math.round(sw / 2.0), Math.round(avail * 0.98));
       let targetPb = 24;
 
       if (isDesktop) {
         const maxHForFold = Math.round(avail * 0.98);
         const targetSw = Math.round(maxHForFold * 2.7424);
-        
+
         if (targetSw < cw - minPeek * 2) {
           sw = targetSw;
           slideH = maxHForFold;
@@ -101,9 +105,8 @@ export function Hero() {
         const extraSpace = (vh - CHROME) - contentHeight;
         targetPb = Math.max(16, extraSpace);
       } else {
-        const contentHeight = 12 + slideH + NAV;
-        const extraSpace = (vh - CHROME) - contentHeight;
-        targetPb = Math.max(16, extraSpace);
+        /* Compact slider on mobile — don't pad out the whole fold */
+        targetPb = 40;
       }
 
       slideWRef.current = sw;
@@ -111,6 +114,7 @@ export function Hero() {
       setSlideW(sw);
       setSlideH(slideH);
       setPb(targetPb);
+      setCoverFit(!isDesktop);
     };
     measure();
     const ro = new ResizeObserver(measure);
@@ -376,7 +380,7 @@ export function Hero() {
     lastPtrX.current    = e.clientX;
     lastPtrT.current    = e.timeStamp;
     velX.current        = 0;
-    
+
     // Kill any active slide/track tweens to prevent fighting the drag
     if (trackRef.current) gsap.killTweensOf(trackRef.current);
     slideRefs.current.forEach(slide => {
@@ -455,7 +459,7 @@ export function Hero() {
                 height:       slideH || undefined,
                 flexShrink:   0,
                 overflow:     'hidden',
-                borderRadius: 12,
+                borderRadius: 'var(--radius-lg)',
                 lineHeight:   0,
                 position:     'relative',
                 background:   'var(--ivory)',
@@ -495,7 +499,7 @@ export function Hero() {
                   width:           '100%',
                   height:          '100%',
                   display:         'block',
-                  objectFit:       'contain',
+                  objectFit:       coverFit ? 'cover' : 'contain',
                   objectPosition:  'center center',
                   transformOrigin: 'center center',
                   willChange:      'transform',
@@ -510,7 +514,7 @@ export function Hero() {
                   position:      'absolute',
                   inset:         0,
                   border:        '0.5px solid rgba(184, 146, 58, 0.22)',
-                  borderRadius:  12,
+                  borderRadius:  'var(--radius-lg)',
                   pointerEvents: 'none',
                   zIndex:        2,
                 }}
@@ -533,6 +537,9 @@ export function Hero() {
 
       {/* ── Navigation ────────────────────────────────────── */}
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, padding: '16px 0 0' }}>
+
+        {/* Page heading kept for SEO/screen readers; visual statement removed */}
+        <h1 className="sr-only">Heirlooms, made by hand. A small family boutique in Swaroop Nagar, Kanpur.</h1>
 
         {/* Pill dots */}
         <div

@@ -71,6 +71,11 @@ const config: Config = {
         default: '1280px',
         wide:    '1440px',
       },
+      borderRadius: {
+        /* One soft-corner language — see --radius-* in globals.css */
+        card:  'var(--radius-sm)',
+        image: 'var(--radius-lg)',
+      },
       transitionTimingFunction: {
         /* The Solitaire editorial ease — slow, cinematic */
         editorial: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',

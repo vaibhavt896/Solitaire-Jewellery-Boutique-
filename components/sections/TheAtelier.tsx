@@ -88,6 +88,7 @@ export function TheAtelier() {
           style={{
             height: 'clamp(320px, 58vh, 680px)',
             marginBottom: '3rem',
+            borderRadius: 'var(--radius-lg)',
           }}
         >
           <Image
@@ -143,6 +144,7 @@ export function TheAtelier() {
               fontSize: 'clamp(1rem, 1.6vw, 1.0625rem)',
               lineHeight: 1.85,
               color: 'var(--ink-soft)',
+              maxWidth: '34rem',
             }}
           >
             Our Polki comes from two workshops in Jaipur we have worked with for
@@ -159,6 +161,7 @@ export function TheAtelier() {
                 lineHeight: 1.85,
                 color: 'var(--ink-soft)',
                 marginBottom: '2rem',
+                maxWidth: '34rem',
               }}
             >
               We work directly with the people who make our pieces, visit them

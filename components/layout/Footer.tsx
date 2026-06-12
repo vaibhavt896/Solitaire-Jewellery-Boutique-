@@ -103,6 +103,7 @@ function NewsletterForm() {
                   background: 'transparent',
                   border: '1px solid rgba(244,239,227,0.20)',
                   borderRight: 'none',
+                  borderRadius: 'var(--radius-sm) 0 0 var(--radius-sm)',
                   padding: '13px 16px',
                   color: 'var(--ivory)',
                   fontFamily: 'var(--font-body)',
@@ -120,6 +121,7 @@ function NewsletterForm() {
                   background: 'var(--aged-gold)',
                   color: 'var(--ivory)',
                   border: 'none',
+                  borderRadius: '0 var(--radius-sm) var(--radius-sm) 0',
                   padding: '13px 22px',
                   fontFamily: 'var(--font-body)',
                   fontSize: 10,
@@ -230,7 +232,7 @@ export function Footer() {
                 marginBottom: '0.35rem',
               }}
             >
-              Solitaire
+              <span className="gold-metallic-text">Solitaire</span>
               <span
                 aria-hidden
                 style={{
@@ -322,21 +324,31 @@ export function Footer() {
           className="mt-16 pt-8 flex flex-col items-center gap-5"
           style={{ borderTop: '1px solid rgba(244,239,227,0.08)' }}
         >
-          <div className="flex items-center gap-6">
+          {/* Logos sit on a light plaque so each reads in its true colour,
+              a common certification pattern, against the dark mahogany. */}
+          <div
+            className="flex items-center gap-6"
+            style={{
+              background: 'var(--paper)',
+              borderRadius: 'var(--radius-sm)',
+              padding: '13px 26px',
+              boxShadow: '0 8px 26px rgba(0,0,0,0.22)',
+            }}
+          >
             <Image
               src="/GIA Logo.png"
               alt="GIA Certified"
-              width={56}
-              height={28}
-              style={{ objectFit: 'contain', filter: 'brightness(0) invert(1)', opacity: 0.55 }}
+              width={80}
+              height={36}
+              style={{ objectFit: 'contain', height: 26, width: 'auto' }}
             />
-            <span aria-hidden style={{ display: 'block', width: 1, height: 20, background: 'rgba(244,239,227,0.12)' }} />
+            <span aria-hidden style={{ display: 'block', width: 1, height: 24, background: 'rgba(26,20,16,0.12)' }} />
             <Image
               src="/IGI logo.jpg"
               alt="IGI Certified"
-              width={56}
-              height={28}
-              style={{ objectFit: 'contain', filter: 'brightness(0) invert(1)', opacity: 0.55 }}
+              width={80}
+              height={36}
+              style={{ objectFit: 'contain', height: 32, width: 'auto' }}
             />
           </div>
           <p

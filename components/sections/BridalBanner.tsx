@@ -78,7 +78,7 @@ export function BridalBanner() {
           ref={imageContainerRef}
           className="md:col-span-7 relative overflow-hidden group cursor-none"
           style={{
-            borderRadius: 24,
+            borderRadius: 'var(--radius-lg)',
             boxShadow: '0 28px 70px -6px rgba(26,20,16,0.14), 0 8px 24px rgba(26,20,16,0.07)',
             aspectRatio: '4/3',
             width: '100%',
@@ -116,7 +116,7 @@ export function BridalBanner() {
             className="absolute inset-0 pointer-events-none"
             style={{
               boxShadow: 'inset 0 0 0 1px rgba(184,146,58,0.20)',
-              borderRadius: 24,
+              borderRadius: 'var(--radius-lg)',
               zIndex: 2,
             }}
           />

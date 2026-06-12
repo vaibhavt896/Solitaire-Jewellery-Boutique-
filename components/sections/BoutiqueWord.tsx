@@ -109,11 +109,11 @@ export function BoutiqueWord() {
 
         {/* Signature */}
         <motion.p
+          className="gold-metallic-text"
           style={{
             fontFamily: 'var(--font-display)',
             fontSize: '1.25rem',
             fontStyle: 'italic',
-            color: 'var(--aged-gold)',
             marginTop: '2.5rem',
             letterSpacing: '0.01em',
           }}
@@ -122,7 +122,7 @@ export function BoutiqueWord() {
           viewport={{ once: true }}
           transition={{ duration: 1, delay: 0.5, ease }}
         >
-         , The Boutique
+          — The Boutique
         </motion.p>
 
         {/* Bottom ornament */}
@@ -133,7 +133,7 @@ export function BoutiqueWord() {
           viewport={{ once: true }}
           transition={{ duration: 0.9, delay: 0.6, ease }}
         >
-          <span aria-hidden style={{ display: 'block', width: 60, height: 1, background: 'var(--ivory-smoke)' }} />
+          <span aria-hidden style={{ display: 'block', width: 60, height: 1, background: 'var(--gold-metallic)', opacity: 0.5 }} />
         </motion.div>
 
       </div>

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import { Reveal } from '@/components/Reveal';
 import { Accordion } from '@/components/Accordion';
 import { JsonLd } from '@/components/JsonLd';
@@ -95,18 +96,20 @@ export default function TrustPage() {
           <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
             <CertCard
               tag="GIA"
+              logo="/GIA Logo.png"
               title="Gemological Institute of America"
               body="The world's leading authority on diamonds. Every solitaire ≥0.30 ct sold by us comes with a GIA report."
               accent="emerald"
             />
             <CertCard
               tag="IGI"
+              logo="/IGI logo.jpg"
               title="International Gemological Institute"
               body="The leading diamond grading lab in India. Most of our bridal diamond pieces carry an IGI report."
               accent="gold-deep"
             />
             <CertCard
-              tag="BIS"
+              tag="BIS 916"
               title="Bureau of Indian Standards"
               body="Mandatory hallmark for gold jewellery in India since 16 June 2021. Every gold piece we sell carries it."
               accent="ruby"
@@ -125,7 +128,7 @@ export default function TrustPage() {
             </h2>
           </Reveal>
           <Reveal className="mt-12">
-            <div className="aspect-[3/2] bg-paper border border-line p-8 md:p-16 relative overflow-hidden">
+            <div className="aspect-[3/2] bg-paper border border-line rounded-image p-8 md:p-16 relative overflow-hidden">
               <div className="absolute inset-0 bg-[linear-gradient(135deg,transparent_0%,#F2EAD0_50%,transparent_100%)] opacity-40" />
               <div className="relative h-full flex flex-col">
                 <div className="flex items-center justify-between">
@@ -191,11 +194,13 @@ export default function TrustPage() {
 
 function CertCard({
   tag,
+  logo,
   title,
   body,
   accent,
 }: {
   tag: string;
+  logo?: string;
   title: string;
   body: string;
   accent: 'emerald' | 'gold-deep' | 'ruby';
@@ -207,12 +212,21 @@ function CertCard({
         ? 'text-ruby'
         : 'text-gold-deep';
   return (
-    <div className="bg-paper border border-line p-8 md:p-10 h-full">
-      <p
-        className={`font-display text-mega font-medium leading-none ${accentClass}`}
-      >
-        {tag}
-      </p>
+    <div className="bg-paper border border-line rounded-card p-8 md:p-10 h-full">
+      <div className="flex items-start justify-between gap-4">
+        <p className={`font-display text-mega font-medium leading-none ${accentClass}`}>
+          {tag}
+        </p>
+        {logo && (
+          <Image
+            src={logo}
+            alt={`${tag} certification logo`}
+            width={80}
+            height={40}
+            style={{ objectFit: 'contain', height: 36, width: 'auto', flexShrink: 0 }}
+          />
+        )}
+      </div>
       <h3 className="font-display text-h2 mt-6">{title}</h3>
       <p className="text-body text-ink-soft mt-4">{body}</p>
     </div>

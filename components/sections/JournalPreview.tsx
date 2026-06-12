@@ -65,7 +65,7 @@ export function JournalPreview() {
               {/* Cinematic image */}
               <div
                 className="relative overflow-hidden mb-6"
-                style={{ aspectRatio: '16/10' }}
+                style={{ aspectRatio: '16/10', borderRadius: 'var(--radius-lg)' }}
               >
                 <Image
                   src={featured.hero.src}
@@ -158,7 +158,7 @@ export function JournalPreview() {
                   {/* Small thumbnail */}
                   <div
                     className="flex-shrink-0 overflow-hidden relative"
-                    style={{ width: 88, height: 72 }}
+                    style={{ width: 88, height: 72, borderRadius: 'var(--radius-sm)' }}
                   >
                     <Image
                       src={a.hero.src}
