@@ -13,17 +13,17 @@ import { SITE } from '@/lib/site';
 
 const GALLERY_IMAGES = [
   {
-    src: '/bridal-consultation-boutique.avif',
+    src: '/bridal-consultation-boutique.webp',
     title: 'The Bridal Lounge',
     description: 'An intimate, private salon designed for absolute comfort and personalized bridal style consultations.'
   },
   {
-    src: '/Homepage images/Polki homee.avif',
+    src: '/Homepage images/Polki homee.webp',
     title: 'Heirloom Displays',
     description: 'Our physical showcases feature curated gold, polki, and diamond jewels crafted for families.'
   },
   {
-    src: '/Homepage images/Bridal Jewellery.avif',
+    src: '/Homepage images/Bridal Jewellery.webp',
     title: 'Private Viewing',
     description: 'Bespoke customer sittings where heritage sets are presented for selection.'
   }

@@ -76,7 +76,7 @@ export function BoutiqueReels() {
   /* ── Update color halo + pill indicators ───────────────── */
   const updateMood = (ri: number) => {
     if (colorHaloRef.current) {
-      gsap.to(colorHaloRef.current, { backgroundColor: REEL_HUES[ri], duration: 1.1, ease: 'power2.inOut', overwrite: 'auto' });
+      gsap.set(colorHaloRef.current, { backgroundColor: REEL_HUES[ri] });
     }
     pillRefs.current.forEach((p, i) => {
       if (!p) return;
@@ -258,7 +258,7 @@ export function BoutiqueReels() {
                   overflow:     'hidden',
                   position:     'relative',
                   cursor:       isActive ? 'default' : 'pointer',
-                  transition:   'opacity 0.68s cubic-bezier(0.16,1,0.3,1), transform 0.68s cubic-bezier(0.16,1,0.3,1), box-shadow 0.68s cubic-bezier(0.16,1,0.3,1)',
+                  transition:   'opacity 0.68s cubic-bezier(0.16,1,0.3,1), transform 0.68s cubic-bezier(0.16,1,0.3,1)',
                   opacity:      isActive ? 1 : 0.42,
                   transform:    `scale(${isActive ? 1 : 0.87})`,
                   boxShadow:    isActive ? '0 36px 90px rgba(0,0,0,0.68), 0 0 0 0.5px rgba(184,146,58,0.22)' : 'none',
@@ -270,7 +270,7 @@ export function BoutiqueReels() {
                   muted
                   loop
                   playsInline
-                  preload={Math.abs(i - vActive) <= 1 ? 'auto' : 'metadata'}
+                  preload={Math.abs(i - vActive) <= 1 ? 'auto' : 'none'}
                   style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', background: '#000' }}
                 />
 

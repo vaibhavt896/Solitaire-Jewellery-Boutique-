@@ -1,5 +1,5 @@
 import { SITE } from '@/lib/site';
-import type { Piece, JournalArticle } from '@/lib/data/types';
+import type { Piece, JournalArticle, ContentBlock } from '@/lib/data/types';
 
 export function jewelryStoreSchema() {
   return {
@@ -62,21 +62,62 @@ export function articleSchema(article: JournalArticle) {
     '@type': 'Article',
     headline: article.title,
     description: article.excerpt,
-    image: article.hero.src,
+    image: `${SITE.url}${article.hero.src}`,
     datePublished: article.publishedAt,
+    dateModified: article.publishedAt,
+    articleSection: article.category,
+    inLanguage: 'en-IN',
     author: {
       '@type': 'Organization',
       name: SITE.name,
+      url: SITE.url,
     },
     publisher: {
       '@type': 'Organization',
       name: SITE.name,
-      logo: { '@type': 'ImageObject', url: `${SITE.url}/logo.svg` },
+      logo: { '@type': 'ImageObject', url: `${SITE.url}/solitaire-logo.png` },
     },
     mainEntityOfPage: {
       '@type': 'WebPage',
       '@id': `${SITE.url}/journal/${article.slug}`,
     },
+  } as const;
+}
+
+/**
+ * FAQ structured data, derived from the article body so the schema stays in
+ * sync with the visible Q&A (Google requires the two to match). We treat any
+ * h3 ending in a question mark, followed by a paragraph, as a Q&A pair, which
+ * cleanly picks up the "Questions we hear often" sections and ignores other
+ * subheadings. Returns null when an article has no such pairs.
+ */
+export function faqSchema(article: JournalArticle) {
+  const body = article.body as ContentBlock[];
+  const faqs: { question: string; answer: string }[] = [];
+
+  body.forEach((block, i) => {
+    if (
+      typeof block === 'object' &&
+      block.type === 'h3' &&
+      block.text.trim().endsWith('?')
+    ) {
+      const answer = body[i + 1];
+      if (typeof answer === 'string') {
+        faqs.push({ question: block.text, answer });
+      }
+    }
+  });
+
+  if (faqs.length === 0) return null;
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.question,
+      acceptedAnswer: { '@type': 'Answer', text: f.answer },
+    })),
   } as const;
 }
 

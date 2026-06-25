@@ -4,7 +4,6 @@ import { BoutiqueWord }        from '@/components/sections/BoutiqueWord';
 import { BoutiqueReels }       from '@/components/sections/BoutiqueReels';
 import { SignatureCategories } from '@/components/sections/SignatureCategories';
 import { FeaturedPiece }       from '@/components/sections/FeaturedPiece';
-import { TheAtelier }          from '@/components/sections/TheAtelier';
 import { TrustNumbers }        from '@/components/sections/TrustNumbers';
 import { BridalBanner }        from '@/components/sections/BridalBanner';
 import { JournalPreview }      from '@/components/sections/JournalPreview';
@@ -19,7 +18,6 @@ export default function HomePage() {
       <BoutiqueReels />
       <SignatureCategories />
       <FeaturedPiece />
-      <TheAtelier />
       <TrustNumbers />
       <BridalBanner />
       <JournalPreview />

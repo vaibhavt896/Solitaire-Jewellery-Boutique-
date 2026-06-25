@@ -324,7 +324,7 @@ export function Footer() {
         >
           <div className="flex items-center gap-6">
             <Image
-              src="/GIA Logo.png"
+              src="/GIA Logo.webp"
               alt="GIA Certified"
               width={56}
               height={28}
@@ -332,7 +332,7 @@ export function Footer() {
             />
             <span aria-hidden style={{ display: 'block', width: 1, height: 20, background: 'rgba(244,239,227,0.12)' }} />
             <Image
-              src="/IGI logo.jpg"
+              src="/IGI logo.webp"
               alt="IGI Certified"
               width={56}
               height={28}

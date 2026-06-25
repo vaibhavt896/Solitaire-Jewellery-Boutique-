@@ -10,7 +10,7 @@ export const COLLECTIONS: Collection[] = [
     description:
       'Polki is the diamond before it was ever cut, natural, full of character, set in pure gold by hand. Ours comes from two workshops in Jaipur we have known for over a decade. No two pieces are ever quite the same, which is rather the point. Polki is uncut by nature, so each stone is one of a kind, and we will explain exactly what you are looking at, in plain words.',
     hero: {
-      src: '/Homepage images/Polki homee.avif',
+      src: '/Homepage images/Polki homee.webp',
       alt: 'Polki bridal necklace with uncut diamonds and emerald drops, Solitaire Boutique Kanpur',
       width: 1600,
       height: 2000,
@@ -26,7 +26,7 @@ export const COLLECTIONS: Collection[] = [
     description:
       'A solitaire is a single diamond, and a big decision. So we make it a calm one. Every solitaire of value here is graded by GIA or IGI, and we walk you through the report in simple words, what the four Cs mean, and which ones actually matter for you. The certificate is independent of us. It travels home with the ring, and we keep a copy on file for life.',
     hero: {
-      src: '/Homepage images/Solitaire Diamond.avif',
+      src: '/Homepage images/Solitaire Diamond.webp',
       alt: 'GIA-certified diamond solitaire engagement ring, Solitaire Boutique Kanpur',
       width: 1600,
       height: 2000,
@@ -42,7 +42,7 @@ export const COLLECTIONS: Collection[] = [
     description:
       'Hand-finished gold in the old techniques, the soft, matte glow that machine-made pieces never quite catch. These are pieces with weight and history to them, made to be worn often and kept for good. All our gold is hallmarked for purity, so you never have to take our word for it.',
     hero: {
-      src: '/Homepage images/kundan-on-gold.avif',
+      src: '/Homepage images/kundan-on-gold.webp',
       alt: 'Kundan-on-gold antique necklace with traditional jadau work, Solitaire Boutique Kanpur',
       width: 1600,
       height: 2000,
@@ -57,7 +57,7 @@ export const COLLECTIONS: Collection[] = [
     description:
       'Rings, pendants, earrings, and bracelets in faceted diamond, set in 18K and 22K gold. Clean, modern, and easy to wear every day, with the same honest certification as everything else we sell. Every diamond piece of value comes with an IGI certificate, so the brilliance is matched by proof.',
     hero: {
-      src: '/Homepage images/Studded, set.avif',
+      src: '/Homepage images/Studded, set.webp',
       alt: 'Studded diamond set in 18K gold, Solitaire Boutique Kanpur',
       width: 1600,
       height: 2000,
@@ -72,7 +72,7 @@ export const COLLECTIONS: Collection[] = [
     description:
       'Temple jewellery carries the figures and forms passed down through generations. We keep them exactly as they should be, for the southern bride, the festival, and anyone who loves jewellery with meaning behind it. These are detailed, traditional pieces, and we are happy to explain the motifs and their stories when you visit.',
     hero: {
-      src: '/Homepage images/Temple Jewellery.avif',
+      src: '/Homepage images/Temple Jewellery.webp',
       alt: 'Temple jewellery necklace with traditional goddess motif, Solitaire Boutique Kanpur',
       width: 1600,
       height: 2000,
@@ -87,7 +87,7 @@ export const COLLECTIONS: Collection[] = [
     description:
       'A bride wears more than one piece, and they all have to sing together, the choker, the long necklace, the earrings, the head piece, the bangles. We compose the full set around you, your outfit, and your day, so nothing fights and nothing is forgotten. This is what our free private sitting is for: we plan the whole look with you, calmly, weeks before the day.',
     hero: {
-      src: '/Homepage images/Bridal Jewellery.avif',
+      src: '/Homepage images/Bridal Jewellery.webp',
       alt: 'Bridal jewellery set with Polki choker and long necklace, Solitaire Boutique Kanpur',
       width: 1600,
       height: 2000,

@@ -96,14 +96,14 @@ export default function TrustPage() {
           <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
             <CertCard
               tag="GIA"
-              logo="/GIA Logo.png"
+              logo="/GIA Logo.webp"
               title="Gemological Institute of America"
               body="The world's leading authority on diamonds. Every solitaire ≥0.30 ct sold by us comes with a GIA report."
               accent="emerald"
             />
             <CertCard
               tag="IGI"
-              logo="/IGI logo.jpg"
+              logo="/IGI logo.webp"
               title="International Gemological Institute"
               body="The leading diamond grading lab in India. Most of our bridal diamond pieces carry an IGI report."
               accent="gold-deep"

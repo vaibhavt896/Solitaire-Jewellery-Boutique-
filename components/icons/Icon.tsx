@@ -23,6 +23,15 @@ export function IconSearch({ size = 20, ...rest }: IconProps) {
   );
 }
 
+export function IconUser({ size = 20, ...rest }: IconProps) {
+  return (
+    <svg {...base(size)} {...rest}>
+      <circle cx="12" cy="8" r="3.4" />
+      <path d="M5.5 19.5c0-3.4 2.9-5.6 6.5-5.6s6.5 2.2 6.5 5.6" />
+    </svg>
+  );
+}
+
 export function IconWhatsApp({ size = 20, ...rest }: IconProps) {
   return (
     <svg {...base(size)} {...rest}>

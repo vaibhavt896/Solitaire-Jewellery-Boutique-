@@ -28,6 +28,7 @@ export function MobileBar() {
       className={`lg:hidden fixed inset-x-0 bottom-0 z-30 bg-paper border-t border-line transition-transform duration-300 ${
         show ? 'translate-y-0' : 'translate-y-full'
       }`}
+      style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
       role="navigation"
       aria-label="Quick actions"
     >

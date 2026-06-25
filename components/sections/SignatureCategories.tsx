@@ -11,6 +11,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { motion, useReducedMotion } from 'framer-motion';
 import { COLLECTIONS } from '@/lib/data/collections';
+import { TextReveal } from '@/components/TextReveal';
 
 const ease = [0.25, 0.46, 0.45, 0.94] as const;
 
@@ -111,12 +112,7 @@ function CollectionRow({
         }}
       >
         <div className="overflow-hidden group cursor-none relative" style={{ borderRadius: 'var(--radius-lg)' }}>
-          <motion.div
-            initial={reduce ? {} : { scale: 1.07 }}
-            whileInView={reduce ? {} : { scale: 1 }}
-            viewport={{ once: true, margin: '-6%' }}
-            transition={{ duration: 1.8, ease }}
-          >
+          <div>
             <Image
               src={collection.hero.src}
               alt={collection.hero.alt}
@@ -127,7 +123,7 @@ function CollectionRow({
               className="transition-transform duration-[1400ms] ease-out group-hover:scale-[1.04]"
               priority={index === 0}
             />
-          </motion.div>
+          </div>
 
           {/* Warm depth vignette, always present, adds richness */}
           <div
@@ -265,7 +261,8 @@ export function SignatureCategories() {
           transition={{ duration: 0.8, ease }}
         >
           <p className="eyebrow mb-4">03 — Collections</p>
-          <h2
+          <TextReveal
+            as="h2"
             className="font-display"
             style={{
               fontSize: 'clamp(2rem, 4.5vw, 3.6rem)',
@@ -275,7 +272,7 @@ export function SignatureCategories() {
             }}
           >
             A few things, chosen well.
-          </h2>
+          </TextReveal>
         </motion.div>
 
         {/* Rows */}

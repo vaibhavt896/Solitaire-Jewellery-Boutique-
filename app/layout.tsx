@@ -8,6 +8,7 @@ import { JsonLd } from '@/components/JsonLd';
 import { jewelryStoreSchema } from '@/lib/seo/schema';
 import { SITE } from '@/lib/site';
 import { CustomCursor } from '@/components/CustomCursor';
+import { Preloader } from '@/components/Preloader';
 
 const display = Cormorant_Garamond({
   subsets: ['latin'],
@@ -73,6 +74,12 @@ export default function RootLayout({
     <html lang="en-IN" className={`${display.variable} ${body.variable} ${mono.variable}`}>
       <head>
         <JsonLd data={jewelryStoreSchema()} />
+        {/* Pre-paint: mark return visits so the preloader never renders for them */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{if(sessionStorage.getItem('sjb-visited'))document.documentElement.setAttribute('data-visited','1')}catch(e){}`,
+          }}
+        />
       </head>
       <body>
         <a
@@ -81,6 +88,7 @@ export default function RootLayout({
         >
           Skip to content
         </a>
+        <Preloader />
         <CustomCursor />
         <Header />
         <main id="main" className="min-h-[60vh]">
@@ -88,6 +96,7 @@ export default function RootLayout({
         </main>
         <Footer />
         <MobileBar />
+        <div className="grain-overlay" aria-hidden />
       </body>
     </html>
   );

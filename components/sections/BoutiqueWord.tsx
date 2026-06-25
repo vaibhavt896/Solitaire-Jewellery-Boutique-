@@ -8,6 +8,7 @@
 ────────────────────────────────────────────────────────── */
 
 import { motion, useReducedMotion } from 'framer-motion';
+import { TextReveal } from '@/components/TextReveal';
 
 const ease = [0.25, 0.46, 0.45, 0.94] as const;
 
@@ -64,7 +65,8 @@ export function BoutiqueWord() {
         </motion.p>
 
         {/* Headline */}
-        <motion.h2
+        <TextReveal
+          as="h2"
           className="font-display"
           style={{
             fontSize: 'clamp(1.9rem, 4vw, 3.2rem)',
@@ -74,13 +76,9 @@ export function BoutiqueWord() {
             color: 'var(--obsidian)',
             marginBottom: '2.5rem',
           }}
-          initial={reduce ? {} : { opacity: 0, y: 16 }}
-          whileInView={reduce ? {} : { opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.9, delay: 0.18, ease }}
         >
           If you are choosing jewellery,<br />you have come to the right place.
-        </motion.h2>
+        </TextReveal>
 
         {/* Body, drop cap paragraph */}
         <motion.div

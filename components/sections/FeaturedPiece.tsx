@@ -14,6 +14,7 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { getFeaturedPiece } from '@/lib/data/pieces';
+import { TextReveal } from '@/components/TextReveal';
 import { whatsappLinkFor, WHATSAPP_MESSAGES } from '@/lib/site';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -86,7 +87,8 @@ export function FeaturedPiece() {
           >
             04 — The Piece
           </p>
-          <h2
+          <TextReveal
+            as="h2"
             className="font-display"
             style={{
               fontSize: 'clamp(2rem, 5vw, 3.8rem)',
@@ -96,7 +98,7 @@ export function FeaturedPiece() {
             }}
           >
             {piece.title}.
-          </h2>
+          </TextReveal>
         </div>
       </div>
 

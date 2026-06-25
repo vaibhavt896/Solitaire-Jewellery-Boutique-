@@ -5,16 +5,17 @@ import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { whatsappLinkFor, WHATSAPP_MESSAGES } from '@/lib/site';
+import { Magnetic } from '@/components/Magnetic';
 
 gsap.config({ force3D: true });
 
 /* ─── Slide data ───────────────────────────────────────────── */
 const SLIDES = [
-  { src: '/Hero-Slider-Images/slide%201.avif', alt: 'Curated solitaire jewellery, Swaroop Nagar Kanpur' },
-  { src: '/Hero-Slider-Images/Slide%202.avif', alt: 'Bridal jewellery, timeless elegance' },
-  { src: '/Hero-Slider-Images/slide%203.avif', alt: 'Heritage gold, Polki, Kundan, antique gold' },
-  { src: '/Hero-Slider-Images/Slide%204.avif', alt: 'Certified diamond solitaires, GIA & IGI' },
-  { src: '/Hero-Slider-Images/Slide%205.avif', alt: 'Fine jewellery for every occasion' },
+  { src: '/Hero-Slider-Images/slide%201.webp', alt: 'Curated solitaire jewellery, Swaroop Nagar Kanpur' },
+  { src: '/Hero-Slider-Images/Slide%202.webp', alt: 'Bridal jewellery, timeless elegance' },
+  { src: '/Hero-Slider-Images/slide%203.webp', alt: 'Heritage gold, Polki, Kundan, antique gold' },
+  { src: '/Hero-Slider-Images/Slide%204.webp', alt: 'Certified diamond solitaires, GIA & IGI' },
+  { src: '/Hero-Slider-Images/Slide%205.webp', alt: 'Fine jewellery for every occasion' },
 ] as const;
 
 const N        = SLIDES.length;
@@ -138,16 +139,13 @@ export function Hero() {
         overwrite: 'auto',
       });
 
-      // Animate slide card scales, opacities, and box-shadows concurrently
+      // Animate slide card scales and opacities concurrently
       slideRefs.current.forEach((slide, idx) => {
         if (!slide) return;
         const isActive = idx === vi;
         gsap.to(slide, {
-          scale: isActive ? 1.0 : 0.96,
+          scale:   isActive ? 1.0 : 0.96,
           opacity: isActive ? 1.0 : 0.68,
-          boxShadow: isActive
-            ? '0 24px 60px -8px rgba(26,20,16,0.18), 0 8px 24px -4px rgba(26,20,16,0.12)'
-            : '0 4px 12px rgba(26,20,16,0.04)',
           duration: SLIDE_MS / 1000,
           ease: 'power4.out',
           overwrite: 'auto',
@@ -163,11 +161,8 @@ export function Hero() {
         const isActive = idx === vi;
         gsap.killTweensOf(slide);
         gsap.set(slide, {
-          scale: isActive ? 1.0 : 0.96,
+          scale:   isActive ? 1.0 : 0.96,
           opacity: isActive ? 1.0 : 0.68,
-          boxShadow: isActive
-            ? '0 24px 60px -8px rgba(26,20,16,0.18), 0 8px 24px -4px rgba(26,20,16,0.12)'
-            : '0 4px 12px rgba(26,20,16,0.04)',
         });
       });
     }
@@ -277,22 +272,16 @@ export function Hero() {
           if (!slide) return;
           const isActive = idx === cloneVi;
           gsap.to(slide, {
-            scale: isActive ? 1.0 : 0.96,
+            scale:   isActive ? 1.0 : 0.96,
             opacity: isActive ? 1.0 : 0.68,
-            boxShadow: isActive
-              ? '0 24px 60px -8px rgba(26,20,16,0.18), 0 8px 24px -4px rgba(26,20,16,0.12)'
-              : '0 4px 12px rgba(26,20,16,0.04)',
             duration: SLIDE_MS / 1000,
             ease: 'power4.out',
             overwrite: 'auto',
             onComplete: () => {
               const isFirst = idx === 1;
               gsap.set(slide, {
-                scale: isFirst ? 1.0 : 0.96,
+                scale:   isFirst ? 1.0 : 0.96,
                 opacity: isFirst ? 1.0 : 0.68,
-                boxShadow: isFirst
-                  ? '0 24px 60px -8px rgba(26,20,16,0.18), 0 8px 24px -4px rgba(26,20,16,0.12)'
-                  : '0 4px 12px rgba(26,20,16,0.04)',
               });
             }
           });
@@ -326,22 +315,16 @@ export function Hero() {
           if (!slide) return;
           const isActive = idx === cloneVi;
           gsap.to(slide, {
-            scale: isActive ? 1.0 : 0.96,
+            scale:   isActive ? 1.0 : 0.96,
             opacity: isActive ? 1.0 : 0.68,
-            boxShadow: isActive
-              ? '0 24px 60px -8px rgba(26,20,16,0.18), 0 8px 24px -4px rgba(26,20,16,0.12)'
-              : '0 4px 12px rgba(26,20,16,0.04)',
             duration: SLIDE_MS / 1000,
             ease: 'power4.out',
             overwrite: 'auto',
             onComplete: () => {
               const isLast = idx === N;
               gsap.set(slide, {
-                scale: isLast ? 1.0 : 0.96,
+                scale:   isLast ? 1.0 : 0.96,
                 opacity: isLast ? 1.0 : 0.68,
-                boxShadow: isLast
-                  ? '0 24px 60px -8px rgba(26,20,16,0.18), 0 8px 24px -4px rgba(26,20,16,0.12)'
-                  : '0 4px 12px rgba(26,20,16,0.04)',
               });
             }
           });
@@ -433,6 +416,8 @@ export function Hero() {
       <div
         ref={containerRef}
         className="overflow-hidden w-full"
+        data-cursor="piece"
+        data-cursor-label="Drag"
         style={{ cursor: dragging ? 'grabbing' : 'grab', userSelect: 'none', touchAction: 'pan-y' }}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
@@ -463,7 +448,6 @@ export function Hero() {
                 lineHeight:   0,
                 position:     'relative',
                 background:   'var(--ivory)',
-                willChange:   'transform, opacity',
                 opacity:      vi === vIdx ? 1 : 0.68,
                 transform:    vi === vIdx ? 'scale(1)' : 'scale(0.96)',
                 boxShadow:    vi === vIdx
@@ -502,7 +486,6 @@ export function Hero() {
                   objectFit:       coverFit ? 'cover' : 'contain',
                   objectPosition:  'center center',
                   transformOrigin: 'center center',
-                  willChange:      'transform',
                   position:        'relative',
                   zIndex:          1,
                 }}
@@ -587,17 +570,23 @@ export function Hero() {
 
         {/* Buttons row */}
         <div className="flex flex-wrap items-center justify-center gap-4">
-          <Link href="/visit" className="cta cta--gold">
-            <span>Visit the Boutique</span>
-          </Link>
-          <a
-            href={whatsappLinkFor(WHATSAPP_MESSAGES.general)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="cta cta--ink"
-          >
-            <span>Message Us on WhatsApp</span>
-          </a>
+          <Magnetic>
+            <Link href="/visit" className="cta cta--gold" data-cursor="cta">
+              <span>Visit the Boutique</span>
+            </Link>
+          </Magnetic>
+          <Magnetic>
+            <a
+              href={whatsappLinkFor(WHATSAPP_MESSAGES.general)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="cta cta--ink"
+              data-cursor="whatsapp"
+              data-cursor-label="Say hello"
+            >
+              <span>Message Us on WhatsApp</span>
+            </a>
+          </Magnetic>
         </div>
 
         {/* Custom global styling to completely clear track transforms on drag */}

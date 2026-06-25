@@ -10,15 +10,14 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { motion, useReducedMotion } from 'framer-motion';
+import { useReducedMotion } from 'framer-motion';
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { whatsappLinkFor, WHATSAPP_MESSAGES } from '@/lib/site';
+import { TextReveal } from '@/components/TextReveal';
 
 gsap.registerPlugin(ScrollTrigger);
-
-const ease = [0.25, 0.46, 0.45, 0.94] as const;
 
 export function BridalBanner() {
   const reduce = useReducedMotion();
@@ -84,23 +83,19 @@ export function BridalBanner() {
             width: '100%',
           }}
         >
-          <motion.div
+          <div
             ref={imageZoomRef}
-            initial={reduce ? {} : { scale: 1.07 }}
-            whileInView={reduce ? {} : { scale: 1 }}
-            viewport={{ once: true, margin: '-6%' }}
-            transition={{ duration: 1.8, ease }}
             className="absolute inset-0"
           >
             <Image
-              src="/bridal-consultation-boutique.avif"
+              src="/bridal-consultation-boutique.webp"
               alt="A bridal consultation at Solitaire, pieces laid out on the boutique table"
               fill
               sizes="(max-width: 768px) 100vw, 58vw"
               className="object-cover object-center transition-transform duration-[1400ms] ease-out group-hover:scale-[1.04]"
               priority
             />
-          </motion.div>
+          </div>
 
           {/* Warm vignette */}
           <div
@@ -145,7 +140,8 @@ export function BridalBanner() {
         {/* ── Text column (right, 5/12) ── */}
         <div className="md:col-span-5 flex flex-col justify-center py-6 md:py-0">
           <p className="eyebrow mb-4">07 — For the Bride</p>
-          <h2
+          <TextReveal
+            as="h2"
             className="font-display"
             style={{
               fontSize: 'clamp(2rem, 3.8vw, 3rem)',
@@ -156,7 +152,7 @@ export function BridalBanner() {
             }}
           >
             Bring your mother.<br />We&rsquo;ll bring the pieces.
-          </h2>
+          </TextReveal>
 
           <p
             style={{

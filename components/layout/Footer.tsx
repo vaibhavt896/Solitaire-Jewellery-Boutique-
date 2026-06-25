@@ -7,7 +7,6 @@
 ────────────────────────────────────────────────────────── */
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { useState } from 'react';
 import { SITE } from '@/lib/site';
 
@@ -213,7 +212,7 @@ function FooterLink({ href, children, external }: { href: string; children: Reac
 export function Footer() {
   return (
     <footer style={{ background: 'var(--mahogany)', color: 'var(--ivory)' }}>
-      <div className="container-wide" style={{ paddingTop: '6rem', paddingBottom: '3rem' }}>
+      <div className="container-wide pb-24 lg:pb-12" style={{ paddingTop: '6rem' }}>
 
         {/* Newsletter, hero at top */}
         <NewsletterForm />
@@ -317,52 +316,6 @@ export function Footer() {
             </FooterCol>
           </div>
 
-        </div>
-
-        {/* Trust line with certification logos */}
-        <div
-          className="mt-16 pt-8 flex flex-col items-center gap-5"
-          style={{ borderTop: '1px solid rgba(244,239,227,0.08)' }}
-        >
-          {/* Logos sit on a light plaque so each reads in its true colour,
-              a common certification pattern, against the dark mahogany. */}
-          <div
-            className="flex items-center gap-6"
-            style={{
-              background: 'var(--paper)',
-              borderRadius: 'var(--radius-sm)',
-              padding: '13px 26px',
-              boxShadow: '0 8px 26px rgba(0,0,0,0.22)',
-            }}
-          >
-            <Image
-              src="/GIA Logo.png"
-              alt="GIA Certified"
-              width={80}
-              height={36}
-              style={{ objectFit: 'contain', height: 26, width: 'auto' }}
-            />
-            <span aria-hidden style={{ display: 'block', width: 1, height: 24, background: 'rgba(26,20,16,0.12)' }} />
-            <Image
-              src="/IGI logo.jpg"
-              alt="IGI Certified"
-              width={80}
-              height={36}
-              style={{ objectFit: 'contain', height: 32, width: 'auto' }}
-            />
-          </div>
-          <p
-            className="text-center"
-            style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: 10,
-              letterSpacing: '0.18em',
-              textTransform: 'uppercase',
-              color: 'rgba(244,239,227,0.25)',
-            }}
-          >
-            Trusted by Kanpur families · GIA & IGI certified diamonds · BIS hallmarked gold
-          </p>
         </div>
 
         {/* Bottom bar */}

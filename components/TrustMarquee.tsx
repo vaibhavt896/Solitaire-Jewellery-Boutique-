@@ -71,9 +71,10 @@ function MarqueeRow({
   speed: number;
   wrapRef: React.RefObject<HTMLDivElement>;
 }) {
-  const trackRef = useRef<HTMLDivElement>(null);
-  const tweenRef = useRef<gsap.core.Tween | null>(null);
-  const loop     = [...items, ...items, ...items];
+  const trackRef   = useRef<HTMLDivElement>(null);
+  const tweenRef   = useRef<gsap.core.Tween | null>(null);
+  const hoveredRef = useRef(false);
+  const loop       = [...items, ...items, ...items];
 
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -103,12 +104,14 @@ function MarqueeRow({
   const slowDown = () => {
     const tw = tweenRef.current;
     if (!tw) return;
+    hoveredRef.current = true;
     gsap.to(tw, { timeScale: 0.22, duration: 0.75, ease: 'power2.out', overwrite: 'auto' });
   };
 
   const speedUp = () => {
     const tw = tweenRef.current;
     if (!tw) return;
+    hoveredRef.current = false;
     gsap.to(tw, { timeScale: 1, duration: 1.1, ease: 'power2.inOut', overwrite: 'auto' });
   };
 

@@ -8,7 +8,7 @@ import {
 } from '@/lib/data/journal';
 import { Reveal } from '@/components/Reveal';
 import { JsonLd } from '@/components/JsonLd';
-import { articleSchema, breadcrumbSchema } from '@/lib/seo/schema';
+import { articleSchema, breadcrumbSchema, faqSchema } from '@/lib/seo/schema';
 import { buildMetadata } from '@/lib/seo/metadata';
 
 export function generateStaticParams() {
@@ -34,6 +34,7 @@ export default async function ArticlePage({ params }: Params) {
   const article = getArticle(slug);
   if (!article) notFound();
   const related = getRelatedArticles(article);
+  const faq = faqSchema(article);
 
   const date = new Date(article.publishedAt).toLocaleDateString('en-IN', {
     day: 'numeric',
@@ -51,6 +52,7 @@ export default async function ArticlePage({ params }: Params) {
           { name: article.title, href: `/journal/${slug}` },
         ])}
       />
+      {faq && <JsonLd data={faq} />}
 
       <article className="bg-bone">
         <div className="container-content pt-12 md:pt-20 pb-8">
@@ -90,26 +92,79 @@ export default async function ArticlePage({ params }: Params) {
 
         <div className="container-content py-16 md:py-20">
           <Reveal className="prose-lg space-y-6">
-            {article.body.map((p, i) => {
-              if (
-                article.pullQuote &&
-                i === Math.floor(article.body.length / 2)
-              ) {
+            {article.body.map((block, i) => {
+              // Plain string = paragraph. Legacy articles may carry a
+              // pullQuote that we drop in at the midpoint paragraph.
+              if (typeof block === 'string') {
+                if (
+                  article.pullQuote &&
+                  i === Math.floor(article.body.length / 2)
+                ) {
+                  return (
+                    <div key={i} className="space-y-6">
+                      <p className="text-body text-ink-soft">{block}</p>
+                      <blockquote className="my-12 border-l-2 border-gold pl-8 py-2">
+                        <p className="font-display text-h1 leading-snug text-ink">
+                          {article.pullQuote}
+                        </p>
+                      </blockquote>
+                    </div>
+                  );
+                }
                 return (
-                  <div key={i}>
-                    <p className="text-body text-ink-soft">{p}</p>
-                    <blockquote className="my-12 border-l-2 border-gold pl-8 py-2">
-                      <p className="font-display text-h1 leading-snug text-ink">
-                        {article.pullQuote}
-                      </p>
-                    </blockquote>
-                  </div>
+                  <p key={i} className="text-body text-ink-soft">
+                    {block}
+                  </p>
                 );
               }
+
+              if (block.type === 'h2') {
+                return (
+                  <h2
+                    key={i}
+                    className="font-display text-h1 leading-tight text-ink pt-10"
+                  >
+                    {block.text}
+                  </h2>
+                );
+              }
+
+              if (block.type === 'h3') {
+                return (
+                  <h3
+                    key={i}
+                    className="font-display text-h2 leading-snug text-ink pt-6"
+                  >
+                    {block.text}
+                  </h3>
+                );
+              }
+
+              if (block.type === 'list') {
+                return (
+                  <ul key={i} className="space-y-3 pl-1">
+                    {block.items.map((item, j) => (
+                      <li key={j} className="flex gap-3 text-body text-ink-soft">
+                        <span
+                          aria-hidden
+                          className="mt-3 h-px w-4 shrink-0 bg-gold"
+                        />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                );
+              }
+
               return (
-                <p key={i} className="text-body text-ink-soft">
-                  {p}
-                </p>
+                <blockquote
+                  key={i}
+                  className="my-12 border-l-2 border-gold pl-8 py-2"
+                >
+                  <p className="font-display text-h1 leading-snug text-ink">
+                    {block.text}
+                  </p>
+                </blockquote>
               );
             })}
           </Reveal>

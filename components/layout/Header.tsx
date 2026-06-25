@@ -12,6 +12,7 @@ import {
   IconClose,
   IconMenu,
   IconSearch,
+  IconUser,
   IconWhatsApp,
 } from '@/components/icons/Icon';
 
@@ -19,95 +20,53 @@ gsap.config({ force3D: true });
 
 const GRAIN = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E")`;
 
-const ANNOUNCEMENTS = [
-  'Swaroop Nagar, Kanpur  ·  Open Monday to Saturday  ·  Visits by appointment welcome',
-  'Every diamond GIA or IGI certified  ·  Gold hallmarked  ·  The certificate goes home with you',
-  'Free private bridal sittings  ·  45 minutes  ·  No pressure to buy',
-];
-
 /* Balanced split: 2 left, 2 right */
 const leftNav  = NAV_PRIMARY.slice(0, 2);
 const rightNav = NAV_PRIMARY.slice(2);
 
-/* ─── Announcement Bar ─── */
+/* ─── Announcement Bar — light cream, single line, underlined CTA ─── */
 function AnnouncementBar() {
-  const [idx, setIdx]         = useState(0);
-  const [visible, setVisible] = useState(true);
-  const textRef               = useRef<HTMLParagraphElement>(null);
-
-  useEffect(() => {
-    const id = setInterval(() => {
-      if (!textRef.current) return;
-      gsap.to(textRef.current, {
-        opacity: 0, y: -5, duration: 0.28, ease: 'power2.in',
-        onComplete: () => {
-          setIdx(i => (i + 1) % ANNOUNCEMENTS.length);
-          gsap.fromTo(textRef.current,
-            { opacity: 0, y: 5 },
-            { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }
-          );
-        },
-      });
-    }, 5200);
-    return () => clearInterval(id);
-  }, []);
-
-  if (!visible) return null;
-
   return (
     <div
       style={{
-        background:   'var(--ink)',
-        height:       34,
-        display:      'flex',
-        alignItems:   'center',
+        background:     'var(--gold-veil)',
+        height:         38,
+        display:        'flex',
+        alignItems:     'center',
         justifyContent: 'center',
-        position:     'relative',
-        overflow:     'hidden',
+        textAlign:      'center',
+        padding:        '0 16px',
       }}
     >
       <p
-        ref={textRef}
         style={{
           fontFamily:    'var(--font-body)',
-          fontSize:      10,
-          letterSpacing: '0.16em',
+          fontSize:      10.5,
+          letterSpacing: '0.18em',
           textTransform: 'uppercase',
-          color:         'rgba(244,239,227,0.50)',
-          maxWidth:      'calc(100% - 52px)',
+          color:         'var(--gold-deep)',
+          margin:        0,
+          whiteSpace:    'nowrap',
           overflow:      'hidden',
           textOverflow:  'ellipsis',
-          whiteSpace:    'nowrap',
-          userSelect:    'none',
+          maxWidth:      '100%',
         }}
       >
-        {ANNOUNCEMENTS[idx]}
+        Complimentary Private Jewellery Viewing
+        <span aria-hidden style={{ margin: '0 0.7em', opacity: 0.55 }}>•</span>
+        <Link
+          href="/bridal/book"
+          style={{
+            color:             'var(--gold-deep)',
+            fontWeight:        600,
+            textDecoration:    'underline',
+            textUnderlineOffset: '3px',
+            textDecorationThickness: '1px',
+          }}
+        >
+          Book Your Appointment
+        </Link>
       </p>
-
-      <button
-        type="button"
-        aria-label="Dismiss announcement"
-        onClick={() => setVisible(false)}
-        style={{
-          position:  'absolute',
-          right:     16,
-          top:       '50%',
-          transform: 'translateY(-50%)',
-          color:     'rgba(244,239,227,0.22)',
-          background: 'none',
-          border:    'none',
-          cursor:    'pointer',
-          padding:   6,
-          lineHeight: 1,
-          transition: 'color 0.25s',
-        }}
-        onMouseEnter={e => { e.currentTarget.style.color = 'rgba(244,239,227,0.6)'; }}
-        onMouseLeave={e => { e.currentTarget.style.color = 'rgba(244,239,227,0.22)'; }}
-      >
-        <svg width="8" height="8" viewBox="0 0 8 8" fill="none" aria-hidden>
-          <path d="M1 1l6 6M7 1L1 7" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
-        </svg>
-      </button>
     </div>
   );
 }
@@ -613,6 +572,7 @@ function NavIcon({
 /* ─── Header ─── */
 export function Header() {
   const [scrolled,  setScrolled]  = useState(false);
+  const [hidden,    setHidden]    = useState(false);
   const [drawer,    setDrawer]    = useState(false);
   const [mega,      setMega]      = useState(false);
   const [bookOpen,  setBookOpen]  = useState(false);
@@ -620,17 +580,23 @@ export function Header() {
   const bookTimer                  = useRef<ReturnType<typeof setTimeout>>(undefined);
   const drawerFirstRef             = useRef<HTMLAnchorElement>(null);
   const headerRef                  = useRef<HTMLElement>(null);
-  const bookFillRef                = useRef<HTMLDivElement>(null);
-  const bookLinkRef                = useRef<HTMLAnchorElement>(null);
 
   const openMega  = () => { clearTimeout(megaTimer.current); setMega(true); };
   const closeMega = () => { megaTimer.current = setTimeout(() => setMega(false), 160); };
   const openBook  = () => { clearTimeout(bookTimer.current); setBookOpen(true); };
   const closeBook = () => { bookTimer.current = setTimeout(() => setBookOpen(false), 160); };
 
-  /* Scroll state */
+  /* Scroll state: shadow past 64px; hide on scroll-down, reveal on scroll-up */
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 64);
+    let lastY = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrolled(y > 64);
+      const delta = y - lastY;
+      if (y < 360 || delta < -4) setHidden(false);
+      else if (delta > 4) setHidden(true);
+      lastY = y;
+    };
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
@@ -672,41 +638,8 @@ export function Header() {
     };
   }, [drawer]);
 
-  /* Book CTA: GSAP ink-flood reveal */
-  const bookEnter = () => {
-    openBook();
-    if (bookFillRef.current) {
-      gsap.fromTo(
-        bookFillRef.current,
-        { clipPath: 'inset(0 100% 0 0)' },
-        { clipPath: 'inset(0 0% 0 0)', duration: 0.44, ease: 'expo.out' }
-      );
-    }
-    if (bookLinkRef.current) bookLinkRef.current.style.color = 'var(--gold-soft)';
-  };
-  const bookLeave = () => {
-    closeBook();
-    if (bookFillRef.current) {
-      gsap.to(bookFillRef.current, {
-        clipPath: 'inset(0 0% 0 100%)', duration: 0.32, ease: 'power3.in',
-      });
-    }
-    setTimeout(() => {
-      if (bookLinkRef.current) bookLinkRef.current.style.color = 'var(--gold-deep)';
-    }, 40);
-  };
-
   return (
     <>
-      {/* 1px gold accent line — signature luxury touch */}
-      <div
-        aria-hidden
-        style={{
-          height:     1,
-          background: 'linear-gradient(to right, transparent 0%, rgba(184,146,58,0.40) 25%, rgba(201,168,76,0.70) 50%, rgba(184,146,58,0.40) 75%, transparent 100%)',
-        }}
-      />
-
       <AnnouncementBar />
 
       {/* ─────── MAIN HEADER ─────── */}
@@ -724,9 +657,8 @@ export function Header() {
           boxShadow: scrolled
             ? '0 4px 48px rgba(26,20,16,0.09)'
             : 'none',
-          transition:  'box-shadow 0.5s ease, border-color 0.5s ease',
-          position:    'relative',
-          overflow:    'hidden',
+          transition: 'box-shadow 0.5s ease, border-color 0.5s ease, transform 0.6s cubic-bezier(0.16,1,0.3,1)',
+          transform:  hidden ? 'translateY(-101%)' : 'translateY(0)',
         }}
       >
         {/* Film grain overlay */}
@@ -838,71 +770,40 @@ export function Header() {
               ))}
             </nav>
 
-            {/* Divider */}
-            <span
-              aria-hidden
-              style={{
-                display:    'block',
-                width:      1,
-                height:     16,
-                background: 'rgba(216,205,178,0.65)',
-                flexShrink: 0,
-              }}
-            />
-
             <NavIcon href="/search" ariaLabel="Search">
-              <IconSearch size={16} />
+              <IconSearch size={17} />
             </NavIcon>
 
-            <NavIcon
-              href={whatsappLinkFor(WHATSAPP_MESSAGES.general)}
-              external
-              ariaLabel="WhatsApp Solitaire"
-            >
-              <IconWhatsApp size={16} />
+            <NavIcon href="/contact" ariaLabel="Your account">
+              <IconUser size={17} />
             </NavIcon>
 
-            {/* Book CTA — GSAP ink-flood on hover */}
+            {/* Book CTA — filled gold button */}
             <div
               className="relative"
-              style={{ overflow: 'hidden' }}
-              onMouseEnter={bookEnter}
-              onMouseLeave={bookLeave}
-              onFocus={bookEnter}
-              onBlur={bookLeave}
+              onMouseEnter={openBook}
+              onMouseLeave={closeBook}
+              onFocus={openBook}
+              onBlur={closeBook}
             >
-              {/* Ink fill layer */}
-              <div
-                ref={bookFillRef}
-                aria-hidden
-                style={{
-                  position:     'absolute',
-                  inset:         0,
-                  background:   'var(--ink)',
-                  clipPath:     'inset(0 100% 0 0)',
-                  pointerEvents: 'none',
-                  zIndex:        0,
-                }}
-              />
-
               <Link
-                ref={bookLinkRef as React.Ref<HTMLAnchorElement>}
                 href="/bridal/book"
                 aria-haspopup="true"
                 aria-expanded={bookOpen}
                 style={{
-                  position:      'relative',
-                  zIndex:        1,
                   display:       'inline-block',
-                  fontSize:      10,
+                  fontSize:      10.5,
                   letterSpacing: '0.22em',
                   fontWeight:    600,
                   textTransform: 'uppercase',
-                  color:         'var(--gold-deep)',
-                  border:        '1px solid var(--gold-deep)',
-                  padding:       '9px 20px',
-                  transition:    'border-color 0.25s',
+                  color:         'var(--ivory)',
+                  background:    'var(--aged-gold)',
+                  padding:       '11px 26px',
+                  borderRadius:  'var(--radius-sm)',
+                  transition:    'background 0.3s ease',
                 }}
+                onMouseEnter={e => { e.currentTarget.style.background = 'var(--gold-deep)'; }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'var(--aged-gold)'; }}
               >
                 Book
               </Link>

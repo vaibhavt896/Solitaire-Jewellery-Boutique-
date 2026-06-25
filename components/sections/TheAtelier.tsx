@@ -13,6 +13,7 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { MEDIA } from '@/lib/placeholder-media';
+import { TextReveal } from '@/components/TextReveal';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -67,7 +68,8 @@ export function TheAtelier() {
         </p>
 
         {/* Headline */}
-        <h2
+        <TextReveal
+          as="h2"
           className="font-display"
           style={{
             fontSize: 'clamp(2rem, 4.5vw, 3.6rem)',
@@ -79,7 +81,7 @@ export function TheAtelier() {
           }}
         >
           Made slowly, by people we know by name.
-        </h2>
+        </TextReveal>
 
         {/* Full-bleed image with film grain overlay */}
         <div

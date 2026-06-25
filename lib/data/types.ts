@@ -44,6 +44,16 @@ export type Piece = {
   publishedAt: string;
 };
 
+// Article body blocks. A plain string is a paragraph (kept for backward
+// compatibility); the object forms add the heading and list structure that
+// long-form, search-optimised articles need.
+export type ContentBlock =
+  | string
+  | { type: 'h2'; text: string }
+  | { type: 'h3'; text: string }
+  | { type: 'list'; items: string[] }
+  | { type: 'quote'; text: string };
+
 export type JournalArticle = {
   slug: string;
   title: string;
@@ -52,7 +62,7 @@ export type JournalArticle = {
   hero: ImageRef;
   readMinutes: number;
   publishedAt: string;
-  body: string[];
+  body: ContentBlock[];
   pullQuote?: string;
   relatedSlugs?: string[];
 };
