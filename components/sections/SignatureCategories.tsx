@@ -75,8 +75,8 @@ function CollectionRow({
 
   return (
     <motion.div
-      className={`grid md:grid-cols-12 gap-0 items-center ${flip ? '' : ''}`}
-      style={{ borderTop: '1px solid var(--ivory-smoke)', paddingTop: '5rem', paddingBottom: '5rem' }}
+      className="grid md:grid-cols-12 gap-0 items-center py-12 md:py-20"
+      style={{ borderTop: '1px solid var(--ivory-smoke)' }}
       initial={reduce ? {} : { opacity: 0, y: 32 }}
       whileInView={reduce ? {} : { opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-6%' }}

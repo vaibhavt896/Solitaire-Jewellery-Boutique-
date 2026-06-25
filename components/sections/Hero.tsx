@@ -83,9 +83,10 @@ export function Hero() {
 
       let sw = cw - minPeek * 2;
       let pk = minPeek;
-      /* Mobile: taller card than the image's native aspect; the image
-         cover-fills it (slight side crop) so slides read bigger */
-      let slideH = Math.min(Math.round(sw / 2.0), Math.round(avail * 0.98));
+      /* Mobile: a tall, magazine-style card (~5:4) so the hero has real
+         presence on a phone. The landscape image cover-fills it, cropped
+         to centre. Height is capped so the dots + CTAs stay near the fold. */
+      let slideH = Math.min(Math.round(sw / 1.25), Math.round(avail * 0.9));
       let targetPb = 24;
 
       if (isDesktop) {

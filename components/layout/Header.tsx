@@ -24,8 +24,39 @@ const GRAIN = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'
 const leftNav  = NAV_PRIMARY.slice(0, 2);
 const rightNav = NAV_PRIMARY.slice(2);
 
-/* ─── Announcement Bar — light cream, single line, underlined CTA ─── */
+/* Rotating announcement messages — the leading phrase changes; the
+   "Book Your Appointment" CTA stays fixed alongside it. */
+const ANNOUNCEMENTS = [
+  'Complimentary Private Jewellery Viewing',
+  'Every Diamond GIA or IGI Certified',
+  'BIS Hallmarked Gold, Certified Pure',
+  'Free Private Bridal Sittings',
+];
+
+/* ─── Announcement Bar — light cream, rotating phrase, fixed CTA ─── */
 function AnnouncementBar() {
+  const [idx, setIdx] = useState(0);
+  const textRef       = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const id = setInterval(() => {
+      if (!textRef.current) return;
+      gsap.to(textRef.current, {
+        opacity: 0, y: -4, duration: 0.3, ease: 'power2.in',
+        onComplete: () => {
+          setIdx(i => (i + 1) % ANNOUNCEMENTS.length);
+          gsap.fromTo(
+            textRef.current,
+            { opacity: 0, y: 4 },
+            { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' },
+          );
+        },
+      });
+    }, 3200);
+    return () => clearInterval(id);
+  }, []);
+
   return (
     <div
       style={{
@@ -50,17 +81,35 @@ function AnnouncementBar() {
           overflow:      'hidden',
           textOverflow:  'ellipsis',
           maxWidth:      '100%',
+          display:       'flex',
+          alignItems:    'center',
+          justifyContent:'center',
         }}
       >
-        Complimentary Private Jewellery Viewing
-        <span aria-hidden style={{ margin: '0 0.7em', opacity: 0.55 }}>•</span>
+        <span
+          ref={textRef}
+          style={{
+            display:      'inline-block',
+            overflow:     'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace:   'nowrap',
+            maxWidth:     '90vw',
+          }}
+        >
+          {ANNOUNCEMENTS[idx]}
+        </span>
+        {/* Separator + CTA: desktop only — on mobile the rotating
+            message stands alone (Book lives in the header & bottom bar) */}
+        <span aria-hidden className="hidden sm:inline" style={{ margin: '0 0.7em', opacity: 0.55, flexShrink: 0 }}>•</span>
         <Link
           href="/bridal/book"
+          className="hidden sm:inline"
           style={{
-            color:             'var(--gold-deep)',
-            fontWeight:        600,
-            textDecoration:    'underline',
-            textUnderlineOffset: '3px',
+            flexShrink:              0,
+            color:                   'var(--gold-deep)',
+            fontWeight:              600,
+            textDecoration:          'underline',
+            textUnderlineOffset:     '3px',
             textDecorationThickness: '1px',
           }}
         >
