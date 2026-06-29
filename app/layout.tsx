@@ -9,6 +9,7 @@ import { jewelryStoreSchema } from '@/lib/seo/schema';
 import { SITE } from '@/lib/site';
 import { CustomCursor } from '@/components/CustomCursor';
 import { Preloader } from '@/components/Preloader';
+import { WhatsAppWidget } from '@/components/layout/WhatsAppWidget';
 
 const display = Cormorant_Garamond({
   subsets: ['latin'],
@@ -96,6 +97,7 @@ export default function RootLayout({
         </main>
         <Footer />
         <MobileBar />
+        <WhatsAppWidget />
         <div className="grain-overlay" aria-hidden />
       </body>
     </html>

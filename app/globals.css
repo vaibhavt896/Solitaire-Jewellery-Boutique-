@@ -395,6 +395,11 @@
   }
 }
 
+/* ── WhatsApp widget: desktop clears the mobile bar ──── */
+@media (min-width: 1024px) {
+  .wa-widget { bottom: 24px !important; right: 24px !important; }
+}
+
 /* ── Print ───────────────────────────────────────────── */
 @media print {
   body { background: white; }

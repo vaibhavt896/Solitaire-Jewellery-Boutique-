@@ -2,8 +2,9 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    formats: ['image/avif', 'image/webp'],
-    qualities: [75, 88, 90, 95],
+    formats: ['image/webp'],
+    qualities: [75, 85, 90],
+    minimumCacheTTL: 31536000,
     /* One provenance: all imagery is local/owned. No remote hosts. */
     /* Allow our own labelled placeholder SVGs (in /public/placeholders)
        to be served through next/image. They are static, first-party

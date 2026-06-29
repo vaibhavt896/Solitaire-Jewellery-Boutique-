@@ -2,20 +2,31 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
-import { whatsappLinkFor, WHATSAPP_MESSAGES } from '@/lib/site';
-import { Magnetic } from '@/components/Magnetic';
+
+const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
 gsap.config({ force3D: true });
 
-/* ─── Slide data ───────────────────────────────────────────── */
+/* ─── Slide data — ordered 1–7 exactly as named ─────────────
+   `eyebrow/title/subtitle/cta` drive the mobile overlay hero only;
+   the desktop carousel ignores them (it reads src/alt/w/h). ───── */
 const SLIDES = [
-  { src: '/Hero-Slider-Images/slide%201.webp', alt: 'Curated solitaire jewellery, Swaroop Nagar Kanpur' },
-  { src: '/Hero-Slider-Images/Slide%202.webp', alt: 'Bridal jewellery, timeless elegance' },
-  { src: '/Hero-Slider-Images/slide%203.webp', alt: 'Heritage gold, Polki, Kundan, antique gold' },
-  { src: '/Hero-Slider-Images/Slide%204.webp', alt: 'Certified diamond solitaires, GIA & IGI' },
-  { src: '/Hero-Slider-Images/Slide%205.webp', alt: 'Fine jewellery for every occasion' },
+  { src: '/Hero-Slider-Images/Slide%201.webp', alt: 'Temple Treasures — antique 22ct gold temple necklace set at Solitaire Jewellery Boutique', w: 1994, h: 789,
+    eyebrow: 'Heritage in Every Detail', title: 'Temple Treasures',     subtitle: 'Antique 22ct gold temple set',                cta: { label: 'Explore Collection', href: '/collections/temple' } },
+  { src: '/Hero-Slider-Images/Slide%202.webp', alt: 'A curated fine jewellery collection — Polki, Kundan and diamond pieces at Solitaire',       w: 1994, h: 789,
+    eyebrow: 'Chosen by Hand',          title: 'The Curated Edit',      subtitle: 'Polki, Kundan & fine diamond',                cta: { label: 'View Collections',   href: '/collections' } },
+  { src: '/Hero-Slider-Images/slide%203.webp', alt: 'Emerald and gold stud earrings, handcrafted at Solitaire Jewellery Boutique',               w: 1994, h: 789,
+    eyebrow: 'Everyday Heirlooms',      title: 'Emerald & Gold',        subtitle: 'Handcrafted stud earrings',                   cta: { label: 'Explore Antique Gold', href: '/collections/antique-gold' } },
+  { src: '/Hero-Slider-Images/Slide%204.webp', alt: 'Timeless Elegance — antique 22ct gold and Polki bridal set at Solitaire',                   w: 1994, h: 789,
+    eyebrow: 'Timeless Elegance',       title: 'The Bridal Set',        subtitle: 'Antique gold & Polki, made to keep',          cta: { label: 'Explore Bridal',     href: '/bridal' } },
+  { src: '/Hero-Slider-Images/Slide%205.webp', alt: 'Handcrafted gold bangles — Dubai gold collection at Solitaire Jewellery Boutique',          w: 1994, h: 789,
+    eyebrow: 'Pure & Hallmarked',       title: 'Handcrafted Bangles',   subtitle: 'BIS hallmarked 22ct gold',                    cta: { label: 'Explore Collection', href: '/collections/dubai-gold-bangles' } },
+  { src: '/Hero-Slider-Images/slide%206.webp', alt: "The Bride's Collection — Polki and Kundan bridal jewellery set at Solitaire",               w: 1994, h: 789,
+    eyebrow: 'Crafted for Forever',     title: "The Bride's Collection", subtitle: 'Timeless pieces for your most precious moments', cta: { label: 'Explore Bridal',  href: '/bridal' } },
+  { src: '/Hero-Slider-Images/Slide%207.webp', alt: 'Heritage jewellery — temple gold and antique designs, Solitaire Jewellery Boutique',        w: 1994, h: 789,
+    eyebrow: 'A Living Heritage',       title: 'Heritage Gold',         subtitle: 'Temple & antique designs',                    cta: { label: 'Explore Collections', href: '/collections' } },
 ] as const;
 
 const N        = SLIDES.length;
@@ -23,9 +34,162 @@ const EXTENDED = [SLIDES[N - 1], ...SLIDES, SLIDES[0]] as const;
 
 const DURATION = 5000;
 const GAP      = 16;
-const SLIDE_MS = 750;
+const SLIDE_MS = 900;
 const KB_SCALE = 1.065;                    // Ken Burns max zoom
 const KB_DUR   = (DURATION + 400) / 1000; // slightly longer than slide lifetime
+
+/* ─── Mobile hero — full-bleed portrait with overlaid copy + CTA ───
+   Rendered only below `md`. The desktop landscape carousel below is
+   hidden on mobile, so its behaviour is completely unchanged. ──────── */
+function MobileHero() {
+  const [idx, setIdx] = useState(0);
+  const idxRef  = useRef(0);
+  const reduce  = useRef(false);
+  const touchX  = useRef(0);
+  const timer   = useRef<ReturnType<typeof setInterval>>(undefined);
+
+  const go = useCallback((n: number) => {
+    const next = (n + N) % N;
+    idxRef.current = next;
+    setIdx(next);
+  }, []);
+
+  const start = useCallback(() => {
+    if (reduce.current) return;
+    clearInterval(timer.current);
+    timer.current = setInterval(() => go(idxRef.current + 1), DURATION);
+  }, [go]);
+
+  useEffect(() => {
+    reduce.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    start();
+    return () => clearInterval(timer.current);
+  }, [start]);
+
+  const onTouchStart = (e: React.TouchEvent) => { touchX.current = e.touches[0].clientX; };
+  const onTouchEnd   = (e: React.TouchEvent) => {
+    const dx = e.changedTouches[0].clientX - touchX.current;
+    if (Math.abs(dx) > 44) { go(idxRef.current + (dx < 0 ? 1 : -1)); start(); }
+  };
+
+  const s = SLIDES[idx];
+
+  return (
+    <section
+      className="md:hidden"
+      aria-roledescription="carousel"
+      aria-label="Featured collections"
+      style={{ position: 'relative', width: '100%', background: 'var(--obsidian)' }}
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
+    >
+      <h1 className="sr-only">Heirlooms, made by hand. A small family boutique in Swaroop Nagar, Kanpur.</h1>
+
+      <style>{`
+        @keyframes mHeroCopyIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+        @media (prefers-reduced-motion: reduce) {
+          .m-hero-img  { transition: opacity 0.3s ease !important; transform: none !important; }
+          .m-hero-copy { animation: none !important; }
+        }
+      `}</style>
+
+      <div style={{ position: 'relative', width: '100%', height: 'clamp(440px, 76vh, 720px)', overflow: 'hidden' }}>
+        {SLIDES.map((slide, i) => (
+          <Image
+            key={i}
+            src={slide.src}
+            alt={slide.alt}
+            fill
+            priority={i === 0}
+            quality={90}
+            sizes="100vw"
+            className="m-hero-img"
+            draggable={false}
+            style={{
+              objectFit:      'cover',
+              objectPosition: 'center 32%',
+              opacity:        i === idx ? 1 : 0,
+              transform:      i === idx ? 'scale(1.06)' : 'scale(1)',
+              transition:     'opacity 0.9s ease, transform 6s ease-out',
+              zIndex:         i === idx ? 1 : 0,
+            }}
+          />
+        ))}
+
+        {/* Bottom legibility gradient */}
+        <div aria-hidden style={{
+          position: 'absolute', inset: 0, zIndex: 2,
+          background: 'linear-gradient(to top, rgba(15,11,7,0.84) 0%, rgba(15,11,7,0.36) 38%, rgba(15,11,7,0.04) 64%, transparent 100%)',
+        }} />
+        {/* Subtle top scrim under the sticky header */}
+        <div aria-hidden style={{
+          position: 'absolute', top: 0, left: 0, right: 0, height: 96, zIndex: 2,
+          background: 'linear-gradient(to bottom, rgba(15,11,7,0.26), transparent)',
+        }} />
+
+        {/* Overlay copy + dots */}
+        <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, zIndex: 3, padding: '0 24px 26px' }}>
+          <div key={idx} className="m-hero-copy" style={{ animation: 'mHeroCopyIn 0.7s cubic-bezier(0.16,1,0.3,1) both' }}>
+            {/* Eyebrow */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+              <span aria-hidden style={{ width: 22, height: 1, background: 'var(--gold-soft)', opacity: 0.85 }} />
+              <span style={{ fontFamily: 'var(--font-body)', fontSize: 10.5, letterSpacing: '0.24em', textTransform: 'uppercase', fontWeight: 600, color: 'var(--gold-soft)' }}>
+                {s.eyebrow}
+              </span>
+            </div>
+
+            {/* Title */}
+            <p style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.3rem, 10vw, 3.2rem)', lineHeight: 1.02, letterSpacing: '-0.02em', color: 'var(--ivory)', margin: 0, textShadow: '0 2px 26px rgba(0,0,0,0.38)' }}>
+              {s.title}
+            </p>
+
+            {/* Subtitle */}
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.95rem', lineHeight: 1.5, color: 'rgba(244,239,227,0.86)', margin: '12px 0 0', maxWidth: 300 }}>
+              {s.subtitle}
+            </p>
+
+            {/* CTA */}
+            <Link
+              href={s.cta.href}
+              className="inline-flex items-center"
+              style={{
+                marginTop: 22, gap: 10,
+                background: 'var(--aged-gold)', color: 'var(--ivory)',
+                padding: '14px 26px', borderRadius: 'var(--radius-sm)',
+                fontFamily: 'var(--font-body)', fontSize: 11, letterSpacing: '0.18em',
+                textTransform: 'uppercase', fontWeight: 600,
+                boxShadow: '0 12px 32px -10px rgba(0,0,0,0.55)',
+              }}
+            >
+              {s.cta.label}
+              <span aria-hidden>→</span>
+            </Link>
+          </div>
+
+          {/* Dots */}
+          <div role="tablist" aria-label="Slide navigation" style={{ display: 'flex', alignItems: 'center', gap: 7, marginTop: 24 }}>
+            {SLIDES.map((_, i) => (
+              <button
+                key={i}
+                role="tab"
+                aria-selected={i === idx}
+                aria-label={`Go to slide ${i + 1}`}
+                onClick={() => { go(i); start(); }}
+                style={{ padding: '6px 0', background: 'transparent', border: 'none', cursor: 'pointer', lineHeight: 0 }}
+              >
+                <span style={{
+                  display: 'block', height: 5, width: i === idx ? 22 : 6, borderRadius: 3,
+                  background: i === idx ? 'var(--gold)' : 'rgba(244,239,227,0.42)',
+                  transition: 'width 0.4s ease, background 0.4s ease',
+                }} />
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
 
 export function Hero() {
   const [idx,      setIdx]      = useState(0);
@@ -67,62 +231,64 @@ export function Hero() {
   }, []);
 
   /* ── Measure container ─────────────────────────────────── */
-  useEffect(() => {
-    const measure = () => {
-      const vw = window.innerWidth;
-      const vh = window.innerHeight;
-      const cw = containerRef.current?.offsetWidth || vw;
-      /* Hero height constraints to keep all slider and buttons above the fold.
-         NAV reserves the lower cluster: dots + CTA buttons. */
-      const CHROME = 128;
-      const NAV    = vw < 640 ? 128 : 118;
-      const avail  = vh - CHROME - NAV;
+  const measure = useCallback(() => {
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const cw = containerRef.current?.offsetWidth || vw;
+    const CHROME = 128;
+    const NAV    = 32; // dots only, no buttons
+    const avail  = vh - CHROME - NAV;
 
-      const isDesktop = vw >= 768;
-      const minPeek = vw < 640 ? 10 : vw < 1024 ? 14 : 16;
+    const isDesktop = vw >= 768;
+    const minPeek = vw < 640 ? 10 : vw < 1024 ? 14 : 16;
 
-      let sw = cw - minPeek * 2;
-      let pk = minPeek;
-      /* Mobile: a tall, magazine-style card (~5:4) so the hero has real
-         presence on a phone. The landscape image cover-fills it, cropped
-         to centre. Height is capped so the dots + CTAs stay near the fold. */
-      let slideH = Math.min(Math.round(sw / 1.25), Math.round(avail * 0.9));
-      let targetPb = 24;
+    const RATIO = 2.53; // 1182/467 — cinematic landscape like the reference
 
-      if (isDesktop) {
-        const maxHForFold = Math.round(avail * 0.98);
-        const targetSw = Math.round(maxHForFold * 2.7424);
+    let sw = cw - minPeek * 2;
+    let pk = minPeek;
+    let slideH = Math.round(sw / RATIO); // landscape on all viewports
+    let targetPb = 8;
 
-        if (targetSw < cw - minPeek * 2) {
-          sw = targetSw;
-          slideH = maxHForFold;
-          pk = Math.round((cw - sw) / 2);
-        } else {
-          sw = cw - minPeek * 2;
-          slideH = Math.round(sw / 2.7424);
-          pk = minPeek;
-        }
+    if (isDesktop) {
+      const maxHForFold = Math.round(avail * 0.98);
+      const targetSw = Math.round(maxHForFold * RATIO);
 
-        const contentHeight = 12 + slideH + NAV;
-        const extraSpace = (vh - CHROME) - contentHeight;
-        targetPb = Math.max(16, extraSpace);
+      if (targetSw < cw - minPeek * 2) {
+        sw = targetSw;
+        slideH = maxHForFold;
+        pk = Math.round((cw - sw) / 2);
       } else {
-        /* Compact slider on mobile — don't pad out the whole fold */
-        targetPb = 40;
+        sw = cw - minPeek * 2;
+        slideH = Math.round(sw / RATIO);
+        pk = minPeek;
       }
 
-      slideWRef.current = sw;
-      setPeek(pk);
-      setSlideW(sw);
-      setSlideH(slideH);
-      setPb(targetPb);
-      setCoverFit(!isDesktop);
-    };
-    measure();
-    const ro = new ResizeObserver(measure);
-    if (containerRef.current) ro.observe(containerRef.current);
-    return () => ro.disconnect();
+      const contentHeight = 12 + slideH + NAV;
+      const extraSpace = (vh - CHROME) - contentHeight;
+      targetPb = Math.max(8, extraSpace);
+    }
+
+    slideWRef.current = sw;
+    setPeek(pk);
+    setSlideW(sw);
+    setSlideH(slideH);
+    setPb(targetPb);
+    setCoverFit(true); // always cover — full bleed, no letterboxing
   }, []);
+
+  /* Initial measurement fires synchronously before first browser paint */
+  useIsomorphicLayoutEffect(() => {
+    measure();
+  }, [measure]);
+
+  /* ResizeObserver: attached once the carousel container is in the DOM */
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+    const ro = new ResizeObserver(measure);
+    ro.observe(container);
+    return () => ro.disconnect();
+  }, [slideW, measure]);
 
   /* ── Set track transform directly via GSAP ─────────────── */
   const setTrack = useCallback((vi: number, animated: boolean) => {
@@ -136,7 +302,7 @@ export function Hero() {
       gsap.to(t, {
         x: targetX,
         duration: SLIDE_MS / 1000,
-        ease: 'power4.out',
+        ease: 'expo.out',
         overwrite: 'auto',
       });
 
@@ -148,7 +314,7 @@ export function Hero() {
           scale:   isActive ? 1.0 : 0.96,
           opacity: isActive ? 1.0 : 0.68,
           duration: SLIDE_MS / 1000,
-          ease: 'power4.out',
+          ease: 'expo.out',
           overwrite: 'auto',
         });
       });
@@ -169,24 +335,11 @@ export function Hero() {
     }
   }, []);
 
-  /* On resize: instant snap to current visual position */
-  useEffect(() => {
+  /* On resize: instant snap to current visual position — runs before paint */
+  useIsomorphicLayoutEffect(() => {
     if (slideW > 0) setTrack(vIdxRef.current, false);
   }, [slideW, setTrack]);
 
-  /* ── GSAP entrance: section fades + lifts up on mount ─── */
-  useEffect(() => {
-    if (reduceRef.current || !sectionRef.current) return;
-    const tween = gsap.from(sectionRef.current, {
-      opacity:    0,
-      y:          24,
-      duration:   1.3,
-      ease:       'power3.out',
-      clearProps: 'opacity,y',
-      overwrite:  'auto',
-    });
-    return () => { tween.kill(); };
-  }, []);
 
   /* ── Ken Burns: zoom active image slowly over slide life ─ */
   useEffect(() => {
@@ -260,7 +413,7 @@ export function Hero() {
         gsap.to(t, {
           x: -(cloneVi * (sw + GAP)),
           duration: SLIDE_MS / 1000,
-          ease: 'power4.out',
+          ease: 'expo.out',
           overwrite: 'auto',
           onComplete: () => {
             gsap.set(t, { x: -(1 * (sw + GAP)) });
@@ -276,7 +429,7 @@ export function Hero() {
             scale:   isActive ? 1.0 : 0.96,
             opacity: isActive ? 1.0 : 0.68,
             duration: SLIDE_MS / 1000,
-            ease: 'power4.out',
+            ease: 'expo.out',
             overwrite: 'auto',
             onComplete: () => {
               const isFirst = idx === 1;
@@ -303,7 +456,7 @@ export function Hero() {
         gsap.to(t, {
           x: -(cloneVi * (sw + GAP)),
           duration: SLIDE_MS / 1000,
-          ease: 'power4.out',
+          ease: 'expo.out',
           overwrite: 'auto',
           onComplete: () => {
             gsap.set(t, { x: -(N * (sw + GAP)) });
@@ -319,7 +472,7 @@ export function Hero() {
             scale:   isActive ? 1.0 : 0.96,
             opacity: isActive ? 1.0 : 0.68,
             duration: SLIDE_MS / 1000,
-            ease: 'power4.out',
+            ease: 'expo.out',
             overwrite: 'auto',
             onComplete: () => {
               const isLast = idx === N;
@@ -407,19 +560,39 @@ export function Hero() {
     const vel   = velX.current;
     if      (delta < -60 || vel < -400) advance(1);
     else if (delta >  60 || vel >  400) advance(-1);
+    else if (Math.abs(delta) < 8)       advance(1); // click = next slide
     else goTo(idxRef.current);
   }, [advance, goTo]);
 
   return (
-    <section ref={sectionRef} className="w-full" style={{ paddingTop: 12, paddingBottom: pb }}>
+    <>
+      {/* ── Mobile hero (full-bleed portrait + overlay copy) ── */}
+      <MobileHero />
 
-      {/* ── Carousel viewport ─────────────────────────────── */}
+      {/* ── Desktop hero (landscape carousel — hidden on mobile, unchanged) ── */}
+      <section ref={sectionRef} className="w-full hidden md:block" style={{ paddingTop: 12, paddingBottom: pb }}>
+
+      {/* ── Static first-frame: server-rendered, visible before JS ── */}
+      {slideW === 0 && (
+        <div style={{ margin: '0 2vw', position: 'relative', aspectRatio: '2.53', overflow: 'hidden', borderRadius: 'var(--radius-lg)', background: 'var(--ivory)' }}>
+          <Image
+            src={SLIDES[0].src}
+            alt={SLIDES[0].alt}
+            fill
+            priority
+            quality={90}
+            sizes="(max-width: 768px) 96vw, 90vw"
+            style={{ objectFit: 'cover' }}
+          />
+        </div>
+      )}
+
+      {/* ── Carousel viewport (after JS measurement) ──────── */}
+      {slideW > 0 && (
       <div
         ref={containerRef}
         className="overflow-hidden w-full"
-        data-cursor="piece"
-        data-cursor-label="Drag"
-        style={{ cursor: dragging ? 'grabbing' : 'grab', userSelect: 'none', touchAction: 'pan-y' }}
+        style={{ cursor: 'pointer', userSelect: 'none', touchAction: 'pan-y' }}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
@@ -432,8 +605,8 @@ export function Hero() {
             gap:        GAP,
             marginLeft: peek,
             willChange: 'transform',
-            opacity:    slideW > 0 ? 1 : 0,
-            transform:  'translateX(0)',
+            opacity:    1,
+            transform:  `translateX(${-(vIdxRef.current * (slideWRef.current + GAP))}px)`,
           }}
         >
           {EXTENDED.map((s, vi) => (
@@ -456,29 +629,15 @@ export function Hero() {
                   : '0 4px 12px rgba(26,20,16,0.04)',
               }}
             >
-              {/* Blurred fill */}
-              <div
-                aria-hidden
-                style={{
-                  position:           'absolute',
-                  inset:              '-12px',
-                  backgroundImage:    `url('${s.src}')`,
-                  backgroundSize:     'cover',
-                  backgroundPosition: 'center',
-                  filter:             'blur(22px)',
-                  opacity:            0.45,
-                  zIndex:             0,
-                }}
-              />
               <Image
                 ref={(el) => { imageRefs.current[vi] = el; }}
                 src={s.src}
                 alt={s.alt}
-                width={2076}
-                height={757}
+                width={s.w}
+                height={s.h}
                 sizes="(max-width: 768px) 96vw, 90vw"
                 quality={90}
-                priority={vi === 1}
+                priority={vi <= 2}  /* vi=1 (Slide 1) and vi=2 (Slide 2) in EXTENDED */
                 draggable={false}
                 style={{
                   width:           '100%',
@@ -518,14 +677,13 @@ export function Hero() {
           ))}
         </div>
       </div>
+      )}
 
       {/* ── Navigation ────────────────────────────────────── */}
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, padding: '16px 0 0' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '10px 0 0' }}>
 
-        {/* Page heading kept for SEO/screen readers; visual statement removed */}
         <h1 className="sr-only">Heirlooms, made by hand. A small family boutique in Swaroop Nagar, Kanpur.</h1>
 
-        {/* Pill dots */}
         <div
           style={{ display: 'flex', alignItems: 'center', gap: 6 }}
           role="tablist"
@@ -569,37 +727,8 @@ export function Hero() {
           ))}
         </div>
 
-        {/* Buttons row */}
-        <div className="flex flex-wrap items-center justify-center gap-4">
-          <Magnetic>
-            <Link href="/visit" className="cta cta--gold" data-cursor="cta">
-              <span>Visit the Boutique</span>
-            </Link>
-          </Magnetic>
-          <Magnetic>
-            <a
-              href={whatsappLinkFor(WHATSAPP_MESSAGES.general)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="cta cta--ink"
-              data-cursor="whatsapp"
-              data-cursor-label="Say hello"
-            >
-              <span>Message Us on WhatsApp</span>
-            </a>
-          </Magnetic>
-        </div>
-
-        {/* Custom global styling to completely clear track transforms on drag */}
-        <style dangerouslySetInnerHTML={{
-          __html: `
-            .carousel-dragging * {
-              user-select: none !important;
-            }
-          `
-        }} />
-
       </div>
-    </section>
+      </section>
+    </>
   );
 }

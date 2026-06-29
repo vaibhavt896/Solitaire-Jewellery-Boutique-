@@ -139,7 +139,7 @@ export function BridalBanner() {
 
         {/* ── Text column (right, 5/12) ── */}
         <div className="md:col-span-5 flex flex-col justify-center py-6 md:py-0">
-          <p className="eyebrow mb-4">07 — For the Bride</p>
+          <p className="eyebrow mb-4">For the Bride</p>
           <TextReveal
             as="h2"
             className="font-display"

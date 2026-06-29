@@ -11,8 +11,9 @@ export const SITE = {
   whatsappUrl: 'https://wa.me/918957804161',
   /* No public email: per the copy revamp we lead with WhatsApp so no
      enquiry lands in an unwatched inbox. */
-  instagram: 'https://www.instagram.com/solitairejewelleryboutique/',
+  instagram: 'https://www.instagram.com/solitairejewelleryboutique/?hl=en',
   instagramHandle: '@solitairejewelleryboutique',
+  facebook: 'https://www.facebook.com/solitairejewelleryboutique',
   address: {
     street: 'Lane of Skin Mantraa, 113/65B, Behind Hotel Royal Cliff, Khalasi Line',
     locality: 'Swaroop Nagar, Kanpur',

@@ -1,372 +1,313 @@
 'use client';
 
 /* ──────────────────────────────────────────────────────────
-   Footer, "inside back cover of a magazine"
-   Dark Mahogany background. Newsletter hero at top.
-   4 editorial columns. Generous vertical space.
+   Footer — light, warm-beige editorial footer.
+   Brand block + four columns (Collections · Quick Links ·
+   Customer Care · Newsletter) and a bottom legal bar.
 ────────────────────────────────────────────────────────── */
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { Logo } from '@/components/Logo';
 import { SITE } from '@/lib/site';
 
-/* ── Newsletter form ── */
+const FOOT_BG = '#ECE4D3';
+
+/* ── Social icons ── */
+const sBase = { width: 18, height: 18, viewBox: '0 0 24 24', 'aria-hidden': true } as const;
+const IconIg = () => (
+  <svg {...sBase} fill="none" stroke="currentColor" strokeWidth={1.6}>
+    <rect x="3" y="3" width="18" height="18" rx="5" />
+    <circle cx="12" cy="12" r="4" />
+    <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+  </svg>
+);
+const IconFb = () => (
+  <svg {...sBase} fill="currentColor">
+    <path d="M14 9h2.5V6H14c-2 0-3.5 1.5-3.5 3.5V11H8v3h2.5v7H14v-7h2.2l.3-3H14V9.5c0-.3.2-.5.5-.5z" />
+  </svg>
+);
+
+const SOCIALS = [
+  { label: 'Instagram', href: SITE.instagram, Icon: IconIg },
+  { label: 'Facebook',  href: SITE.facebook,  Icon: IconFb },
+];
+
+/* ── Column data ── */
+const COLUMNS: { title: string; links: { label: string; href: string }[] }[] = [
+  {
+    title: 'Collections',
+    links: [
+      { label: 'Bridal Jewellery',   href: '/collections/bridal' },
+      { label: 'Heritage Jewellery', href: '/collections/antique-gold' },
+      { label: 'Diamond Jewellery',  href: '/collections/diamond' },
+      { label: 'Polki Jewellery',    href: '/collections/polki' },
+      { label: 'Temple Jewellery',   href: '/collections/temple' },
+    ],
+  },
+  {
+    title: 'Quick Links',
+    links: [
+      { label: 'Our Story',     href: '/story' },
+      { label: 'Craftsmanship', href: '/craftsmanship' },
+      { label: 'Private Viewing', href: '/visit' },
+      { label: 'Appointments',  href: '/bridal/book' },
+      { label: 'Visit Us',      href: '/visit' },
+      { label: 'Contact Us',    href: '/contact' },
+    ],
+  },
+  {
+    title: 'Customer Care',
+    links: [
+      { label: 'FAQs',                href: '/trust' },
+      { label: 'Shipping & Delivery', href: '/legal/returns' },
+      { label: 'Returns & Exchanges', href: '/legal/returns' },
+      { label: 'Jewellery Care',      href: '/journal/caring-for-your-polki-pieces' },
+      { label: 'Track Your Order',    href: '/contact' },
+    ],
+  },
+];
+
+/* ── Newsletter (light) ── */
 function NewsletterForm() {
-  const [email,   setEmail]   = useState('');
-  const [status,  setStatus]  = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
-  const [message, setMessage] = useState('');
+  const [email,  setEmail]  = useState('');
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success'>('idle');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
     setStatus('loading');
-    await new Promise(r => setTimeout(r, 800));
+    await new Promise(r => setTimeout(r, 700));
     setStatus('success');
-    setMessage('Thank you. The next letter will arrive on the first Saturday of next month.');
     setEmail('');
   };
 
-  return (
-    <div className="grid md:grid-cols-2 gap-10 lg:gap-20 items-start pb-20"
-      style={{ borderBottom: '1px solid rgba(244,239,227,0.10)' }}>
-
-      {/* Left: editorial heading */}
-      <div>
-        <p
-          style={{
-            fontFamily: 'var(--font-body)',
-            fontSize: 10,
-            letterSpacing: '0.22em',
-            textTransform: 'uppercase',
-            color: 'rgba(244,239,227,0.35)',
-            marginBottom: '0.75rem',
-          }}
-        >
-          A Quiet Note
-        </p>
-        <h3
-          className="font-display"
-          style={{
-            fontSize: 'clamp(1.8rem, 3.5vw, 2.6rem)',
-            color: 'var(--ivory)',
-            lineHeight: 1.1,
-            letterSpacing: '-0.02em',
-            fontStyle: 'italic',
-            marginBottom: '1.25rem',
-          }}
-        >
-          A quiet note, now and then.
-        </h3>
-        <p
-          style={{
-            fontFamily: 'var(--font-body)',
-            fontSize: '0.9375rem',
-            lineHeight: 1.75,
-            color: 'rgba(244,239,227,0.55)',
-            maxWidth: 380,
-          }}
-        >
-          New pieces, the festival edits, and a little on how to choose well.
-          No noise.
-        </p>
-      </div>
-
-      {/* Right: form */}
-      <div className="md:pt-8">
-        {status === 'success' ? (
-          <p
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: '1.0625rem',
-              fontStyle: 'italic',
-              color: 'var(--aged-gold)',
-              lineHeight: 1.6,
-            }}
-          >
-            {message}
-          </p>
-        ) : (
-          <form onSubmit={handleSubmit} noValidate>
-            <div className="flex gap-0">
-              <label className="sr-only" htmlFor="footer-email">Email address</label>
-              <input
-                id="footer-email"
-                type="email"
-                required
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                placeholder="Your email"
-                disabled={status === 'loading'}
-                style={{
-                  flex: 1,
-                  background: 'transparent',
-                  border: '1px solid rgba(244,239,227,0.20)',
-                  borderRight: 'none',
-                  borderRadius: 'var(--radius-sm) 0 0 var(--radius-sm)',
-                  padding: '13px 16px',
-                  color: 'var(--ivory)',
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '0.9375rem',
-                  outline: 'none',
-                  transition: 'border-color 0.4s ease',
-                }}
-                onFocus={e => { e.currentTarget.style.borderColor = 'rgba(184,146,58,0.6)'; }}
-                onBlur={e => { e.currentTarget.style.borderColor = 'rgba(244,239,227,0.20)'; }}
-              />
-              <button
-                type="submit"
-                disabled={status === 'loading'}
-                style={{
-                  background: 'var(--aged-gold)',
-                  color: 'var(--ivory)',
-                  border: 'none',
-                  borderRadius: '0 var(--radius-sm) var(--radius-sm) 0',
-                  padding: '13px 22px',
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 10,
-                  letterSpacing: '0.16em',
-                  textTransform: 'uppercase',
-                  cursor: 'pointer',
-                  transition: 'background 0.4s ease',
-                  whiteSpace: 'nowrap',
-                  opacity: status === 'loading' ? 0.6 : 1,
-                }}
-                onMouseEnter={e => { if (status !== 'loading') (e.currentTarget as HTMLButtonElement).style.background = 'var(--mahogany)'; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'var(--aged-gold)'; }}
-              >
-                {status === 'loading' ? '…' : 'Keep Me Posted'}
-              </button>
-            </div>
-            <p
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: 10,
-                color: 'rgba(244,239,227,0.28)',
-                marginTop: '0.75rem',
-                letterSpacing: '0.04em',
-              }}
-            >
-              We don&rsquo;t sell your email, and we don&rsquo;t write more than once a month.
-            </p>
-          </form>
-        )}
-      </div>
-    </div>
-  );
-}
-
-/* ── Footer column ── */
-function FooterCol({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div>
       <p
         style={{
           fontFamily: 'var(--font-body)',
-          fontSize: 10,
-          letterSpacing: '0.22em',
-          textTransform: 'uppercase',
-          color: 'var(--aged-gold)',
-          marginBottom: '1.25rem',
-          opacity: 0.8,
+          fontSize: '0.875rem',
+          lineHeight: 1.6,
+          color: 'var(--stone-600)',
+          marginBottom: '1rem',
+          maxWidth: 240,
         }}
       >
-        {title}
+        Subscribe to receive updates on our latest collections and offers.
       </p>
-      <ul className="space-y-3">{children}</ul>
+
+      {status === 'success' ? (
+        <p style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: '0.95rem', color: 'var(--gold-deep)' }}>
+          Thank you — we&rsquo;ll be in touch.
+        </p>
+      ) : (
+        <form onSubmit={handleSubmit} noValidate className="flex">
+          <label className="sr-only" htmlFor="footer-email">Email address</label>
+          <input
+            id="footer-email"
+            type="email"
+            required
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            placeholder="Enter your email"
+            disabled={status === 'loading'}
+            style={{
+              flex: 1,
+              minWidth: 0,
+              background: '#FFFFFF',
+              border: '1px solid var(--ivory-smoke)',
+              borderRight: 'none',
+              borderRadius: 'var(--radius-sm) 0 0 var(--radius-sm)',
+              padding: '11px 14px',
+              color: 'var(--obsidian)',
+              fontFamily: 'var(--font-body)',
+              fontSize: '0.85rem',
+              outline: 'none',
+              transition: 'border-color 0.3s ease',
+            }}
+            onFocus={e => { e.currentTarget.style.borderColor = 'var(--aged-gold)'; }}
+            onBlur={e => { e.currentTarget.style.borderColor = 'var(--ivory-smoke)'; }}
+          />
+          <button
+            type="submit"
+            disabled={status === 'loading'}
+            style={{
+              background: 'var(--aged-gold)',
+              color: '#FFFFFF',
+              border: 'none',
+              borderRadius: '0 var(--radius-sm) var(--radius-sm) 0',
+              padding: '11px 18px',
+              fontFamily: 'var(--font-body)',
+              fontSize: 10,
+              letterSpacing: '0.16em',
+              textTransform: 'uppercase',
+              fontWeight: 600,
+              cursor: 'pointer',
+              whiteSpace: 'nowrap',
+              transition: 'background 0.3s ease',
+              opacity: status === 'loading' ? 0.6 : 1,
+            }}
+            onMouseEnter={e => { if (status !== 'loading') (e.currentTarget as HTMLButtonElement).style.background = 'var(--gold-deep)'; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'var(--aged-gold)'; }}
+          >
+            {status === 'loading' ? '…' : 'Subscribe'}
+          </button>
+        </form>
+      )}
     </div>
   );
 }
 
-function FooterLink({ href, children, external }: { href: string; children: React.ReactNode; external?: boolean }) {
-  const style: React.CSSProperties = {
-    fontFamily: 'var(--font-body)',
-    fontSize: '0.875rem',
-    lineHeight: 1.5,
-    color: 'rgba(244,239,227,0.55)',
-    transition: 'color 0.4s ease',
-    display: 'block',
-  };
-  const onEnter = (e: React.SyntheticEvent<HTMLElement>) => { e.currentTarget.style.color = 'var(--ivory)'; };
-  const onLeave = (e: React.SyntheticEvent<HTMLElement>) => { e.currentTarget.style.color = 'rgba(244,239,227,0.55)'; };
-
-  if (external) {
-    return (
-      <li>
-        <a href={href} target="_blank" rel="noopener noreferrer" style={style}
-          onMouseEnter={onEnter} onMouseLeave={onLeave}>
-          {children}
-        </a>
-      </li>
-    );
-  }
+/* ── Footer link ── */
+function FooterLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
     <li>
-      <Link href={href} style={style} onMouseEnter={onEnter} onMouseLeave={onLeave}>
+      <Link
+        href={href}
+        style={{
+          fontFamily: 'var(--font-body)',
+          fontSize: '0.875rem',
+          lineHeight: 1.5,
+          color: 'var(--stone-600)',
+          transition: 'color 0.3s ease',
+          display: 'block',
+        }}
+        onMouseEnter={e => { e.currentTarget.style.color = 'var(--aged-gold)'; }}
+        onMouseLeave={e => { e.currentTarget.style.color = 'var(--stone-600)'; }}
+      >
         {children}
       </Link>
     </li>
   );
 }
 
-/* ── Main Footer ── */
+/* ── Footer ── */
 export function Footer() {
+  const year = new Date().getFullYear();
+
   return (
-    <footer style={{ background: 'var(--mahogany)', color: 'var(--ivory)' }}>
-      <div className="container-wide pb-24 lg:pb-12" style={{ paddingTop: '6rem' }}>
+    <footer style={{ background: FOOT_BG, color: 'var(--obsidian)', borderTop: '1px solid var(--ivory-smoke)' }}>
+      <div className="container-wide pb-24 lg:pb-10" style={{ paddingTop: '4.5rem' }}>
 
-        {/* Newsletter, hero at top */}
-        <NewsletterForm />
+        {/* Brand + columns */}
+        <div className="grid grid-cols-2 md:grid-cols-12 gap-10 lg:gap-8">
 
-        {/* Brand + four columns */}
-        <div className="grid grid-cols-2 md:grid-cols-12 gap-10 mt-16">
-
-          {/* Brand column (3 cols) */}
-          <div className="col-span-2 md:col-span-3">
-            <span
-              className="font-display block"
-              style={{
-                fontSize: 'clamp(1.4rem, 2.5vw, 1.8rem)',
-                color: 'var(--ivory)',
-                letterSpacing: '0.04em',
-                marginBottom: '0.35rem',
-              }}
-            >
-              <span className="gold-metallic-text">Solitaire</span>
-              <span
-                aria-hidden
-                style={{
-                  display: 'inline-block',
-                  width: 5,
-                  height: 5,
-                  background: 'var(--aged-gold)',
-                  borderRadius: '50%',
-                  margin: '0 0.4rem',
-                  verticalAlign: 'middle',
-                }}
-              />
-            </span>
-            <span
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: '0.625rem',
-                textTransform: 'uppercase',
-                letterSpacing: '0.18em',
-                color: 'var(--aged-gold)',
-                display: 'block',
-                marginBottom: '1.25rem',
-              }}
-            >
-              Jewellery Boutique
-            </span>
+          {/* Brand block */}
+          <div className="col-span-2 md:col-span-4 lg:pr-8">
+            <Link href="/" aria-label="Solitaire, home" className="inline-block mb-5">
+              <Logo />
+            </Link>
             <p
               style={{
                 fontFamily: 'var(--font-body)',
                 fontSize: '0.875rem',
                 lineHeight: 1.7,
-                color: 'rgba(244,239,227,0.45)',
-                maxWidth: 200,
+                color: 'var(--stone-600)',
+                maxWidth: 260,
+                marginBottom: '1.5rem',
               }}
             >
-              {SITE.address.full}
-              <br />{SITE.hours.weekdays}
-              <br />{SITE.phoneDisplay}
+              Crafting timeless jewellery that celebrates your most precious moments with elegance and trust.
             </p>
+            <div className="flex items-center gap-3">
+              {SOCIALS.map(({ label, href, Icon }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  className="grid place-items-center"
+                  style={{
+                    width: 36, height: 36, borderRadius: '50%',
+                    border: '1px solid var(--ivory-smoke)',
+                    background: '#FFFFFF',
+                    color: 'var(--stone-600)',
+                    transition: 'color 0.3s ease, border-color 0.3s ease, background 0.3s ease',
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.color = '#FFFFFF'; e.currentTarget.style.background = 'var(--aged-gold)'; e.currentTarget.style.borderColor = 'var(--aged-gold)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.color = 'var(--stone-600)'; e.currentTarget.style.background = '#FFFFFF'; e.currentTarget.style.borderColor = 'var(--ivory-smoke)'; }}
+                >
+                  <Icon />
+                </a>
+              ))}
+            </div>
           </div>
 
-          {/* Col 1, The Boutique */}
-          <div className="col-span-1 md:col-span-2 md:col-start-5">
-            <FooterCol title="The Boutique">
-              <FooterLink href="/story">Our Story</FooterLink>
-              <FooterLink href="/trust">Trust & Certification</FooterLink>
-              <FooterLink href="/bridal">Bridal</FooterLink>
-            </FooterCol>
-          </div>
+          {/* Link columns — last one spans full width on phones to avoid a lone half-cell */}
+          {COLUMNS.map((col, ci) => (
+            <div
+              key={col.title}
+              className={`${ci === COLUMNS.length - 1 ? 'col-span-2 md:col-span-2' : 'col-span-1'} md:col-span-2`}
+            >
+              <p
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 11,
+                  letterSpacing: '0.18em',
+                  textTransform: 'uppercase',
+                  fontWeight: 600,
+                  color: 'var(--obsidian)',
+                  marginBottom: '1.25rem',
+                }}
+              >
+                {col.title}
+              </p>
+              <ul className="space-y-3">
+                {col.links.map((l) => (
+                  <FooterLink key={l.label + l.href} href={l.href}>{l.label}</FooterLink>
+                ))}
+              </ul>
+            </div>
+          ))}
 
-          {/* Col 2, Collections */}
-          <div className="col-span-1 md:col-span-2">
-            <FooterCol title="Collections">
-              <FooterLink href="/collections/polki">Polki</FooterLink>
-              <FooterLink href="/collections/solitaires">Certified Solitaires</FooterLink>
-              <FooterLink href="/collections/antique-gold">Antique Gold</FooterLink>
-              <FooterLink href="/collections/diamond">Diamond</FooterLink>
-              <FooterLink href="/collections/temple">Temple</FooterLink>
-              <FooterLink href="/collections/bridal">Bridal Sets</FooterLink>
-              <FooterLink href="/collections/dubai-gold-bangles">Gold Bangles</FooterLink>
-            </FooterCol>
+          {/* Newsletter */}
+          <div className="col-span-2 md:col-span-2">
+            <p
+              style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: 11,
+                letterSpacing: '0.18em',
+                textTransform: 'uppercase',
+                fontWeight: 600,
+                color: 'var(--obsidian)',
+                marginBottom: '1.25rem',
+              }}
+            >
+              Newsletter
+            </p>
+            <NewsletterForm />
           </div>
-
-          {/* Col 3, Visit */}
-          <div className="col-span-1 md:col-span-2">
-            <FooterCol title="Visit">
-              <FooterLink href="/visit">Swaroop Nagar Boutique</FooterLink>
-              <FooterLink href={SITE.mapsDirectionsUrl} external>Get Directions</FooterLink>
-              <FooterLink href="/bridal/book">Book a Private Sitting</FooterLink>
-              <FooterLink href="/contact">Contact</FooterLink>
-            </FooterCol>
-          </div>
-
-          {/* Col 4, Read */}
-          <div className="col-span-1 md:col-span-3">
-            <FooterCol title="Read">
-              <FooterLink href="/journal">The Journal</FooterLink>
-              <FooterLink href="/journal/polki-vs-kundan-a-buyers-guide">Polki vs Kundan</FooterLink>
-              <FooterLink href="/journal/how-to-verify-a-gia-certified-solitaire">Verify a GIA certificate</FooterLink>
-              <FooterLink href="/journal/wedding-jewellery-checklist-up-bride">The bridal checklist</FooterLink>
-              <FooterLink href="/journal">All articles →</FooterLink>
-            </FooterCol>
-          </div>
-
         </div>
 
         {/* Bottom bar */}
         <div
-          className="mt-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4"
-          style={{ borderTop: '1px solid rgba(244,239,227,0.06)', paddingTop: '1.5rem' }}
+          className="mt-14 pt-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4"
+          style={{ borderTop: '1px solid var(--ivory-smoke)' }}
         >
-          <p
-            style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: '0.8125rem',
-              color: 'rgba(244,239,227,0.28)',
-            }}
-          >
-            &copy; Solitaire Jewellery Boutique, Kanpur. Made to be kept.
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.8125rem', color: 'var(--ink-muted)' }}>
+            &copy; {year} Solitaire Jewellery Boutique. All Rights Reserved.
           </p>
-
-          <ul
-            className="flex flex-wrap gap-6"
-            style={{ fontFamily: 'var(--font-body)', fontSize: '0.8125rem' }}
-          >
-            {[
-              { href: '/legal/privacy',  label: 'Privacy' },
-              { href: '/legal/terms',    label: 'Terms' },
-              { href: '/legal/cookies',  label: 'Cookies' },
-              { href: '/legal/returns',  label: 'Boutique Policy' },
-            ].map(({ href, label }) => (
-              <li key={href}>
-                <Link
-                  href={href}
-                  style={{ color: 'rgba(244,239,227,0.28)', transition: 'color 0.4s ease' }}
-                  onMouseEnter={e => { e.currentTarget.style.color = 'rgba(244,239,227,0.65)'; }}
-                  onMouseLeave={e => { e.currentTarget.style.color = 'rgba(244,239,227,0.28)'; }}
-                >
-                  {label}
-                </Link>
-              </li>
-            ))}
-            <li>
-              <a
-                href={SITE.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ color: 'var(--aged-gold)', transition: 'color 0.4s ease' }}
-                onMouseEnter={e => { e.currentTarget.style.color = 'var(--ivory)'; }}
-                onMouseLeave={e => { e.currentTarget.style.color = 'var(--aged-gold)'; }}
-              >
-                Instagram
-              </a>
-            </li>
-          </ul>
+          <div className="flex items-center gap-4" style={{ fontFamily: 'var(--font-body)', fontSize: '0.8125rem' }}>
+            <Link
+              href="/legal/privacy"
+              style={{ color: 'var(--ink-muted)', transition: 'color 0.3s ease' }}
+              onMouseEnter={e => { e.currentTarget.style.color = 'var(--aged-gold)'; }}
+              onMouseLeave={e => { e.currentTarget.style.color = 'var(--ink-muted)'; }}
+            >
+              Privacy Policy
+            </Link>
+            <span aria-hidden style={{ color: 'var(--ivory-smoke)' }}>|</span>
+            <Link
+              href="/legal/terms"
+              style={{ color: 'var(--ink-muted)', transition: 'color 0.3s ease' }}
+              onMouseEnter={e => { e.currentTarget.style.color = 'var(--aged-gold)'; }}
+              onMouseLeave={e => { e.currentTarget.style.color = 'var(--ink-muted)'; }}
+            >
+              Terms & Conditions
+            </Link>
+          </div>
         </div>
 
       </div>

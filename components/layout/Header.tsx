@@ -9,8 +9,11 @@ import { NAV_PRIMARY, SITE, whatsappLinkFor, WHATSAPP_MESSAGES } from '@/lib/sit
 import { COLLECTIONS } from '@/lib/data/collections';
 import { Logo } from '@/components/Logo';
 import {
+  IconArrowRight,
   IconClose,
   IconMenu,
+  IconMinus,
+  IconPlus,
   IconSearch,
   IconUser,
   IconWhatsApp,
@@ -24,98 +27,148 @@ const GRAIN = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'
 const leftNav  = NAV_PRIMARY.slice(0, 2);
 const rightNav = NAV_PRIMARY.slice(2);
 
-/* Rotating announcement messages — the leading phrase changes; the
-   "Book Your Appointment" CTA stays fixed alongside it. */
-const ANNOUNCEMENTS = [
-  'Complimentary Private Jewellery Viewing',
-  'Every Diamond GIA or IGI Certified',
-  'BIS Hallmarked Gold, Certified Pure',
-  'Free Private Bridal Sittings',
+/* ─── Mobile drawer data (real routes only) ─── */
+const SUBCOLLECTIONS: { title: string; href: string }[] = [
+  { title: 'All Collections', href: '/collections' },
+  ...COLLECTIONS.slice(0, 7).map((c) => ({ title: c.title, href: `/collections/${c.slug}` })),
+];
+const MENU_LINKS = [
+  { label: 'Bridal',    href: '/bridal' },
+  { label: 'Our Story', href: '/story' },
+  { label: 'Visit Us',  href: '/visit' },
+];
+const SECONDARY = [
+  { label: 'Search',  href: '/search',  icon: <IconSearch size={18} /> },
+  { label: 'Account', href: '/contact', icon: <IconUser size={18} /> },
+];
+const primaryLabel: React.CSSProperties = {
+  fontFamily:    'var(--font-body)',
+  fontSize:      14,
+  letterSpacing: '0.14em',
+  textTransform: 'uppercase',
+  fontWeight:    500,
+  color:         'var(--obsidian)',
+};
+
+/* ─── Announcement icons — 13px, hairline gold ─── */
+const annIcon = { width: 13, height: 13, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 1.7, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const, 'aria-hidden': true };
+const MarkDiamond = () => (<svg {...annIcon}><path d="M6 3h12l3 6-9 12L3 9z" /><path d="M3 9h18M9 3l3 6 3-6M9 9l3 12 3-12" /></svg>);
+const MarkShield  = () => (<svg {...annIcon}><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z" /><path d="M9 12l2 2 4-4" /></svg>);
+const MarkViewing = () => (<svg {...annIcon}><path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12z" /><circle cx="12" cy="12" r="2.6" /></svg>);
+const MarkBridal  = () => (<svg {...annIcon}><circle cx="12" cy="14" r="5.4" /><path d="M9 8.6l3-4 3 4M12 4.6V2" /></svg>);
+const MarkOffer   = () => (<svg {...annIcon}><path d="M3 12V5a2 2 0 0 1 2-2h7l9 9-9 9z" /><circle cx="8" cy="8" r="1.4" fill="currentColor" stroke="none" /></svg>);
+
+/* Rotating announcements — value props today; to run a promotion,
+   add an item with `pill: 'Offer'` (and an optional href) and it
+   styles + links itself. The bar is built to carry offers. */
+type Announce = { text: string; Icon: () => React.ReactElement; pill?: string; href?: string };
+const ANNOUNCEMENTS: Announce[] = [
+  { text: 'Every Diamond GIA or IGI Certified',      Icon: MarkDiamond },
+  { text: 'BIS Hallmarked Gold · Certified Pure',    Icon: MarkShield  },
+  { text: 'Complimentary Private Jewellery Viewing', Icon: MarkViewing },
+  { text: 'Free Private Bridal Sittings',            Icon: MarkBridal  },
 ];
 
-/* ─── Announcement Bar — light cream, rotating phrase, fixed CTA ─── */
+/* ─── Announcement Bar — deep, modern, gold-accented, offer-ready ─── */
 function AnnouncementBar() {
   const [idx, setIdx] = useState(0);
-  const textRef       = useRef<HTMLSpanElement>(null);
+  const itemRef       = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const id = setInterval(() => {
-      if (!textRef.current) return;
-      gsap.to(textRef.current, {
-        opacity: 0, y: -4, duration: 0.3, ease: 'power2.in',
+      if (!itemRef.current) return;
+      gsap.to(itemRef.current, {
+        opacity: 0, y: -6, duration: 0.32, ease: 'power2.in',
         onComplete: () => {
           setIdx(i => (i + 1) % ANNOUNCEMENTS.length);
           gsap.fromTo(
-            textRef.current,
-            { opacity: 0, y: 4 },
-            { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' },
+            itemRef.current,
+            { opacity: 0, y: 6 },
+            { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' },
           );
         },
       });
-    }, 3200);
+    }, 4200);
     return () => clearInterval(id);
   }, []);
+
+  const a = ANNOUNCEMENTS[idx];
 
   return (
     <div
       style={{
-        background:     'var(--gold-veil)',
-        height:         38,
-        display:        'flex',
-        alignItems:     'center',
-        justifyContent: 'center',
-        textAlign:      'center',
-        padding:        '0 16px',
+        position:   'relative',
+        height:     40,
+        overflow:   'hidden',
+        background: 'linear-gradient(90deg, #15100B 0%, #221710 50%, #15100B 100%)',
       }}
     >
-      <p
+      <style>{`
+        @keyframes ann-sheen { 0% { transform: translateX(-160%) skewX(-18deg); } 100% { transform: translateX(160%) skewX(-18deg); } }
+        @media (prefers-reduced-motion: reduce) { .ann-sheen { display: none; } }
+      `}</style>
+
+      {/* Slow sheen sweep — subtle sign of life */}
+      <span
+        aria-hidden
+        className="ann-sheen"
         style={{
-          fontFamily:    'var(--font-body)',
-          fontSize:      10.5,
-          letterSpacing: '0.18em',
-          textTransform: 'uppercase',
-          color:         'var(--gold-deep)',
-          margin:        0,
-          whiteSpace:    'nowrap',
-          overflow:      'hidden',
-          textOverflow:  'ellipsis',
-          maxWidth:      '100%',
-          display:       'flex',
-          alignItems:    'center',
-          justifyContent:'center',
+          position: 'absolute', top: 0, bottom: 0, width: 120,
+          background: 'linear-gradient(90deg, transparent, rgba(255,240,210,0.07), transparent)',
+          animation: 'ann-sheen 9s ease-in-out infinite',
+          pointerEvents: 'none',
         }}
-      >
-        <span
-          ref={textRef}
-          style={{
-            display:      'inline-block',
-            overflow:     'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace:   'nowrap',
-            maxWidth:     '90vw',
-          }}
+      />
+      {/* Gold hairline at the base */}
+      <span
+        aria-hidden
+        style={{
+          position: 'absolute', left: 0, right: 0, bottom: 0, height: 1,
+          background: 'linear-gradient(90deg, transparent, rgba(189,154,69,0.55) 50%, transparent)',
+        }}
+      />
+
+      <div className="container-wide" style={{ height: '100%', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+
+        {/* Centered rotating message — purely informational, no CTA here */}
+        <div
+          ref={itemRef}
+          style={{ display: 'flex', alignItems: 'center', gap: 9, maxWidth: '92vw' }}
         >
-          {ANNOUNCEMENTS[idx]}
-        </span>
-        {/* Separator + CTA: desktop only — on mobile the rotating
-            message stands alone (Book lives in the header & bottom bar) */}
-        <span aria-hidden className="hidden sm:inline" style={{ margin: '0 0.7em', opacity: 0.55, flexShrink: 0 }}>•</span>
-        <Link
-          href="/bridal/book"
-          className="hidden sm:inline"
-          style={{
-            flexShrink:              0,
-            color:                   'var(--gold-deep)',
-            fontWeight:              600,
-            textDecoration:          'underline',
-            textUnderlineOffset:     '3px',
-            textDecorationThickness: '1px',
-          }}
-        >
-          Book Your Appointment
-        </Link>
-      </p>
+          {a.pill && (
+            <span
+              style={{
+                flexShrink: 0,
+                fontFamily: 'var(--font-body)', fontSize: 8.5, fontWeight: 700,
+                letterSpacing: '0.14em', textTransform: 'uppercase',
+                color: '#1A1410', background: 'linear-gradient(180deg, var(--gold-soft), var(--aged-gold))',
+                padding: '3px 7px', borderRadius: 999,
+              }}
+            >
+              {a.pill}
+            </span>
+          )}
+          <span style={{ color: 'var(--gold-soft)', display: 'grid', placeItems: 'center', flexShrink: 0 }}>
+            <a.Icon />
+          </span>
+          <span
+            style={{
+              fontFamily:    'var(--font-body)',
+              fontSize:      10.5,
+              letterSpacing: '0.17em',
+              textTransform: 'uppercase',
+              fontWeight:    500,
+              color:         'rgba(244,239,227,0.92)',
+              whiteSpace:    'nowrap',
+              overflow:      'hidden',
+              textOverflow:  'ellipsis',
+            }}
+          >
+            {a.text}
+          </span>
+        </div>
+      </div>
     </div>
   );
 }
@@ -625,9 +678,10 @@ export function Header() {
   const [drawer,    setDrawer]    = useState(false);
   const [mega,      setMega]      = useState(false);
   const [bookOpen,  setBookOpen]  = useState(false);
+  const [collOpen,  setCollOpen]  = useState(false);
   const megaTimer                  = useRef<ReturnType<typeof setTimeout>>(undefined);
   const bookTimer                  = useRef<ReturnType<typeof setTimeout>>(undefined);
-  const drawerFirstRef             = useRef<HTMLAnchorElement>(null);
+  const drawerFirstRef             = useRef<HTMLButtonElement>(null);
   const headerRef                  = useRef<HTMLElement>(null);
 
   const openMega  = () => { clearTimeout(megaTimer.current); setMega(true); };
@@ -663,7 +717,7 @@ export function Header() {
   /* Drawer lock + keyboard */
   useEffect(() => {
     document.body.style.overflow = drawer ? 'hidden' : '';
-    if (!drawer) return;
+    if (!drawer) { setCollOpen(false); return; }
     drawerFirstRef.current?.focus();
     const drawerEl = document.getElementById('mobile-drawer');
     const focusable = drawerEl?.querySelectorAll<HTMLElement>(
@@ -780,33 +834,11 @@ export function Header() {
             ))}
           </nav>
 
-          {/* CENTER LOGO with gold decorative rules */}
-          <div style={{ display: 'flex', alignItems: 'center', padding: '0 40px' }}>
-            <span
-              aria-hidden
-              style={{
-                display:    'block',
-                width:      1,
-                height:     30,
-                background: 'linear-gradient(to bottom, transparent, rgba(184,146,58,0.30) 40%, rgba(184,146,58,0.30) 60%, transparent)',
-                flexShrink: 0,
-                marginRight: 28,
-              }}
-            />
+          {/* CENTER LOGO */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 40px' }}>
             <Link href="/" aria-label="Solitaire, home" className="flex items-center justify-center">
               <Logo light={false} />
             </Link>
-            <span
-              aria-hidden
-              style={{
-                display:    'block',
-                width:      1,
-                height:     30,
-                background: 'linear-gradient(to bottom, transparent, rgba(184,146,58,0.30) 40%, rgba(184,146,58,0.30) 60%, transparent)',
-                flexShrink: 0,
-                marginLeft:  28,
-              }}
-            />
           </div>
 
           {/* RIGHT NAV + UTILITIES */}
@@ -827,7 +859,7 @@ export function Header() {
               <IconUser size={17} />
             </NavIcon>
 
-            {/* Book CTA — filled gold button */}
+            {/* Book CTA — refined ivory/gold outlined button */}
             <div
               className="relative"
               onMouseEnter={openBook}
@@ -841,20 +873,34 @@ export function Header() {
                 aria-expanded={bookOpen}
                 style={{
                   display:       'inline-block',
-                  fontSize:      10.5,
-                  letterSpacing: '0.22em',
+                  fontFamily:    'var(--font-body)',
+                  fontSize:      10,
+                  letterSpacing: '0.2em',
                   fontWeight:    600,
                   textTransform: 'uppercase',
-                  color:         'var(--ivory)',
-                  background:    'var(--aged-gold)',
-                  padding:       '11px 26px',
+                  color:         'var(--aged-gold)',
+                  background:    'var(--ivory)',
+                  border:        '1px solid rgba(189,154,69,0.55)',
+                  padding:       '10px 22px',
                   borderRadius:  'var(--radius-sm)',
-                  transition:    'background 0.3s ease',
+                  whiteSpace:    'nowrap',
+                  transition:    'color 0.28s ease, background 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease',
+                  boxShadow:     '0 1px 4px rgba(189,154,69,0.08)',
                 }}
-                onMouseEnter={e => { e.currentTarget.style.background = 'var(--gold-deep)'; }}
-                onMouseLeave={e => { e.currentTarget.style.background = 'var(--aged-gold)'; }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.color        = 'var(--ivory)';
+                  e.currentTarget.style.background   = 'var(--aged-gold)';
+                  e.currentTarget.style.borderColor  = 'var(--aged-gold)';
+                  e.currentTarget.style.boxShadow    = '0 4px 16px rgba(189,154,69,0.28)';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.color        = 'var(--aged-gold)';
+                  e.currentTarget.style.background   = 'var(--ivory)';
+                  e.currentTarget.style.borderColor  = 'rgba(189,154,69,0.55)';
+                  e.currentTarget.style.boxShadow    = '0 1px 4px rgba(189,154,69,0.08)';
+                }}
               >
-                Book
+                Book Visit
               </Link>
 
               <AnimatePresence>
@@ -911,154 +957,145 @@ export function Header() {
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ duration: 0.44, ease: [0.32, 0.72, 0, 1] }}
-              className="fixed left-0 top-0 bottom-0 z-50 overflow-y-auto"
-              style={{ width: 'min(85vw, 360px)', background: 'var(--ink)', position: 'relative' }}
+              className="fixed left-0 top-0 bottom-0 z-50 flex flex-col"
+              style={{ width: 'min(100%, 440px)', background: 'var(--ivory-raised)', boxShadow: '0 0 80px rgba(26,20,16,0.22)' }}
               role="dialog"
               aria-modal="true"
               aria-label="Navigation menu"
             >
-              {/* Grain */}
-              <div
-                aria-hidden
-                style={{
-                  position:         'absolute',
-                  inset:             0,
-                  backgroundImage:  GRAIN,
-                  backgroundRepeat: 'repeat',
-                  opacity:          0.05,
-                  pointerEvents:    'none',
-                  mixBlendMode:     'overlay',
-                  zIndex:           0,
-                }}
-              />
-
-              <div style={{ position: 'relative', zIndex: 1 }}>
-                {/* Header */}
+              <div className="flex flex-col h-full">
+                {/* Header — logo + close */}
                 <div
-                  className="flex items-center justify-between px-6 h-[80px]"
-                  style={{ borderBottom: '1px solid rgba(244,239,227,0.07)' }}
+                  className="flex items-center justify-between px-6"
+                  style={{ height: 72, borderBottom: '1px solid rgba(184,146,58,0.16)', flexShrink: 0 }}
                 >
-                  <Link href="/" onClick={() => setDrawer(false)}>
-                    <Logo light />
+                  <Link href="/" onClick={() => setDrawer(false)} aria-label="Solitaire, home">
+                    <Logo light={false} />
                   </Link>
                   <button
+                    ref={drawerFirstRef}
                     type="button"
                     aria-label="Close menu"
                     onClick={() => setDrawer(false)}
                     style={{
-                      color:      'rgba(244,239,227,0.32)',
+                      color:      'var(--ink-soft)',
                       background: 'none',
                       border:     'none',
                       cursor:     'pointer',
                       padding:    8,
+                      margin:     '0 -8px 0 0',
                       transition: 'color 0.22s',
                     }}
-                    onMouseEnter={e => { e.currentTarget.style.color = 'rgba(244,239,227,0.85)'; }}
-                    onMouseLeave={e => { e.currentTarget.style.color = 'rgba(244,239,227,0.32)'; }}
+                    onMouseEnter={e => { e.currentTarget.style.color = 'var(--obsidian)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.color = 'var(--ink-soft)'; }}
                   >
                     <IconClose />
                   </button>
                 </div>
 
-                {/* Nav links */}
-                <nav className="px-6 pt-10 pb-6 flex flex-col" aria-label="Mobile navigation">
-                  {NAV_PRIMARY.map((item, i) => (
-                    <motion.div
-                      key={item.href}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.08 + i * 0.055, duration: 0.36, ease: [0.16, 1, 0.3, 1] }}
+                {/* Scrollable nav */}
+                <nav className="flex-1 overflow-y-auto px-6 pt-3 pb-6" aria-label="Mobile navigation">
+
+                  {/* Collections — expandable */}
+                  <div style={{ borderBottom: '1px solid rgba(26,20,16,0.08)' }}>
+                    <button
+                      type="button"
+                      onClick={() => setCollOpen(o => !o)}
+                      aria-expanded={collOpen}
+                      className="w-full flex items-center justify-between"
+                      style={{ padding: '17px 0', background: 'none', border: 'none', cursor: 'pointer' }}
                     >
-                      <Link
-                        href={item.href}
-                        ref={i === 0 ? drawerFirstRef : undefined}
-                        onClick={() => setDrawer(false)}
-                        className="block font-display py-[13px]"
-                        style={{
-                          fontSize:      'clamp(1.6rem, 6vw, 2.1rem)',
-                          color:         'rgba(244,239,227,0.75)',
-                          borderBottom:  '1px solid rgba(244,239,227,0.06)',
-                          transition:    'color 0.22s, padding-left 0.22s, letter-spacing 0.22s',
-                          letterSpacing: '0.01em',
-                        }}
-                        onMouseEnter={e => {
-                          e.currentTarget.style.color         = 'var(--gold-soft)';
-                          e.currentTarget.style.paddingLeft   = '8px';
-                          e.currentTarget.style.letterSpacing = '0.03em';
-                        }}
-                        onMouseLeave={e => {
-                          e.currentTarget.style.color         = 'rgba(244,239,227,0.75)';
-                          e.currentTarget.style.paddingLeft   = '0';
-                          e.currentTarget.style.letterSpacing = '0.01em';
-                        }}
-                      >
-                        {item.label}
-                      </Link>
-                    </motion.div>
+                      <span style={primaryLabel}>Collections</span>
+                      <span style={{ color: 'var(--aged-gold)', display: 'grid', placeItems: 'center' }}>
+                        {collOpen ? <IconMinus size={15} /> : <IconPlus size={15} />}
+                      </span>
+                    </button>
+
+                    <AnimatePresence initial={false}>
+                      {collOpen && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
+                          style={{ overflow: 'hidden' }}
+                        >
+                          <div style={{ paddingBottom: 12 }}>
+                            {SUBCOLLECTIONS.map((c) => (
+                              <Link
+                                key={c.href}
+                                href={c.href}
+                                onClick={() => setDrawer(false)}
+                                className="block"
+                                style={{
+                                  fontFamily:    'var(--font-body)',
+                                  fontSize:      13,
+                                  letterSpacing: '0.03em',
+                                  color:         'var(--ink-soft)',
+                                  padding:       '9px 0 9px 2px',
+                                  transition:    'color 0.2s',
+                                }}
+                                onMouseEnter={e => { e.currentTarget.style.color = 'var(--gold-deep)'; }}
+                                onMouseLeave={e => { e.currentTarget.style.color = 'var(--ink-soft)'; }}
+                              >
+                                {c.title}
+                              </Link>
+                            ))}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+
+                  {/* Primary links */}
+                  {MENU_LINKS.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={() => setDrawer(false)}
+                      className="flex items-center justify-between"
+                      style={{ padding: '17px 0', borderBottom: '1px solid rgba(26,20,16,0.08)' }}
+                      onMouseEnter={e => { e.currentTarget.style.opacity = '0.62'; }}
+                      onMouseLeave={e => { e.currentTarget.style.opacity = '1'; }}
+                    >
+                      <span style={primaryLabel}>{item.label}</span>
+                      <span style={{ color: 'rgba(26,20,16,0.22)', display: 'grid', placeItems: 'center' }}>
+                        <IconArrowRight size={15} />
+                      </span>
+                    </Link>
                   ))}
 
-                  {/* Gold diamond divider */}
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.42, duration: 0.5 }}
-                    style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '28px 0 24px' }}
-                  >
-                    <span style={{ flex: 1, height: 0.5, background: 'rgba(184,146,58,0.30)' }} />
-                    <svg width="5" height="5" viewBox="0 0 6 6" aria-hidden>
-                      <rect
-                        x="1" y="1" width="4" height="4"
-                        transform="rotate(45 3 3)"
-                        fill="none"
-                        stroke="rgba(184,146,58,0.55)"
-                        strokeWidth="0.8"
-                      />
-                    </svg>
-                    <span style={{ flex: 1, height: 0.5, background: 'rgba(184,146,58,0.30)' }} />
-                  </motion.div>
-
-                  {/* Book CTA */}
-                  <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.08 + NAV_PRIMARY.length * 0.055, duration: 0.36, ease: [0.16, 1, 0.3, 1] }}
-                  >
-                    <Link
-                      href="/bridal/book"
-                      onClick={() => setDrawer(false)}
-                      className="inline-block"
-                      style={{
-                        fontFamily:    'var(--font-body)',
-                        fontSize:      10,
-                        letterSpacing: '0.24em',
-                        textTransform: 'uppercase',
-                        fontWeight:    600,
-                        color:         'var(--gold-soft)',
-                        border:        '1px solid rgba(201,168,76,0.35)',
-                        padding:       '13px 24px',
-                        transition:    'all 0.25s ease',
-                      }}
-                      onMouseEnter={e => {
-                        e.currentTarget.style.background   = 'rgba(201,168,76,0.09)';
-                        e.currentTarget.style.borderColor  = 'rgba(201,168,76,0.65)';
-                      }}
-                      onMouseLeave={e => {
-                        e.currentTarget.style.background   = 'transparent';
-                        e.currentTarget.style.borderColor  = 'rgba(201,168,76,0.35)';
-                      }}
-                    >
-                      Book a Private Sitting
-                    </Link>
-                  </motion.div>
+                  {/* Utilities — search / account */}
+                  <div style={{ marginTop: 20, paddingTop: 16, borderTop: '1px solid rgba(184,146,58,0.18)' }}>
+                    {SECONDARY.map((item) => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        onClick={() => setDrawer(false)}
+                        className="flex items-center"
+                        style={{ gap: 14, padding: '13px 0' }}
+                        onMouseEnter={e => { e.currentTarget.style.opacity = '0.62'; }}
+                        onMouseLeave={e => { e.currentTarget.style.opacity = '1'; }}
+                      >
+                        <span style={{ color: 'var(--aged-gold)', display: 'grid', placeItems: 'center' }}>{item.icon}</span>
+                        <span
+                          style={{
+                            fontFamily:    'var(--font-body)',
+                            fontSize:      12.5,
+                            letterSpacing: '0.16em',
+                            textTransform: 'uppercase',
+                            fontWeight:    500,
+                            color:         'var(--ink)',
+                          }}
+                        >
+                          {item.label}
+                        </span>
+                      </Link>
+                    ))}
+                  </div>
 
                   {/* Boutique info */}
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.65, duration: 0.45 }}
-                    className="mt-10 pt-6 space-y-2"
-                    style={{ borderTop: '1px solid rgba(244,239,227,0.06)' }}
-                  >
+                  <div className="mt-8 pt-6 space-y-2" style={{ borderTop: '1px solid rgba(26,20,16,0.07)' }}>
                     {[SITE.address.full, SITE.hours.weekdays, SITE.phoneDisplay].map((line) => (
                       <p
                         key={line}
@@ -1067,14 +1104,42 @@ export function Header() {
                           fontSize:      10,
                           letterSpacing: '0.08em',
                           textTransform: 'uppercase',
-                          color:         'rgba(244,239,227,0.20)',
+                          color:         'var(--ink-muted)',
+                          lineHeight:    1.6,
                         }}
                       >
                         {line}
                       </p>
                     ))}
-                  </motion.div>
+                  </div>
                 </nav>
+
+                {/* Book Visit — pinned footer */}
+                <div className="px-6 py-5" style={{ borderTop: '1px solid rgba(184,146,58,0.18)', flexShrink: 0 }}>
+                  <Link
+                    href="/bridal/book"
+                    onClick={() => setDrawer(false)}
+                    className="flex items-center justify-center w-full"
+                    style={{
+                      gap:           10,
+                      background:    'var(--aged-gold)',
+                      color:         'var(--ivory)',
+                      padding:       '15px 24px',
+                      borderRadius:  'var(--radius-sm)',
+                      fontFamily:    'var(--font-body)',
+                      fontSize:      11.5,
+                      letterSpacing: '0.2em',
+                      textTransform: 'uppercase',
+                      fontWeight:    600,
+                      boxShadow:     '0 12px 30px -10px rgba(189,154,69,0.6)',
+                      transition:    'background 0.25s ease',
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.background = 'var(--gold-deep)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = 'var(--aged-gold)'; }}
+                  >
+                    Book Visit
+                  </Link>
+                </div>
               </div>
             </motion.div>
           </>
