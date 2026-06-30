@@ -290,9 +290,19 @@ export function BoutiqueReels() {
         setTimeout(() => v.play().catch(() => {}), delay);
       });
     };
-    playAll();
-
-    startTimer();
+    /* Defer playback + auto-advance until the section nears the
+       viewport. The reels sit below the fold, so this keeps ~24 MB of
+       video off the critical initial page load — it only starts loading
+       once you scroll toward it. */
+    let started = false;
+    const io = new IntersectionObserver((entries) => {
+      if (entries[0]?.isIntersecting && !started) {
+        started = true;
+        playAll();
+        startTimer();
+      }
+    }, { rootMargin: '300px 0px' });
+    if (sectionRef.current) io.observe(sectionRef.current);
 
     let resizeTimer: ReturnType<typeof setTimeout> | undefined;
     const onResize = () => {
@@ -302,6 +312,7 @@ export function BoutiqueReels() {
     window.addEventListener('resize', onResize);
 
     return () => {
+      io.disconnect();
       timerRef.current && clearInterval(timerRef.current);
       clearTimeout(resizeTimer);
       window.removeEventListener('resize', onResize);
@@ -454,10 +465,9 @@ export function BoutiqueReels() {
                   ref={el => { videoRefs.current[i] = el; }}
                   src={reel.src}
                   muted
-                  autoPlay
                   loop
                   playsInline
-                  preload={Math.abs(i - vActive) <= 1 ? 'auto' : 'metadata'}
+                  preload="none"
                   style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', background: '#1a1410' }}
                 />
 
