@@ -2,11 +2,11 @@ import { Hero }                from '@/components/sections/Hero';
 import { TrustBadges }          from '@/components/sections/TrustBadges';
 import { CollectionsShowcase }  from '@/components/sections/CollectionsShowcase';
 import { BoutiqueReels }        from '@/components/sections/BoutiqueReels';
+import { BangleShowcase }       from '@/components/sections/BangleShowcase';
 import { InstagramReelEmbed }   from '@/components/sections/InstagramReelEmbed';
 import { StorySplit }           from '@/components/sections/StorySplit';
 import { BridalBanner }         from '@/components/sections/BridalBanner';
 import { ArticlesGrid }         from '@/components/sections/ArticlesGrid';
-import { InstagramStrip }       from '@/components/sections/InstagramStrip';
 
 /* Heart cradled in open hands — the "crafted for forever" mark */
 const HandsHeart = (
@@ -28,20 +28,7 @@ export default function HomePage() {
 
       <BoutiqueReels />
 
-      <InstagramReelEmbed />
-
-      {/* Content left / image right */}
-      <StorySplit
-        eyebrow="Our Story"
-        title="A Legacy of Craftsmanship and Trust"
-        body="For over a decade, Solitaire has been a name to know in Swaroop Nagar — crafting and curating jewellery that celebrates life's most precious moments. Each piece is a blend of heritage, passion, and quiet perfection, chosen by hand and made to be kept."
-        ctaLabel="Know Our Journey"
-        ctaHref="/story"
-        ctaVariant="outline"
-        image={{ src: '', alt: 'Our story at Solitaire Jewellery Boutique' }}
-      />
-
-      {/* Reversed: image left / content right */}
+      {/* Image left / content right */}
       <StorySplit
         flip
         eyebrow="Crafted for Forever"
@@ -51,8 +38,11 @@ export default function HomePage() {
         ctaHref="/craftsmanship"
         ctaVariant="fill"
         icon={HandsHeart}
-        image={{ src: '', alt: 'The craftsmanship behind every Solitaire piece' }}
+        image={{ src: '/Crafted for Forever.webp', alt: 'The craftsmanship behind every Solitaire piece' }}
       />
+
+      {/* Full-bleed cinematic — craftsmanship in motion */}
+      <BangleShowcase />
 
       <TrustBadges variant="service" />
 
@@ -60,7 +50,8 @@ export default function HomePage() {
 
       <ArticlesGrid />
 
-      <InstagramStrip />
+      {/* Closing Instagram moment — reel rail + follow card, before footer */}
+      <InstagramReelEmbed />
     </>
   );
 }

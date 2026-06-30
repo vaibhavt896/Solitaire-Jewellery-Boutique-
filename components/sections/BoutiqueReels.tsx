@@ -42,10 +42,10 @@ function PlayBadge() {
   return (
     <span
       aria-hidden
-      className="absolute inset-0 grid place-items-center pointer-events-none transition-opacity duration-500 group-hover:opacity-0"
+      className="absolute inset-0 grid place-items-center pointer-events-none"
     >
       <span
-        className="grid place-items-center"
+        className="grid place-items-center transition-transform duration-500 group-hover:scale-110"
         style={{
           width: 52, height: 52, borderRadius: '50%',
           background: 'rgba(244,239,227,0.90)',
@@ -61,10 +61,171 @@ function PlayBadge() {
   );
 }
 
+/* ─── Player icons ───────────────────────────────────────── */
+const IPlay    = () => (<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden><path d="M7 4.5v15l13-7.5z" /></svg>);
+const IPause   = () => (<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden><rect x="6" y="5" width="3.6" height="14" rx="1.2" /><rect x="14.4" y="5" width="3.6" height="14" rx="1.2" /></svg>);
+const IReplay  = () => (<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M3 12a9 9 0 1 0 2.6-6.3" /><polyline points="3 3 3 8 8 8" /></svg>);
+const IVolOn   = () => (<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" /><path d="M15.5 8.5a5 5 0 0 1 0 7" /><path d="M19 5a10 10 0 0 1 0 14" /></svg>);
+const IVolOff  = () => (<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" /><line x1="22" y1="9" x2="16" y2="15" /><line x1="16" y1="9" x2="22" y2="15" /></svg>);
+const IExpand  = () => (<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M16 21h3a2 2 0 0 0 2-2v-3M8 21H5a2 2 0 0 1-2-2v-3" /></svg>);
+const IClose   = () => (<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden><line x1="6" y1="6" x2="18" y2="18" /><line x1="6" y1="18" x2="18" y2="6" /></svg>);
+const IChevron = ({ d }: { d: 'l' | 'r' }) => (<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><polyline points={d === 'l' ? '15 18 9 12 15 6' : '9 18 15 12 9 6'} /></svg>);
+
+const sideBtn: React.CSSProperties = {
+  position: 'fixed', top: '50%', transform: 'translateY(-50%)',
+  width: 48, height: 48, borderRadius: '50%',
+  border: '1px solid rgba(244,239,227,0.18)', background: 'rgba(244,239,227,0.06)',
+  color: 'rgba(244,239,227,0.85)', cursor: 'pointer', placeItems: 'center', zIndex: 2,
+};
+
+/* ─── Immersive player ───────────────────────────────────────
+   Tap a card → this opens. Sound on, full controls, prev/next,
+   keyboard (Space play/pause · M mute · ←/→ switch · Esc close).
+   Auto-plays with sound; if the browser blocks it, falls back to
+   muted and shows the unmute control.                            */
+function ReelPlayer({ reels, index, onClose, onSelect }: {
+  reels:   readonly { src: string; caption: string }[];
+  index:   number;
+  onClose: () => void;
+  onSelect: (i: number) => void;
+}) {
+  const vref      = useRef<HTMLVideoElement>(null);
+  const stageRef  = useRef<HTMLDivElement>(null);
+  const hideTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
+
+  const [playing,  setPlaying]  = useState(true);
+  const [muted,    setMuted]    = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [ended,    setEnded]    = useState(false);
+  const [ui,       setUi]       = useState(true);
+
+  const n    = reels.length;
+  const reel = reels[index];
+
+  const toggle = () => { const v = vref.current; if (!v) return; v.paused ? v.play() : v.pause(); };
+  const replay = () => { const v = vref.current; if (!v) return; v.currentTime = 0; setEnded(false); v.play(); };
+  const toggleMute = () => { const v = vref.current; if (!v) return; v.muted = !v.muted; setMuted(v.muted); };
+  const onSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const v = vref.current; if (!v || !v.duration) return;
+    const f = Number(e.target.value) / 1000;
+    v.currentTime = f * v.duration; setProgress(f);
+  };
+  const fullscreen = () => {
+    const el = stageRef.current; if (!el) return;
+    document.fullscreenElement ? document.exitFullscreen?.() : el.requestFullscreen?.();
+  };
+  const poke = () => {
+    setUi(true);
+    clearTimeout(hideTimer.current);
+    hideTimer.current = setTimeout(() => { if (!vref.current?.paused) setUi(false); }, 2600);
+  };
+
+  /* (re)start playback whenever the reel changes — sound-first */
+  useEffect(() => {
+    const v = vref.current; if (!v) return;
+    setEnded(false); setProgress(0); v.currentTime = 0;
+    v.muted = false; setMuted(false);
+    v.play().then(() => setPlaying(true)).catch(() => {
+      v.muted = true; setMuted(true);
+      v.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
+    });
+    poke();
+  }, [index]);
+
+  /* keyboard */
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if      (e.key === 'Escape')     onClose();
+      else if (e.key === ' ' || e.key === 'k') { e.preventDefault(); toggle(); }
+      else if (e.key === 'ArrowRight') onSelect((index + 1) % n);
+      else if (e.key === 'ArrowLeft')  onSelect((index - 1 + n) % n);
+      else if (e.key === 'm')          toggleMute();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => { window.removeEventListener('keydown', onKey); clearTimeout(hideTimer.current); };
+  }, [index, n, onClose, onSelect]);
+
+  const controlsVisible = ui || !playing || ended;
+  const ctrlBtn: React.CSSProperties = { background: 'transparent', border: 'none', color: 'rgba(244,239,227,0.92)', cursor: 'pointer', display: 'grid', placeItems: 'center', padding: 4 };
+
+  return (
+    <div
+      role="dialog" aria-modal="true" aria-label={`${reel.caption} — video`}
+      onClick={onClose}
+      style={{ position: 'fixed', inset: 0, zIndex: 130, background: 'rgba(6,4,2,0.92)', backdropFilter: 'blur(10px)', display: 'grid', placeItems: 'center', padding: 'clamp(12px,3vw,28px)', animation: 'reelPlayerFade 0.28s ease both' }}
+    >
+      <style>{`
+        @keyframes reelPlayerFade { from { opacity: 0 } to { opacity: 1 } }
+        .reel-scrub { -webkit-appearance: none; appearance: none; width: 100%; height: 4px; border-radius: 3px; background: rgba(244,239,227,0.22); cursor: pointer; }
+        .reel-scrub::-webkit-slider-thumb { -webkit-appearance: none; width: 13px; height: 13px; border-radius: 50%; background: var(--aged-gold); box-shadow: 0 0 0 3px rgba(189,154,69,0.25); cursor: pointer; }
+        .reel-scrub::-moz-range-thumb { width: 13px; height: 13px; border: none; border-radius: 50%; background: var(--aged-gold); cursor: pointer; }
+      `}</style>
+
+      {/* close */}
+      <button onClick={onClose} aria-label="Close" style={{ position: 'fixed', top: 'clamp(14px,3vw,26px)', right: 'clamp(14px,3vw,26px)', width: 44, height: 44, borderRadius: '50%', border: '1px solid rgba(244,239,227,0.18)', background: 'rgba(244,239,227,0.06)', color: 'rgba(244,239,227,0.85)', display: 'grid', placeItems: 'center', cursor: 'pointer', zIndex: 2 }}>
+        <IClose />
+      </button>
+
+      {/* prev / next (≥ sm) */}
+      <button onClick={(e) => { e.stopPropagation(); onSelect((index - 1 + n) % n); }} aria-label="Previous video" className="hidden sm:grid" style={{ ...sideBtn, left: 'clamp(10px,3vw,32px)' }}><IChevron d="l" /></button>
+      <button onClick={(e) => { e.stopPropagation(); onSelect((index + 1) % n); }} aria-label="Next video" className="hidden sm:grid" style={{ ...sideBtn, right: 'clamp(10px,3vw,32px)' }}><IChevron d="r" /></button>
+
+      {/* stage */}
+      <div
+        ref={stageRef}
+        onClick={(e) => e.stopPropagation()}
+        onMouseMove={poke}
+        onTouchStart={poke}
+        style={{ position: 'relative', height: 'min(86vh, 760px)', aspectRatio: '9 / 16', maxWidth: '94vw', borderRadius: 18, overflow: 'hidden', background: '#0c0a08', boxShadow: '0 40px 120px -30px rgba(0,0,0,0.9)' }}
+      >
+        <video
+          ref={vref}
+          src={reel.src}
+          playsInline
+          autoPlay
+          onClick={toggle}
+          onPlay={() => setPlaying(true)}
+          onPause={() => setPlaying(false)}
+          onEnded={() => { setEnded(true); setPlaying(false); setUi(true); }}
+          onTimeUpdate={() => { const v = vref.current; if (v && v.duration) setProgress(v.currentTime / v.duration); }}
+          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', cursor: 'pointer', background: '#0c0a08' }}
+        />
+
+        {/* centre play / replay */}
+        {(!playing || ended) && (
+          <button onClick={ended ? replay : toggle} aria-label={ended ? 'Replay' : 'Play'}
+            style={{ position: 'absolute', inset: 0, margin: 'auto', width: 74, height: 74, borderRadius: '50%', border: '1px solid rgba(244,239,227,0.3)', background: 'rgba(20,15,10,0.42)', backdropFilter: 'blur(4px)', color: '#F4EFE3', display: 'grid', placeItems: 'center', cursor: 'pointer' }}>
+            {ended ? <IReplay /> : <span style={{ marginLeft: 3 }}><IPlay /></span>}
+          </button>
+        )}
+
+        {/* controls */}
+        <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, padding: '36px 16px 16px', background: 'linear-gradient(to top, rgba(6,4,2,0.88), transparent)', opacity: controlsVisible ? 1 : 0, transition: 'opacity 0.3s ease', pointerEvents: controlsVisible ? 'auto' : 'none' }}>
+          <p style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontSize: '0.95rem', color: 'var(--ivory)', margin: '0 0 10px', letterSpacing: '-0.01em' }}>
+            {reel.caption}
+          </p>
+          <input type="range" min={0} max={1000} value={Math.round(progress * 1000)} onChange={onSeek} aria-label="Seek" className="reel-scrub" />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginTop: 8 }}>
+            <button onClick={toggle} aria-label={playing ? 'Pause' : 'Play'} style={ctrlBtn}>{playing ? <IPause /> : <IPlay />}</button>
+            <button onClick={replay} aria-label="Replay" style={ctrlBtn}><IReplay /></button>
+            <button onClick={toggleMute} aria-label={muted ? 'Unmute' : 'Mute'} style={ctrlBtn}>{muted ? <IVolOff /> : <IVolOn />}</button>
+            <span style={{ flex: 1 }} />
+            <span style={{ fontFamily: 'var(--font-body)', fontSize: 11, letterSpacing: '0.14em', color: 'rgba(244,239,227,0.5)' }}>
+              {String(index + 1).padStart(2, '0')} / {String(n).padStart(2, '0')}
+            </span>
+            <button onClick={fullscreen} aria-label="Fullscreen" style={ctrlBtn}><IExpand /></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ─── Component ──────────────────────────────────────────── */
 export function BoutiqueReels() {
   const [active,  setActive]  = useState(0);   // real index 0…N-1
   const [vActive, setVActive] = useState(1);   // visual index 0…N+1
+  const [playerIdx, setPlayerIdx] = useState<number | null>(null); // open reel in player
 
   const sectionRef   = useRef<HTMLElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -75,6 +236,7 @@ export function BoutiqueReels() {
   const activeRef  = useRef(0);
   const vActiveRef = useRef(1);
   const timerRef   = useRef<ReturnType<typeof setInterval> | null>(null);
+  const playerWasOpen = useRef(false);
   const ptrStartX  = useRef(0);
   const ptrMoved   = useRef(false);
   const touchStartX = useRef(0);
@@ -149,6 +311,26 @@ export function BoutiqueReels() {
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  /* ── Player open: pause carousel + previews; resume on close ── */
+  useEffect(() => {
+    if (playerIdx !== null) {
+      playerWasOpen.current = true;
+      if (timerRef.current) clearInterval(timerRef.current);
+      videoRefs.current.forEach(v => v?.pause());
+      document.body.style.overflow = 'hidden';
+    } else if (playerWasOpen.current) {
+      playerWasOpen.current = false;
+      document.body.style.overflow = '';
+      videoRefs.current.forEach((v, i) => {
+        if (!v) return;
+        const delay = Math.abs(i - vActiveRef.current) * 120;
+        setTimeout(() => v.play().catch(() => {}), delay);
+      });
+      startTimer();
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [playerIdx]); // eslint-disable-line react-hooks/exhaustive-deps
+
   /* ── Pointer drag (desktop) ─────────────────────────────── */
   const onPtrDown = (e: React.PointerEvent) => { ptrStartX.current = e.clientX; ptrMoved.current = false; };
   const onPtrMove = (e: React.PointerEvent) => { if (Math.abs(e.clientX - ptrStartX.current) > 5) ptrMoved.current = true; };
@@ -221,6 +403,8 @@ export function BoutiqueReels() {
         onPointerUp={onPtrUp}
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
+        onMouseEnter={() => { if (playerIdx === null && timerRef.current) clearInterval(timerRef.current); }}
+        onMouseLeave={() => { if (playerIdx === null) startTimer(); }}
       >
         {/* Edge fades */}
         <div aria-hidden style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '6%', background: 'linear-gradient(to right, var(--ivory) 0%, transparent 100%)', zIndex: 10, pointerEvents: 'none' }} />
@@ -250,7 +434,10 @@ export function BoutiqueReels() {
               <div
                 key={i}
                 ref={el => { cardRefs.current[i] = el; }}
-                onClick={() => { if (!ptrMoved.current) { window.open(SITE.instagram, '_blank', 'noopener'); } }}
+                onClick={() => {
+                  if (ptrMoved.current) return;
+                  setPlayerIdx(i === 0 ? N - 1 : i === N + 1 ? 0 : i - 1);
+                }}
                 className="group"
                 style={{
                   flexShrink:   0,
@@ -291,6 +478,15 @@ export function BoutiqueReels() {
           })}
         </div>
       </div>
+
+      {playerIdx !== null && (
+        <ReelPlayer
+          reels={REELS}
+          index={playerIdx}
+          onClose={() => setPlayerIdx(null)}
+          onSelect={setPlayerIdx}
+        />
+      )}
     </section>
   );
 }
