@@ -57,13 +57,13 @@ const COLUMNS: { title: string; links: { label: string; href: string }[] }[] = [
     ],
   },
   {
-    title: 'Customer Care',
+    title: 'Visit & Care',
     links: [
-      { label: 'FAQs',                href: '/trust' },
-      { label: 'Shipping & Delivery', href: '/legal/returns' },
-      { label: 'Returns & Exchanges', href: '/legal/returns' },
-      { label: 'Jewellery Care',      href: '/journal/caring-for-your-polki-pieces' },
-      { label: 'Track Your Order',    href: '/contact' },
+      { label: 'Store FAQs',        href: '/trust' },
+      { label: 'Boutique Policy',   href: '/legal/returns' },
+      { label: 'Jewellery Care',    href: '/journal/caring-for-your-polki-pieces' },
+      { label: 'Book Appointment',  href: '/bridal/book' },
+      { label: 'Contact Us',        href: '/contact' },
     ],
   },
 ];

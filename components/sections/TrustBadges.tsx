@@ -44,12 +44,6 @@ const ICalendar = (
     <path d="M3 9.5h18M8 2.5v4M16 2.5v4M8.5 15l2.2 2.2L15.5 13" />
   </svg>
 );
-const IDelivery = (
-  <svg width="32" height="32" viewBox="0 0 24 24" {...stroke} aria-hidden>
-    <path d="M2 6h11v9H2zM13 9h4l3 3v3h-7z" />
-    <circle cx="6" cy="18" r="1.8" /><circle cx="17" cy="18" r="1.8" />
-  </svg>
-);
 const IReturns = (
   <svg width="32" height="32" viewBox="0 0 24 24" {...stroke} aria-hidden>
     <path d="M3 8a9 9 0 0 1 16-3M21 16a9 9 0 0 1-16 3" />
@@ -73,10 +67,10 @@ const SETS: Record<'promise' | 'service', Badge[]> = {
     { icon: ICalendar, title: 'Private Viewings',   sub: 'By Appointment Only' },
   ],
   service: [
-    { icon: IDelivery, title: 'Secure & Insured Delivery', sub: 'Across India' },
-    { icon: IReturns,  title: 'Easy Returns',              sub: '14 Day Return Policy' },
-    { icon: IMedal,    title: 'Certified Jewellery',       sub: '100% Hallmarked' },
-    { icon: IAssist,   title: 'Personal Assistance',       sub: "We're Here to Help" },
+    { icon: ICalendar, title: 'Private Viewings',    sub: 'By Appointment, At Your Pace' },
+    { icon: IReturns,  title: 'In-Store Exchange',   sub: 'Within 7 Days of Purchase' },
+    { icon: IMedal,    title: 'Certified Jewellery', sub: '100% Hallmarked & GIA / IGI' },
+    { icon: IAssist,   title: 'Personal Assistance', sub: 'One-on-One Guidance' },
   ],
 };
 

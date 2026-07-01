@@ -14,8 +14,6 @@ import {
   IconMenu,
   IconMinus,
   IconPlus,
-  IconSearch,
-  IconUser,
   IconWhatsApp,
 } from '@/components/icons/Icon';
 
@@ -37,9 +35,10 @@ const MENU_LINKS = [
   { label: 'Our Story', href: '/story' },
   { label: 'Visit Us',  href: '/visit' },
 ];
-const SECONDARY = [
-  { label: 'Search',  href: '/search',  icon: <IconSearch size={18} /> },
-  { label: 'Account', href: '/contact', icon: <IconUser size={18} /> },
+type SecondaryLink = { label: string; href: string; icon: React.ReactNode; external?: boolean };
+const SECONDARY: SecondaryLink[] = [
+  { label: 'WhatsApp Us', href: whatsappLinkFor(WHATSAPP_MESSAGES.general), icon: <IconWhatsApp size={18} />, external: true },
+  { label: 'Contact Us',  href: '/contact', icon: <IconArrowRight size={18} /> },
 ];
 const primaryLabel: React.CSSProperties = {
   fontFamily:    'var(--font-body)',
@@ -279,10 +278,10 @@ function MegaMenu({ onClose }: { onClose: () => void }) {
             <p
               style={{
                 fontFamily:    'var(--font-body)',
-                fontSize:      10,
-                letterSpacing: '0.26em',
+                fontSize:      9.5,
+                letterSpacing: '0.30em',
                 textTransform: 'uppercase',
-                color:         'rgba(201,168,76,0.60)',
+                color:         'rgba(201,168,76,0.50)',
                 marginBottom:  18,
               }}
             >
@@ -307,22 +306,19 @@ function MegaMenu({ onClose }: { onClose: () => void }) {
                   fill
                   sizes="240px"
                   loading="lazy"
-                  className="object-cover transition-transform duration-[800ms] ease-out group-hover:scale-[1.05]"
+                  className="object-cover transition-transform duration-[900ms] ease-out group-hover:scale-[1.04]"
                 />
                 <div
                   style={{
                     position:   'absolute',
                     inset:       0,
-                    background: 'linear-gradient(to top, rgba(8,6,4,0.92) 0%, rgba(8,6,4,0.08) 58%)',
+                    background: 'linear-gradient(to top, rgba(8,6,4,0.94) 0%, rgba(8,6,4,0.06) 55%)',
                   }}
                 />
-                {/* Gold border reveal on hover */}
+                {/* Gold border — group-hover via Tailwind */}
                 <div
                   aria-hidden
-                  className="absolute inset-0 border border-transparent transition-all duration-500"
-                  style={{ borderColor: 'rgba(184,146,58,0)', transition: 'border-color 0.5s' }}
-                  onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(184,146,58,0.28)'; }}
-                  onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(184,146,58,0)'; }}
+                  className="absolute inset-0 border border-[rgba(184,146,58,0)] group-hover:border-[rgba(184,146,58,0.36)] transition-all duration-500"
                 />
               </div>
 
@@ -332,18 +328,18 @@ function MegaMenu({ onClose }: { onClose: () => void }) {
                   bottom:   0,
                   left:     0,
                   right:    0,
-                  padding:  '20px 20px 24px',
+                  padding:  '22px 20px 26px',
                 }}
               >
                 <p
                   style={{
                     fontFamily:    'var(--font-display)',
-                    fontSize:      '1.2rem',
+                    fontSize:      '1.25rem',
                     fontStyle:     'italic',
                     color:         'var(--ivory)',
-                    lineHeight:    1.2,
+                    lineHeight:    1.15,
                     letterSpacing: '-0.01em',
-                    marginBottom:  10,
+                    marginBottom:  12,
                   }}
                 >
                   {featured.title}
@@ -351,14 +347,14 @@ function MegaMenu({ onClose }: { onClose: () => void }) {
                 <p
                   style={{
                     fontFamily:    'var(--font-body)',
-                    fontSize:      10,
-                    letterSpacing: '0.20em',
+                    fontSize:      9.5,
+                    letterSpacing: '0.22em',
                     textTransform: 'uppercase',
-                    color:         'rgba(201,168,76,0.52)',
-                    transition:    'color 0.3s',
+                    color:         'rgba(201,168,76,0.48)',
+                    transition:    'color 0.32s',
                   }}
                   onMouseEnter={e => { e.currentTarget.style.color = 'var(--gold-soft)'; }}
-                  onMouseLeave={e => { e.currentTarget.style.color = 'rgba(201,168,76,0.52)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.color = 'rgba(201,168,76,0.48)'; }}
                 >
                   Discover Collection →
                 </p>
@@ -366,132 +362,42 @@ function MegaMenu({ onClose }: { onClose: () => void }) {
             </Link>
           </div>
 
-          {/* RIGHT: 3-col grid */}
+          {/* RIGHT: editorial collection grid */}
           <div>
+            {/* Header row: label left, View All right */}
             <div
               style={{
-                display:    'flex',
-                alignItems: 'center',
-                gap:        12,
-                marginBottom: 24,
-              }}
-            >
-              <span
-                aria-hidden
-                style={{ display: 'block', width: 22, height: 0.5, background: 'rgba(184,146,58,0.55)' }}
-              />
-              <p
-                style={{
-                  fontFamily:    'var(--font-body)',
-                  fontSize:      10,
-                  letterSpacing: '0.26em',
-                  textTransform: 'uppercase',
-                  color:         'rgba(244,239,227,0.32)',
-                }}
-              >
-                Collections
-              </p>
-            </div>
-
-            <div
-              style={{
-                display:             'grid',
-                gridTemplateColumns: 'repeat(3, 1fr)',
-                gap:                 '22px 28px',
-              }}
-            >
-              {grid.map((c, i) => (
-                <motion.div
-                  key={c.slug}
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.06 + i * 0.04, duration: 0.30, ease: [0.16, 1, 0.3, 1] }}
-                >
-                  <Link
-                    href={`/collections/${c.slug}`}
-                    onClick={onClose}
-                    className="group block"
-                  >
-                    <div
-                      style={{
-                        aspectRatio: '4/3',
-                        position:    'relative',
-                        overflow:    'hidden',
-                        background:  'rgba(255,255,255,0.03)',
-                        marginBottom: 10,
-                      }}
-                    >
-                      <Image
-                        src={c.hero.src}
-                        alt={c.hero.alt}
-                        fill
-                        sizes="(max-width: 1280px) 22vw, 18vw"
-                        loading="lazy"
-                        className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.08]"
-                      />
-                      <div
-                        className="absolute inset-0 transition-colors duration-500"
-                        style={{ background: 'rgba(0,0,0,0)' }}
-                        onMouseEnter={e => { e.currentTarget.style.background = 'rgba(0,0,0,0.18)'; }}
-                        onMouseLeave={e => { e.currentTarget.style.background = 'rgba(0,0,0,0)'; }}
-                      />
-                    </div>
-                    <p
-                      style={{
-                        fontFamily:    'var(--font-body)',
-                        fontSize:      '0.8125rem',
-                        color:         'rgba(244,239,227,0.62)',
-                        letterSpacing: '0.03em',
-                        transition:    'color 0.22s',
-                      }}
-                      onMouseEnter={e => { e.currentTarget.style.color = 'var(--ivory)'; }}
-                      onMouseLeave={e => { e.currentTarget.style.color = 'rgba(244,239,227,0.62)'; }}
-                    >
-                      {c.title}
-                    </p>
-                    <p
-                      style={{
-                        fontFamily:    'var(--font-body)',
-                        fontSize:      10,
-                        letterSpacing: '0.10em',
-                        color:         'rgba(244,239,227,0.24)',
-                        marginTop:     3,
-                      }}
-                    >
-                      {c.pieceCount} pieces
-                    </p>
-                  </Link>
-                </motion.div>
-              ))}
-            </div>
-
-            <div
-              style={{
-                marginTop:    30,
-                paddingTop:   22,
-                borderTop:    '1px solid rgba(184,146,58,0.12)',
-                display:      'flex',
-                alignItems:   'center',
+                display:        'flex',
+                alignItems:     'center',
                 justifyContent: 'space-between',
+                marginBottom:   30,
               }}
             >
-              <p
-                style={{
-                  fontFamily:    'var(--font-body)',
-                  fontSize:      10,
-                  letterSpacing: '0.06em',
-                  color:         'rgba(244,239,227,0.20)',
-                }}
-              >
-                Polki · Solitaires · Antique Gold · Temple · Bridal · Everyday
-              </p>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <span
+                  aria-hidden
+                  style={{ display: 'block', width: 22, height: 0.5, background: 'rgba(184,146,58,0.55)' }}
+                />
+                <p
+                  style={{
+                    fontFamily:    'var(--font-body)',
+                    fontSize:      9.5,
+                    letterSpacing: '0.28em',
+                    textTransform: 'uppercase',
+                    color:         'rgba(244,239,227,0.28)',
+                  }}
+                >
+                  Collections
+                </p>
+              </div>
+
               <Link
                 href="/collections"
                 onClick={onClose}
                 style={{
                   fontFamily:    'var(--font-body)',
-                  fontSize:      10,
-                  letterSpacing: '0.20em',
+                  fontSize:      9.5,
+                  letterSpacing: '0.22em',
                   textTransform: 'uppercase',
                   fontWeight:    600,
                   color:         'var(--aged-gold)',
@@ -500,8 +406,67 @@ function MegaMenu({ onClose }: { onClose: () => void }) {
                 onMouseEnter={e => { e.currentTarget.style.color = 'var(--ivory)'; }}
                 onMouseLeave={e => { e.currentTarget.style.color = 'var(--aged-gold)'; }}
               >
-                View all collections →
+                View All →
               </Link>
+            </div>
+
+            {/* 3-col image grid — imagery speaks, no metadata */}
+            <div
+              style={{
+                display:             'grid',
+                gridTemplateColumns: 'repeat(3, 1fr)',
+                gap:                 '26px 24px',
+              }}
+            >
+              {grid.map((c, i) => (
+                <motion.div
+                  key={c.slug}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.06 + i * 0.038, duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <Link
+                    href={`/collections/${c.slug}`}
+                    onClick={onClose}
+                    className="group block"
+                  >
+                    <div
+                      style={{
+                        aspectRatio:  '4/3',
+                        position:     'relative',
+                        overflow:     'hidden',
+                        background:   'rgba(255,255,255,0.03)',
+                        marginBottom: 12,
+                      }}
+                    >
+                      <Image
+                        src={c.hero.src}
+                        alt={c.hero.alt}
+                        fill
+                        sizes="(max-width: 1280px) 22vw, 18vw"
+                        loading="lazy"
+                        className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]"
+                      />
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/[0.18] transition-all duration-500" />
+                    </div>
+                    <p
+                      style={{
+                        fontFamily:    'var(--font-display)',
+                        fontSize:      '0.9rem',
+                        fontStyle:     'italic',
+                        color:         'rgba(244,239,227,0.65)',
+                        letterSpacing: '-0.01em',
+                        lineHeight:    1.2,
+                        transition:    'color 0.28s ease',
+                      }}
+                      onMouseEnter={e => { e.currentTarget.style.color = 'var(--gold-soft)'; }}
+                      onMouseLeave={e => { e.currentTarget.style.color = 'rgba(244,239,227,0.65)'; }}
+                    >
+                      {c.title}
+                    </p>
+                  </Link>
+                </motion.div>
+              ))}
             </div>
           </div>
         </div>
@@ -851,15 +816,18 @@ export function Header() {
               ))}
             </nav>
 
-            <NavIcon href="/search" ariaLabel="Search">
-              <IconSearch size={17} />
+            {/* Hairline divider */}
+            <span aria-hidden style={{ width: 1, height: 20, background: 'rgba(26,20,16,0.13)', flexShrink: 0 }} />
+
+            <NavIcon
+              href={whatsappLinkFor(WHATSAPP_MESSAGES.general)}
+              external
+              ariaLabel="WhatsApp us"
+            >
+              <IconWhatsApp size={17} />
             </NavIcon>
 
-            <NavIcon href="/contact" ariaLabel="Your account">
-              <IconUser size={17} />
-            </NavIcon>
-
-            {/* Book CTA — refined ivory/gold outlined button */}
+            {/* Book CTA — solid gold, premium */}
             <div
               className="relative"
               onMouseEnter={openBook}
@@ -878,26 +846,24 @@ export function Header() {
                   letterSpacing: '0.2em',
                   fontWeight:    600,
                   textTransform: 'uppercase',
-                  color:         'var(--aged-gold)',
-                  background:    'var(--ivory)',
-                  border:        '1px solid rgba(189,154,69,0.55)',
+                  color:         'var(--ivory)',
+                  background:    'var(--aged-gold)',
+                  border:        '1px solid var(--aged-gold)',
                   padding:       '10px 22px',
                   borderRadius:  'var(--radius-sm)',
                   whiteSpace:    'nowrap',
-                  transition:    'color 0.28s ease, background 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease',
-                  boxShadow:     '0 1px 4px rgba(189,154,69,0.08)',
+                  transition:    'background 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease',
+                  boxShadow:     '0 2px 14px rgba(189,154,69,0.28)',
                 }}
                 onMouseEnter={e => {
-                  e.currentTarget.style.color        = 'var(--ivory)';
-                  e.currentTarget.style.background   = 'var(--aged-gold)';
-                  e.currentTarget.style.borderColor  = 'var(--aged-gold)';
-                  e.currentTarget.style.boxShadow    = '0 4px 16px rgba(189,154,69,0.28)';
+                  e.currentTarget.style.background   = 'var(--gold-deep)';
+                  e.currentTarget.style.borderColor  = 'var(--gold-deep)';
+                  e.currentTarget.style.boxShadow    = '0 4px 22px rgba(189,154,69,0.42)';
                 }}
                 onMouseLeave={e => {
-                  e.currentTarget.style.color        = 'var(--aged-gold)';
-                  e.currentTarget.style.background   = 'var(--ivory)';
-                  e.currentTarget.style.borderColor  = 'rgba(189,154,69,0.55)';
-                  e.currentTarget.style.boxShadow    = '0 1px 4px rgba(189,154,69,0.08)';
+                  e.currentTarget.style.background   = 'var(--aged-gold)';
+                  e.currentTarget.style.borderColor  = 'var(--aged-gold)';
+                  e.currentTarget.style.boxShadow    = '0 2px 14px rgba(189,154,69,0.28)';
                 }}
               >
                 Book Visit
@@ -1065,33 +1031,41 @@ export function Header() {
                     </Link>
                   ))}
 
-                  {/* Utilities — search / account */}
+                  {/* Utilities — whatsapp / contact */}
                   <div style={{ marginTop: 20, paddingTop: 16, borderTop: '1px solid rgba(184,146,58,0.18)' }}>
-                    {SECONDARY.map((item) => (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        onClick={() => setDrawer(false)}
-                        className="flex items-center"
-                        style={{ gap: 14, padding: '13px 0' }}
-                        onMouseEnter={e => { e.currentTarget.style.opacity = '0.62'; }}
-                        onMouseLeave={e => { e.currentTarget.style.opacity = '1'; }}
-                      >
-                        <span style={{ color: 'var(--aged-gold)', display: 'grid', placeItems: 'center' }}>{item.icon}</span>
-                        <span
-                          style={{
-                            fontFamily:    'var(--font-body)',
-                            fontSize:      12.5,
-                            letterSpacing: '0.16em',
-                            textTransform: 'uppercase',
-                            fontWeight:    500,
-                            color:         'var(--ink)',
-                          }}
-                        >
-                          {item.label}
-                        </span>
-                      </Link>
-                    ))}
+                    {SECONDARY.map((item) => {
+                      const inner = (
+                        <>
+                          <span style={{ color: 'var(--aged-gold)', display: 'grid', placeItems: 'center' }}>{item.icon}</span>
+                          <span
+                            style={{
+                              fontFamily:    'var(--font-body)',
+                              fontSize:      12.5,
+                              letterSpacing: '0.16em',
+                              textTransform: 'uppercase',
+                              fontWeight:    500,
+                              color:         'var(--ink)',
+                            }}
+                          >
+                            {item.label}
+                          </span>
+                        </>
+                      );
+                      const shared = {
+                        style:        { display: 'flex', alignItems: 'center', gap: 14, padding: '13px 0' } as React.CSSProperties,
+                        onMouseEnter: (e: React.MouseEvent<HTMLElement>) => { e.currentTarget.style.opacity = '0.62'; },
+                        onMouseLeave: (e: React.MouseEvent<HTMLElement>) => { e.currentTarget.style.opacity = '1'; },
+                      };
+                      return item.external ? (
+                        <a key={item.href} href={item.href} target="_blank" rel="noopener noreferrer" {...shared}>
+                          {inner}
+                        </a>
+                      ) : (
+                        <Link key={item.href} href={item.href} onClick={() => setDrawer(false)} {...shared}>
+                          {inner}
+                        </Link>
+                      );
+                    })}
                   </div>
 
                   {/* Boutique info */}

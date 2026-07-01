@@ -295,13 +295,13 @@ export default async function PiecePage({ params }: Params) {
         </section>
       )}
 
-      {/* Care / Returns / Shipping accordions */}
+      {/* Care / Policy / Visit accordions */}
       <section className="bg-bone">
         <div className="container-content py-16">
           <Accordion title="Care Instructions">
             <p>{piece.careInstructions}</p>
           </Accordion>
-          <Accordion title="Authenticity & Returns">
+          <Accordion title="Authenticity & Exchange">
             <p>
               Every piece comes with a Solitaire authentication card and the applicable
               certificate (GIA, IGI, or BIS). Bring the piece in for an annual check-up at
@@ -309,10 +309,10 @@ export default async function PiecePage({ params }: Params) {
               loosened.
             </p>
           </Accordion>
-          <Accordion title="Shipping & Visit">
+          <Accordion title="Visit & In-Store Collection">
             <p>
-              Inspection is in-store at Swaroop Nagar, Kanpur. For high-value pieces, we
-              arrange a private courier for trial within Kanpur and Lucknow.
+              All pieces are available exclusively in-store at Swaroop Nagar, Kanpur. For
+              high-value pieces, we can arrange a private viewing at a time that suits you.
             </p>
           </Accordion>
         </div>
