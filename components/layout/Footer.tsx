@@ -57,12 +57,12 @@ const COLUMNS: { title: string; links: { label: string; href: string }[] }[] = [
     ],
   },
   {
-    title: 'Visit & Care',
+    title: 'Legal & Care',
     links: [
       { label: 'Store FAQs',        href: '/trust' },
       { label: 'Boutique Policy',   href: '/legal/returns' },
+      { label: 'Cookie Policy',     href: '/legal/cookies' },
       { label: 'Jewellery Care',    href: '/journal/caring-for-your-polki-pieces' },
-      { label: 'Book Appointment',  href: '/bridal/book' },
       { label: 'Contact Us',        href: '/contact' },
     ],
   },
@@ -289,24 +289,27 @@ export function Footer() {
           <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.8125rem', color: 'var(--ink-muted)' }}>
             &copy; {year} Solitaire Jewellery Boutique. All Rights Reserved.
           </p>
-          <div className="flex items-center gap-4" style={{ fontFamily: 'var(--font-body)', fontSize: '0.8125rem' }}>
-            <Link
-              href="/legal/privacy"
-              style={{ color: 'var(--ink-muted)', transition: 'color 0.3s ease' }}
-              onMouseEnter={e => { e.currentTarget.style.color = 'var(--aged-gold)'; }}
-              onMouseLeave={e => { e.currentTarget.style.color = 'var(--ink-muted)'; }}
-            >
-              Privacy Policy
-            </Link>
-            <span aria-hidden style={{ color: 'var(--ivory-smoke)' }}>|</span>
-            <Link
-              href="/legal/terms"
-              style={{ color: 'var(--ink-muted)', transition: 'color 0.3s ease' }}
-              onMouseEnter={e => { e.currentTarget.style.color = 'var(--aged-gold)'; }}
-              onMouseLeave={e => { e.currentTarget.style.color = 'var(--ink-muted)'; }}
-            >
-              Terms & Conditions
-            </Link>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2" style={{ fontFamily: 'var(--font-body)', fontSize: '0.8125rem' }}>
+            {[
+              { label: 'Privacy Policy',   href: '/legal/privacy' },
+              { label: 'Terms of Service', href: '/legal/terms' },
+              { label: 'Cookie Policy',    href: '/legal/cookies' },
+              { label: 'Boutique Policy',  href: '/legal/returns' },
+            ].map((link, i, arr) => (
+              <span key={link.href} className="flex items-center gap-4">
+                <Link
+                  href={link.href}
+                  style={{ color: 'var(--ink-muted)', transition: 'color 0.3s ease' }}
+                  onMouseEnter={e => { e.currentTarget.style.color = 'var(--aged-gold)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.color = 'var(--ink-muted)'; }}
+                >
+                  {link.label}
+                </Link>
+                {i < arr.length - 1 && (
+                  <span aria-hidden style={{ color: 'var(--ivory-smoke)' }}>|</span>
+                )}
+              </span>
+            ))}
           </div>
         </div>
 
