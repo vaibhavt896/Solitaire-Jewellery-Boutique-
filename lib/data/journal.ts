@@ -1,6 +1,12 @@
 import type { JournalArticle } from './types';
 import { PLACEHOLDER } from '@/lib/placeholder-media';
 
+const JOURNAL_COVERS = {
+  'akshaya-tritiya-buying-guide':         '/journal/akshaya-tritiya-cover.webp',
+  'polki-vs-kundan-a-buyers-guide':       '/journal/polki-vs-kundan-cover.webp',
+  'how-to-verify-a-gia-certified-solitaire': '/journal/gia-certificate-cover.webp',
+} as const;
+
 export const ARTICLES: JournalArticle[] = [
   {
     slug: 'polki-vs-kundan-a-buyers-guide',
@@ -9,7 +15,7 @@ export const ARTICLES: JournalArticle[] = [
       'Polki and Kundan look like cousins on the counter, but one holds diamond value and one does not. Here is the difference in plain words, and how to choose.',
     category: 'Buying Guide',
     hero: {
-      src: PLACEHOLDER.journal('polki-vs-kundan-a-buyers-guide'),
+      src: JOURNAL_COVERS['polki-vs-kundan-a-buyers-guide'],
       alt: 'Polki and Kundan jewellery laid side-by-side on cream cloth',
       width: 1600,
       height: 900,
@@ -71,7 +77,7 @@ export const ARTICLES: JournalArticle[] = [
       'A diamond certificate is a page of numbers, and that is how a weak stone gets sold as a strong one. Here is how to read GIA and IGI reports and verify the stone yourself.',
     category: 'Buying Guide',
     hero: {
-      src: PLACEHOLDER.journal('how-to-verify-a-gia-certified-solitaire'),
+      src: JOURNAL_COVERS['how-to-verify-a-gia-certified-solitaire'],
       alt: 'GIA certificate next to a loose diamond on a cream linen surface',
       width: 1600,
       height: 900,
@@ -242,7 +248,7 @@ export const ARTICLES: JournalArticle[] = [
       'Akshaya Tritiya is one of the busiest gold-buying days of the year, which is exactly why it is easy to buy badly. Here is how to buy gold with a clear head.',
     category: 'Festive',
     hero: {
-      src: PLACEHOLDER.journal('akshaya-tritiya-buying-guide'),
+      src: JOURNAL_COVERS['akshaya-tritiya-buying-guide'],
       alt: 'Gold coins and bangles arranged for Akshaya Tritiya',
       width: 1600,
       height: 900,
