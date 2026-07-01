@@ -6,6 +6,7 @@ import { BangleShowcase }       from '@/components/sections/BangleShowcase';
 import { InstagramReelEmbed }   from '@/components/sections/InstagramReelEmbed';
 import { StorySplit }           from '@/components/sections/StorySplit';
 import { BridalBanner }         from '@/components/sections/BridalBanner';
+import { NecklaceShowcase }     from '@/components/sections/NecklaceShowcase';
 import { ArticlesGrid }         from '@/components/sections/ArticlesGrid';
 
 /* Heart cradled in open hands — the "crafted for forever" mark */
@@ -47,6 +48,9 @@ export default function HomePage() {
       <TrustBadges variant="service" />
 
       <BridalBanner />
+
+      {/* Full-bleed cinematic — heritage necklace with carvings */}
+      <NecklaceShowcase />
 
       <ArticlesGrid />
 
