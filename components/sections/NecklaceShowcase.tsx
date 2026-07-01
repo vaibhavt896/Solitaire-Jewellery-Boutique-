@@ -52,7 +52,7 @@ export function NecklaceShowcase() {
       aria-label="Heritage necklace with antique carvings and motifs"
       style={{
         background: 'var(--ivory)',
-        padding: 'clamp(3rem,7vh,5.5rem) 0 clamp(2.2rem,5vh,3.6rem)',
+        padding: 'clamp(2.5rem,5vh,4rem) 0 clamp(1.8rem,4vh,3rem)',
         overflow: 'hidden',
       }}
     >
@@ -90,46 +90,50 @@ export function NecklaceShowcase() {
         </h2>
       </div>
 
-      {/* Full-bleed video at native 16:9 — the full frame, no cropping */}
-      <div
-        style={{
-          position:    'relative',
-          width:       '100%',
-          aspectRatio: '16 / 9',
-          background:  'var(--bone-deep)',
-        }}
-      >
-        {/* Poster — instant paint + reduced-motion still */}
-        <Image
-          src="/video/necklace-carvings-poster.webp"
-          alt="Heritage necklace with antique carvings and motifs"
-          fill
-          sizes="100vw"
-          quality={85}
-          style={{ objectFit: 'cover' }}
-        />
-
-        {/* Video — fades in over the poster once playing */}
-        <video
-          ref={videoRef}
-          muted
-          loop
-          playsInline
-          preload="none"
-          aria-hidden
-          onPlaying={() => setPlaying(true)}
+      {/* Video — constrained width so 16:9 height stays in viewport */}
+      <div className="container-wide" style={{ padding: '0 clamp(1rem, 6vw, 5rem)' }}>
+        <div
           style={{
-            position:   'absolute',
-            inset:      0,
-            width:      '100%',
-            height:     '100%',
-            objectFit:  'cover',
-            opacity:    playing ? 1 : 0,
-            transition: 'opacity 0.9s ease',
+            position:     'relative',
+            width:        '100%',
+            aspectRatio:  '16 / 9',
+            background:   'var(--bone-deep)',
+            borderRadius: 'var(--radius-lg)',
+            overflow:     'hidden',
           }}
         >
-          <source src="/video/necklace-carvings.mp4" type="video/mp4" />
-        </video>
+          {/* Poster — instant paint + reduced-motion still */}
+          <Image
+            src="/video/necklace-carvings-poster.webp"
+            alt="Heritage necklace with antique carvings and motifs"
+            fill
+            sizes="(max-width: 768px) 100vw, 80vw"
+            quality={85}
+            style={{ objectFit: 'cover' }}
+          />
+
+          {/* Video — fades in over the poster once playing */}
+          <video
+            ref={videoRef}
+            muted
+            loop
+            playsInline
+            preload="none"
+            aria-hidden
+            onPlaying={() => setPlaying(true)}
+            style={{
+              position:   'absolute',
+              inset:      0,
+              width:      '100%',
+              height:     '100%',
+              objectFit:  'cover',
+              opacity:    playing ? 1 : 0,
+              transition: 'opacity 0.9s ease',
+            }}
+          >
+            <source src="/video/necklace-carvings.mp4" type="video/mp4" />
+          </video>
+        </div>
       </div>
 
       {/* Discreet CTA — below the frame */}
