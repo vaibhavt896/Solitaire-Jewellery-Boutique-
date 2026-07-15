@@ -57,7 +57,7 @@ export const COLLECTIONS: Collection[] = [
     description:
       'Rings, pendants, earrings, and bracelets in faceted diamond, set in 18K and 22K gold. Clean, modern, and easy to wear every day, with the same honest certification as everything else we sell. Every diamond piece of value comes with an IGI certificate, so the brilliance is matched by proof.',
     hero: {
-      src: '/Homepage images/Studded, set.webp',
+      src: '/Homepage images/Studded Set.webp',
       alt: 'Studded diamond set in 18K gold, Solitaire Boutique Kanpur',
       width: 1600,
       height: 2000,

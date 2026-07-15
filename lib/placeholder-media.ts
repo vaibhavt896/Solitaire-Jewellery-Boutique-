@@ -28,7 +28,7 @@ export const MEDIA = {
   polki:         '/Homepage images/Polki homee.webp',
   solitaire:     '/Homepage images/Solitaire Diamond.webp',
   gold:          '/Homepage images/kundan-on-gold.webp',
-  diamond:       '/Homepage images/Studded, set.webp',
+  diamond:       '/Homepage images/Studded Set.webp',
   temple:        '/Homepage images/Temple Jewellery.webp',
   bridal:        '/Homepage images/Bridal Jewellery.webp',
   boutique:      '/bridal-consultation-boutique.webp',

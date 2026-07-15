@@ -27,7 +27,7 @@ const CARDS: Card[] = [
   { slug: 'polki',              name: 'Polki',                desc: 'Uncut diamonds, set in pure gold by hand.',        img: '/Homepage images/Polki homee.webp' },
   { slug: 'solitaires',         name: 'Certified Solitaires', desc: 'One stone, GIA & IGI certified to its character.',  img: '/Homepage images/Solitaire Diamond.webp' },
   { slug: 'antique-gold',       name: 'Antique Gold',         desc: 'Old-world craftsmanship, warm and hallmarked.',     img: '/Homepage images/kundan-on-gold.webp' },
-  { slug: 'diamond',            name: 'Diamond',              desc: 'Modern, faceted brilliance for every day.',         img: '/Homepage images/Studded, set.webp' },
+  { slug: 'diamond',            name: 'Diamond',              desc: 'Modern, faceted brilliance for every day.',         img: '/Homepage images/Studded Set.webp' },
   { slug: 'temple',             name: 'Temple',               desc: 'Divine motifs, kept exactly as they should be.',    img: '/Homepage images/Temple Jewellery.webp' },
   { slug: 'bridal',             name: 'Bridal Sets',          desc: 'The full bridal look, composed around you.',        img: '/Homepage images/Bridal Jewellery.webp' },
   { slug: 'dubai-gold-bangles', name: 'Gold Bangles',         desc: '22K bangles, hand-picked and hallmarked.',          img: '/Homepage images/Gold Bangles.webp' },

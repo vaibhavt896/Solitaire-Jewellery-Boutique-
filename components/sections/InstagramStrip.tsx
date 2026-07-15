@@ -14,7 +14,7 @@ const TILES = [
   { src: '/Homepage images/Solitaire Diamond.webp',            alt: 'Certified diamond solitaire' },
   { src: '/Homepage images/Temple Jewellery.webp',             alt: 'Temple jewellery necklace' },
   { src: '/Homepage images/Bridal Jewellery.webp',             alt: 'Bridal jewellery set' },
-  { src: '/Homepage images/Studded, set.webp',                 alt: 'Studded diamond set in gold' },
+  { src: '/Homepage images/Studded Set.webp',                 alt: 'Studded diamond set in gold' },
   { src: '/Homepage images/kundan-on-gold.webp',               alt: 'Kundan-on-gold antique necklace' },
   { src: '/Polki Bridal Necklace with Emerald Drops..webp',    alt: 'Polki bridal necklace with emerald drops', play: true },
 ];
