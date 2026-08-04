@@ -765,16 +765,8 @@ export function Header() {
             <Logo light={false} />
           </Link>
 
-          <a
-            href={whatsappLinkFor(WHATSAPP_MESSAGES.general)}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="WhatsApp us"
-            className="p-2 -mr-2"
-            style={{ color: 'var(--ink)' }}
-          >
-            <IconWhatsApp />
-          </a>
+          {/* Right spacer for balanced logo centering */}
+          <div className="w-8 h-8" aria-hidden />
         </div>
 
         {/* ── Desktop: 3-column split-logo ── */}
@@ -922,9 +914,16 @@ export function Header() {
               initial={{ x: '-100%' }}
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
-              transition={{ duration: 0.44, ease: [0.32, 0.72, 0, 1] }}
+              transition={{ duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
               className="fixed left-0 top-0 bottom-0 z-50 flex flex-col"
-              style={{ width: 'min(100%, 440px)', background: 'var(--ivory-raised)', boxShadow: '0 0 80px rgba(26,20,16,0.22)' }}
+              style={{
+                width: 'min(100%, 420px)',
+                background: 'rgba(251, 247, 238, 0.98)',
+                backdropFilter: 'blur(28px)',
+                WebkitBackdropFilter: 'blur(28px)',
+                borderRight: '1px solid rgba(189, 154, 69, 0.25)',
+                boxShadow: '0 0 90px rgba(26, 20, 16, 0.28)',
+              }}
               role="dialog"
               aria-modal="true"
               aria-label="Navigation menu"
@@ -933,9 +932,9 @@ export function Header() {
                 {/* Header — logo + close */}
                 <div
                   className="flex items-center justify-between px-6"
-                  style={{ height: 72, borderBottom: '1px solid rgba(184,146,58,0.16)', flexShrink: 0 }}
+                  style={{ height: 72, borderBottom: '1px solid rgba(184,146,58,0.22)', flexShrink: 0 }}
                 >
-                  <Link href="/" onClick={() => setDrawer(false)} aria-label="Solitaire, home">
+                  <Link href="/" onClick={() => setDrawer(false)} aria-label="Solitaire, home" className="touch-scale">
                     <Logo light={false} />
                   </Link>
                   <button
@@ -943,24 +942,25 @@ export function Header() {
                     type="button"
                     aria-label="Close menu"
                     onClick={() => setDrawer(false)}
+                    className="touch-scale"
                     style={{
-                      color:      'var(--ink-soft)',
-                      background: 'none',
-                      border:     'none',
+                      color:      'var(--obsidian)',
+                      background: 'rgba(184,146,58,0.10)',
+                      border:     '1px solid rgba(184,146,58,0.25)',
+                      borderRadius: '50%',
+                      width:      40,
+                      height:     40,
+                      display:    'grid',
+                      placeItems: 'center',
                       cursor:     'pointer',
-                      padding:    8,
-                      margin:     '0 -8px 0 0',
-                      transition: 'color 0.22s',
                     }}
-                    onMouseEnter={e => { e.currentTarget.style.color = 'var(--obsidian)'; }}
-                    onMouseLeave={e => { e.currentTarget.style.color = 'var(--ink-soft)'; }}
                   >
                     <IconClose />
                   </button>
                 </div>
 
                 {/* Scrollable nav */}
-                <nav className="flex-1 overflow-y-auto px-6 pt-3 pb-6" aria-label="Mobile navigation">
+                <nav className="flex-1 overflow-y-auto px-6 pt-3 pb-8 scrollbar-none" aria-label="Mobile navigation">
 
                   {/* Collections — expandable */}
                   <div style={{ borderBottom: '1px solid rgba(26,20,16,0.08)' }}>
@@ -968,12 +968,12 @@ export function Header() {
                       type="button"
                       onClick={() => setCollOpen(o => !o)}
                       aria-expanded={collOpen}
-                      className="w-full flex items-center justify-between"
-                      style={{ padding: '17px 0', background: 'none', border: 'none', cursor: 'pointer' }}
+                      className="w-full flex items-center justify-between touch-scale"
+                      style={{ padding: '18px 0', background: 'none', border: 'none', cursor: 'pointer' }}
                     >
                       <span style={primaryLabel}>Collections</span>
                       <span style={{ color: 'var(--aged-gold)', display: 'grid', placeItems: 'center' }}>
-                        {collOpen ? <IconMinus size={15} /> : <IconPlus size={15} />}
+                        {collOpen ? <IconMinus size={16} /> : <IconPlus size={16} />}
                       </span>
                     </button>
 
@@ -986,25 +986,23 @@ export function Header() {
                           transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
                           style={{ overflow: 'hidden' }}
                         >
-                          <div style={{ paddingBottom: 12 }}>
+                          <div style={{ paddingBottom: 14 }} className="pl-2 space-y-1">
                             {SUBCOLLECTIONS.map((c) => (
                               <Link
                                 key={c.href}
                                 href={c.href}
                                 onClick={() => setDrawer(false)}
-                                className="block"
+                                className="flex items-center justify-between touch-scale py-2 px-3 rounded hover:bg-[rgba(184,146,58,0.08)]"
                                 style={{
                                   fontFamily:    'var(--font-body)',
-                                  fontSize:      13,
-                                  letterSpacing: '0.03em',
-                                  color:         'var(--ink-soft)',
-                                  padding:       '9px 0 9px 2px',
-                                  transition:    'color 0.2s',
+                                  fontSize:      13.5,
+                                  letterSpacing: '0.04em',
+                                  color:         'var(--obsidian)',
+                                  fontWeight:    500,
                                 }}
-                                onMouseEnter={e => { e.currentTarget.style.color = 'var(--gold-deep)'; }}
-                                onMouseLeave={e => { e.currentTarget.style.color = 'var(--ink-soft)'; }}
                               >
-                                {c.title}
+                                <span>{c.title}</span>
+                                <span style={{ color: 'var(--aged-gold)', fontSize: 12 }}>→</span>
                               </Link>
                             ))}
                           </div>
@@ -1019,20 +1017,18 @@ export function Header() {
                       key={item.href}
                       href={item.href}
                       onClick={() => setDrawer(false)}
-                      className="flex items-center justify-between"
-                      style={{ padding: '17px 0', borderBottom: '1px solid rgba(26,20,16,0.08)' }}
-                      onMouseEnter={e => { e.currentTarget.style.opacity = '0.62'; }}
-                      onMouseLeave={e => { e.currentTarget.style.opacity = '1'; }}
+                      className="flex items-center justify-between touch-scale"
+                      style={{ padding: '18px 0', borderBottom: '1px solid rgba(26,20,16,0.08)' }}
                     >
                       <span style={primaryLabel}>{item.label}</span>
-                      <span style={{ color: 'rgba(26,20,16,0.22)', display: 'grid', placeItems: 'center' }}>
+                      <span style={{ color: 'var(--aged-gold)', display: 'grid', placeItems: 'center' }}>
                         <IconArrowRight size={15} />
                       </span>
                     </Link>
                   ))}
 
                   {/* Utilities — whatsapp / contact */}
-                  <div style={{ marginTop: 20, paddingTop: 16, borderTop: '1px solid rgba(184,146,58,0.18)' }}>
+                  <div style={{ marginTop: 22, paddingTop: 18, borderTop: '1px solid rgba(184,146,58,0.22)' }}>
                     {SECONDARY.map((item) => {
                       const inner = (
                         <>
@@ -1040,11 +1036,11 @@ export function Header() {
                           <span
                             style={{
                               fontFamily:    'var(--font-body)',
-                              fontSize:      12.5,
+                              fontSize:      13,
                               letterSpacing: '0.16em',
                               textTransform: 'uppercase',
-                              fontWeight:    500,
-                              color:         'var(--ink)',
+                              fontWeight:    600,
+                              color:         'var(--obsidian)',
                             }}
                           >
                             {item.label}
@@ -1052,9 +1048,8 @@ export function Header() {
                         </>
                       );
                       const shared = {
-                        style:        { display: 'flex', alignItems: 'center', gap: 14, padding: '13px 0' } as React.CSSProperties,
-                        onMouseEnter: (e: React.MouseEvent<HTMLElement>) => { e.currentTarget.style.opacity = '0.62'; },
-                        onMouseLeave: (e: React.MouseEvent<HTMLElement>) => { e.currentTarget.style.opacity = '1'; },
+                        className:    'touch-scale',
+                        style:        { display: 'flex', alignItems: 'center', gap: 14, padding: '14px 0' } as React.CSSProperties,
                       };
                       return item.external ? (
                         <a key={item.href} href={item.href} target="_blank" rel="noopener noreferrer" {...shared}>
@@ -1069,14 +1064,14 @@ export function Header() {
                   </div>
 
                   {/* Boutique info */}
-                  <div className="mt-8 pt-6 space-y-2" style={{ borderTop: '1px solid rgba(26,20,16,0.07)' }}>
+                  <div className="mt-8 pt-6 space-y-2" style={{ borderTop: '1px solid rgba(26,20,16,0.08)' }}>
                     {[SITE.address.full, SITE.hours.weekdays, SITE.phoneDisplay].map((line) => (
                       <p
                         key={line}
                         style={{
                           fontFamily:    'var(--font-body)',
-                          fontSize:      10,
-                          letterSpacing: '0.08em',
+                          fontSize:      10.5,
+                          letterSpacing: '0.09em',
                           textTransform: 'uppercase',
                           color:         'var(--ink-muted)',
                           lineHeight:    1.6,
@@ -1089,27 +1084,25 @@ export function Header() {
                 </nav>
 
                 {/* Book Visit — pinned footer */}
-                <div className="px-6 py-5" style={{ borderTop: '1px solid rgba(184,146,58,0.18)', flexShrink: 0 }}>
+                <div className="px-6 py-5 pb-8" style={{ borderTop: '1px solid rgba(184,146,58,0.22)', flexShrink: 0 }}>
                   <Link
                     href="/bridal/book"
                     onClick={() => setDrawer(false)}
-                    className="flex items-center justify-center w-full"
+                    className="flex items-center justify-center w-full touch-scale"
                     style={{
                       gap:           10,
-                      background:    'var(--aged-gold)',
-                      color:         'var(--ivory)',
-                      padding:       '15px 24px',
+                      background:    'linear-gradient(135deg, #BD9A45 0%, #9A7A2E 100%)',
+                      color:         '#FFFFFF',
+                      padding:       '16px 24px',
                       borderRadius:  'var(--radius-sm)',
                       fontFamily:    'var(--font-body)',
-                      fontSize:      11.5,
-                      letterSpacing: '0.2em',
+                      fontSize:      12,
+                      letterSpacing: '0.22em',
                       textTransform: 'uppercase',
                       fontWeight:    600,
-                      boxShadow:     '0 12px 30px -10px rgba(189,154,69,0.6)',
-                      transition:    'background 0.25s ease',
+                      boxShadow:     '0 12px 30px -8px rgba(189,154,69,0.55)',
+                      border:        '1px solid rgba(255,255,255,0.2)',
                     }}
-                    onMouseEnter={e => { e.currentTarget.style.background = 'var(--gold-deep)'; }}
-                    onMouseLeave={e => { e.currentTarget.style.background = 'var(--aged-gold)'; }}
                   >
                     Book Visit
                   </Link>

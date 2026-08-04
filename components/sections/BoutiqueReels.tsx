@@ -421,10 +421,11 @@ export function BoutiqueReels() {
         <div aria-hidden style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '6%', background: 'linear-gradient(to right, var(--ivory) 0%, transparent 100%)', zIndex: 10, pointerEvents: 'none' }} />
         <div aria-hidden style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: '6%', background: 'linear-gradient(to left, var(--ivory) 0%, transparent 100%)', zIndex: 10, pointerEvents: 'none' }} />
 
-        {/* Edge arrows */}
+        {/* Edge arrows (hidden on small touch screens for clean swiping) */}
         <button
           onClick={() => { goPrev(); startTimer(); }}
           aria-label="Previous reel"
+          className="hidden sm:flex"
           style={{ ...arrowBtn, position: 'absolute', left: 'clamp(8px,2vw,28px)', top: '50%', transform: 'translateY(-50%)', zIndex: 20 }}
           onMouseEnter={e => gsap.to(e.currentTarget, { scale: 1.1, duration: 0.18, ease: 'power2.out' })}
           onMouseLeave={e => gsap.to(e.currentTarget, { scale: 1,   duration: 0.22, ease: 'power2.out' })}
@@ -432,6 +433,7 @@ export function BoutiqueReels() {
         <button
           onClick={() => { goNext(); startTimer(); }}
           aria-label="Next reel"
+          className="hidden sm:flex"
           style={{ ...arrowBtn, position: 'absolute', right: 'clamp(8px,2vw,28px)', top: '50%', transform: 'translateY(-50%)', zIndex: 20 }}
           onMouseEnter={e => gsap.to(e.currentTarget, { scale: 1.1, duration: 0.18, ease: 'power2.out' })}
           onMouseLeave={e => gsap.to(e.currentTarget, { scale: 1,   duration: 0.22, ease: 'power2.out' })}
@@ -449,7 +451,7 @@ export function BoutiqueReels() {
                   if (ptrMoved.current) return;
                   setPlayerIdx(i === 0 ? N - 1 : i === N + 1 ? 0 : i - 1);
                 }}
-                className="group"
+                className="group touch-scale"
                 style={{
                   flexShrink:   0,
                   width:        'clamp(190px, 17.5vw, 250px)',

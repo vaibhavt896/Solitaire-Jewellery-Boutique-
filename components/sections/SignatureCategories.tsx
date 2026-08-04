@@ -111,7 +111,11 @@ function CollectionRow({
           boxShadow: '0 28px 70px -6px rgba(26,20,16,0.14), 0 8px 24px rgba(26,20,16,0.07)',
         }}
       >
-        <div className="overflow-hidden group cursor-none relative" style={{ borderRadius: 'var(--radius-lg)' }}>
+        <Link
+          href={`/collections/${item.slug}`}
+          className="overflow-hidden group md:cursor-none relative block touch-scale"
+          style={{ borderRadius: 'var(--radius-lg)' }}
+        >
           <div>
             <Image
               src={collection.hero.src}
@@ -160,12 +164,12 @@ function CollectionRow({
             className="absolute inset-0 pointer-events-none"
             style={{ boxShadow: 'inset 0 0 0 1px rgba(184,146,58,0.20)', borderRadius: 'var(--radius-lg)' }}
           />
-        </div>
+        </Link>
       </div>
 
       {/* Text, 4 columns */}
       <motion.div
-        className={`md:col-span-4 ${flip ? 'md:order-1 md:pr-12 lg:pr-20' : 'md:order-3 md:pl-12 lg:pl-20'} pt-8 md:pt-0`}
+        className={`md:col-span-4 ${flip ? 'md:order-1 md:pr-12 lg:pr-20' : 'md:order-3 md:pl-12 lg:pl-20'} pt-6 md:pt-0`}
         initial={reduce ? {} : { opacity: 0, x: flip ? -24 : 24 }}
         whileInView={reduce ? {} : { opacity: 1, x: 0 }}
         viewport={{ once: true, margin: '-6%' }}
@@ -174,13 +178,13 @@ function CollectionRow({
         {/* Mobile number */}
         <span
           aria-hidden
-          className="md:hidden block mb-3"
+          className="md:hidden block mb-2"
           style={{
             fontFamily: 'var(--font-display)',
-            fontSize: '3.5rem',
+            fontSize: '3rem',
             lineHeight: 1,
             color: 'var(--aged-gold)',
-            opacity: 0.18,
+            opacity: 0.22,
             letterSpacing: '-0.04em',
           }}
         >
@@ -195,23 +199,23 @@ function CollectionRow({
             letterSpacing: '0.28em',
             textTransform: 'uppercase',
             color: 'var(--aged-gold)',
-            marginBottom: '1.1rem',
+            marginBottom: '0.8rem',
           }}
         >
           Collection {item.num}
         </p>
 
         {/* Gold rule, typographic anchor */}
-        <div style={{ width: 30, height: 1.5, background: 'var(--aged-gold)', opacity: 0.65, marginBottom: '1.4rem' }} />
+        <div style={{ width: 30, height: 1.5, background: 'var(--aged-gold)', opacity: 0.65, marginBottom: '1.2rem' }} />
 
         <h3
           className="font-display"
           style={{
-            fontSize: 'clamp(2rem, 3.6vw, 3.1rem)',
-            lineHeight: 1.04,
+            fontSize: 'clamp(1.75rem, 6.5vw, 3.1rem)',
+            lineHeight: 1.06,
             letterSpacing: '-0.022em',
             color: 'var(--obsidian)',
-            marginBottom: '1.4rem',
+            marginBottom: '1.1rem',
           }}
         >
           {item.headline}
@@ -220,10 +224,10 @@ function CollectionRow({
         <p
           style={{
             fontFamily: 'var(--font-body)',
-            fontSize: '1rem',
-            lineHeight: 1.88,
+            fontSize: '0.96rem',
+            lineHeight: 1.8,
             color: 'var(--ink-soft)',
-            marginBottom: '2.2rem',
+            marginBottom: '1.8rem',
           }}
         >
           {item.body}
@@ -231,7 +235,7 @@ function CollectionRow({
 
         <Link
           href={`/collections/${item.slug}`}
-          className="btn-ghost"
+          className="btn-ghost touch-scale inline-block"
           style={{ fontSize: 10.5, letterSpacing: '0.18em', color: 'var(--aged-gold)' }}
         >
           {item.cta} →

@@ -113,7 +113,7 @@ export function WhatsAppWidget() {
         ref={wrapRef}
         onMouseEnter={engage}
         onTouchStart={engage}
-        className="wa-widget fixed z-[9998] flex flex-col items-end gap-3"
+        className="wa-widget fixed z-[9998] hidden lg:flex flex-col items-end gap-3"
         style={{ bottom: 'calc(env(safe-area-inset-bottom,0px) + 72px)', right: 16 }}
       >
 
