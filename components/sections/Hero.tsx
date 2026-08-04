@@ -13,7 +13,7 @@ gsap.config({ force3D: true });
    `eyebrow/title/subtitle/cta` drive the mobile overlay hero only;
    the desktop carousel ignores them (it reads src/alt/w/h). ───── */
 const SLIDES = [
-  { src: '/Hero-Slider-Images/slide%201.webp', mobileSrc: '/Hero-Slider-Images/slide%201%20(Mob).webp', hasBakedText: true, mobilePos: 'center 35%', alt: 'Temple Treasures — antique 22ct gold temple necklace set at Solitaire Jewellery Boutique', w: 1994, h: 789,
+  { src: '/Hero-Slider-Images/slide%201.webp', mobileSrc: '/Hero-Slider-Images/slide%201%20mob.png', mobilePos: 'center 75%', alt: 'Temple Treasures — antique 22ct gold temple necklace set at Solitaire Jewellery Boutique', w: 1994, h: 789,
     eyebrow: 'Heritage in Every Detail', title: 'Temple Treasures',     subtitle: 'Antique 22ct gold temple set',                cta: { label: 'Explore Collection', href: '/collections/temple' } },
   { src: '/Hero-Slider-Images/Slide%202.webp', mobileSrc: '/Hero-Slider-Images/slide%202%20mob.png', mobilePos: 'center 85%', alt: 'A curated fine jewellery collection — pearl and diamond choker with sapphire centrepiece at Solitaire', w: 1994, h: 789,
     eyebrow: 'Chosen by Hand',          title: 'The Curated Edit',      subtitle: 'Polki, Kundan & fine diamond',                cta: { label: 'View Collections',   href: '/collections' } },
