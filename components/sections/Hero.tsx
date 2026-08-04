@@ -13,19 +13,19 @@ gsap.config({ force3D: true });
    `eyebrow/title/subtitle/cta` drive the mobile overlay hero only;
    the desktop carousel ignores them (it reads src/alt/w/h). ───── */
 const SLIDES = [
-  { src: '/Hero-Slider-Images/slide%201.webp', mobileSrc: '/Hero-Slider-Images/slide%201%20(Mob).webp', hasBakedText: true, mobilePos: 'center 15%', alt: 'Temple Treasures — antique 22ct gold temple necklace set at Solitaire Jewellery Boutique', w: 1994, h: 789,
+  { src: '/Hero-Slider-Images/slide%201.webp', mobileSrc: '/Hero-Slider-Images/slide%201%20(Mob).webp', hasBakedText: true, mobilePos: 'center 35%', alt: 'Temple Treasures — antique 22ct gold temple necklace set at Solitaire Jewellery Boutique', w: 1994, h: 789,
     eyebrow: 'Heritage in Every Detail', title: 'Temple Treasures',     subtitle: 'Antique 22ct gold temple set',                cta: { label: 'Explore Collection', href: '/collections/temple' } },
-  { src: '/Hero-Slider-Images/Slide%202.webp', mobileSrc: '/Hero-Slider-Images/slide%202%20mob.png', mobilePos: 'center 42%', alt: 'A curated fine jewellery collection — pearl and diamond choker with sapphire centrepiece at Solitaire', w: 1994, h: 789,
+  { src: '/Hero-Slider-Images/Slide%202.webp', mobileSrc: '/Hero-Slider-Images/slide%202%20mob.png', mobilePos: 'center 85%', alt: 'A curated fine jewellery collection — pearl and diamond choker with sapphire centrepiece at Solitaire', w: 1994, h: 789,
     eyebrow: 'Chosen by Hand',          title: 'The Curated Edit',      subtitle: 'Polki, Kundan & fine diamond',                cta: { label: 'View Collections',   href: '/collections' } },
-  { src: '/Hero-Slider-Images/slide%203.webp', mobileSrc: '/Hero-Slider-Images/slide%203%20mobile.png', mobilePos: 'center 54%', alt: 'Antique 22ct gold necklace and jhumka earring set, handcrafted at Solitaire Jewellery Boutique', w: 1993, h: 789,
+  { src: '/Hero-Slider-Images/slide%203.webp', mobileSrc: '/Hero-Slider-Images/slide%203%20mobile.png', mobilePos: 'center 82%', alt: 'Antique 22ct gold necklace and jhumka earring set, handcrafted at Solitaire Jewellery Boutique', w: 1993, h: 789,
     eyebrow: 'Detail in Every Motif',   title: 'Necklace & Jhumka Set', subtitle: 'Antique 22ct gold, hand-worked',              cta: { label: 'Explore Antique Gold', href: '/collections/antique-gold' } },
-  { src: '/Hero-Slider-Images/Slide%204.webp', mobilePos: 'center 42%', alt: 'Timeless Elegance — antique 22ct gold and Polki bridal set at Solitaire',                   w: 1994, h: 789,
+  { src: '/Hero-Slider-Images/Slide%204.webp', mobilePos: 'center 60%', alt: 'Timeless Elegance — antique 22ct gold and Polki bridal set at Solitaire',                   w: 1994, h: 789,
     eyebrow: 'Timeless Elegance',       title: 'The Bridal Set',        subtitle: 'Antique gold & Polki, made to keep',          cta: { label: 'Explore Bridal',     href: '/bridal' } },
-  { src: '/Hero-Slider-Images/Slide%205.webp', mobilePos: 'center 45%', alt: 'Handcrafted gold bangles — Dubai gold collection at Solitaire Jewellery Boutique',          w: 1993, h: 789,
+  { src: '/Hero-Slider-Images/Slide%205.webp', mobilePos: 'center 65%', alt: 'Handcrafted gold bangles — Dubai gold collection at Solitaire Jewellery Boutique',          w: 1993, h: 789,
     eyebrow: 'Pure & Hallmarked',       title: 'Handcrafted Bangles',   subtitle: 'BIS hallmarked 22ct gold',                    cta: { label: 'Explore Collection', href: '/collections/dubai-gold-bangles' } },
-  { src: '/Hero-Slider-Images/slide%206.webp', mobilePos: 'center 42%', alt: "The Bride's Collection — Polki and Kundan bridal jewellery set at Solitaire",               w: 1994, h: 789,
+  { src: '/Hero-Slider-Images/slide%206.webp', mobilePos: 'center 60%', alt: "The Bride's Collection — Polki and Kundan bridal jewellery set at Solitaire",               w: 1994, h: 789,
     eyebrow: 'Crafted for Forever',     title: "The Bride's Collection", subtitle: 'Timeless pieces for your most precious moments', cta: { label: 'Explore Bridal',  href: '/bridal' } },
-  { src: '/Hero-Slider-Images/Slide%207.webp', mobilePos: 'center 42%', alt: 'Heritage jewellery — temple gold and antique designs, Solitaire Jewellery Boutique',        w: 1994, h: 789,
+  { src: '/Hero-Slider-Images/Slide%207.webp', mobilePos: 'center 60%', alt: 'Heritage jewellery — temple gold and antique designs, Solitaire Jewellery Boutique',        w: 1994, h: 789,
     eyebrow: 'A Living Heritage',       title: 'Heritage Gold',         subtitle: 'Temple & antique designs',                    cta: { label: 'Explore Collections', href: '/collections' } },
 ] as const;
 
@@ -87,14 +87,14 @@ function MobileHero() {
       <h1 className="sr-only">Heirlooms, made by hand. A small family boutique in Swaroop Nagar, Kanpur.</h1>
 
       <style>{`
-        @keyframes mHeroCopyIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes mHeroCopyIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
         @media (prefers-reduced-motion: reduce) {
           .m-hero-img  { transition: opacity 0.3s ease !important; transform: none !important; }
           .m-hero-copy { animation: none !important; }
         }
       `}</style>
 
-      <div style={{ position: 'relative', width: '100%', height: 'clamp(460px, 78dvh, 720px)', overflow: 'hidden' }}>
+      <div style={{ position: 'relative', width: '100%', height: 'clamp(480px, 80dvh, 740px)', overflow: 'hidden' }}>
         {SLIDES.map((slide, i) => (
           <Image
             key={i}
@@ -108,46 +108,46 @@ function MobileHero() {
             draggable={false}
             style={{
               objectFit:      'cover',
-              objectPosition: 'mobilePos' in slide ? slide.mobilePos : 'center 40%',
+              objectPosition: 'mobilePos' in slide ? slide.mobilePos : 'center 60%',
               opacity:        i === idx ? 1 : 0,
-              transform:      i === idx ? 'scale(1.04)' : 'scale(1)',
+              transform:      i === idx ? 'scale(1.05)' : 'scale(1)',
               transition:     'opacity 0.8s ease, transform 5s ease-out',
               zIndex:         i === idx ? 1 : 0,
             }}
           />
         ))}
 
-        {/* Focused gradient scrim at bottom 22% so jewelry remains 100% bright & untouched */}
+        {/* Minimal gradient scrim focused at bottom only so top & center jewelry remain 100% visible */}
         <div aria-hidden style={{
           position: 'absolute', inset: 0, zIndex: 2,
-          background: 'linear-gradient(to top, rgba(10,7,4,0.92) 0%, rgba(10,7,4,0.50) 20%, transparent 42%)',
+          background: 'linear-gradient(to top, rgba(12,8,5,0.92) 0%, rgba(12,8,5,0.48) 28%, transparent 58%)',
         }} />
         {/* Top header scrim */}
         <div aria-hidden style={{
-          position: 'absolute', top: 0, left: 0, right: 0, height: 70, zIndex: 2,
-          background: 'linear-gradient(to bottom, rgba(10,7,4,0.20), transparent)',
+          position: 'absolute', top: 0, left: 0, right: 0, height: 80, zIndex: 2,
+          background: 'linear-gradient(to bottom, rgba(12,8,5,0.25), transparent)',
         }} />
 
         {/* Overlay copy + dots (centered cleanly at bottom) */}
-        <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, zIndex: 3, padding: '0 16px 12px', textAlign: 'center' }}>
+        <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, zIndex: 3, padding: '0 18px 18px', textAlign: 'center' }}>
           <div key={idx} className="m-hero-copy" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', animation: 'mHeroCopyIn 0.65s cubic-bezier(0.16,1,0.3,1) both' }}>
             {!hasBaked && (
               <>
                 {/* Eyebrow badge */}
-                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, marginBottom: 4, padding: '2px 8px', borderRadius: 999, background: 'rgba(189,154,69,0.22)', border: '1px solid rgba(189,154,69,0.42)', backdropFilter: 'blur(6px)' }}>
-                  <span aria-hidden style={{ width: 4, height: 4, borderRadius: '50%', background: 'var(--gold-light)' }} />
-                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 8.5, letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 600, color: 'var(--gold-light)' }}>
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, marginBottom: 6, padding: '3px 11px', borderRadius: 999, background: 'rgba(189,154,69,0.22)', border: '1px solid rgba(189,154,69,0.42)', backdropFilter: 'blur(6px)' }}>
+                  <span aria-hidden style={{ width: 5, height: 5, borderRadius: '50%', background: 'var(--gold-light)' }} />
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 9.5, letterSpacing: '0.22em', textTransform: 'uppercase', fontWeight: 600, color: 'var(--gold-light)' }}>
                     {s.eyebrow}
                   </span>
                 </div>
 
                 {/* Title */}
-                <p style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.25rem, 5.2vw, 1.7rem)', lineHeight: 1.08, letterSpacing: '-0.015em', color: '#FFFFFF', margin: 0, textAlign: 'center', textShadow: '0 2px 18px rgba(0,0,0,0.85)' }}>
+                <p style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.75rem, 7.5vw, 2.3rem)', lineHeight: 1.05, letterSpacing: '-0.02em', color: '#FFFFFF', margin: 0, textAlign: 'center', textShadow: '0 2px 24px rgba(0,0,0,0.9)' }}>
                   {s.title}
                 </p>
 
                 {/* Subtitle */}
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.775rem', lineHeight: 1.3, color: 'rgba(244,239,227,0.88)', margin: '3px auto 0', maxWidth: 260, textAlign: 'center', textShadow: '0 1px 8px rgba(0,0,0,0.7)' }}>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '0.85rem', lineHeight: 1.4, color: 'rgba(244,239,227,0.92)', margin: '5px auto 0', maxWidth: 280, textAlign: 'center', textShadow: '0 1px 10px rgba(0,0,0,0.75)' }}>
                   {s.subtitle}
                 </p>
               </>
@@ -158,12 +158,12 @@ function MobileHero() {
               href={s.cta.href}
               className="inline-flex items-center touch-scale"
               style={{
-                marginTop: hasBaked ? 0 : 8, gap: 6,
+                marginTop: hasBaked ? 0 : 12, gap: 8,
                 background: 'linear-gradient(135deg, #BD9A45 0%, #9A7A2E 100%)', color: '#FFFFFF',
-                padding: '7px 16px', borderRadius: 'var(--radius-sm)',
-                fontFamily: 'var(--font-body)', fontSize: 9, letterSpacing: '0.18em',
+                padding: '10px 22px', borderRadius: 'var(--radius-sm)',
+                fontFamily: 'var(--font-body)', fontSize: 10, letterSpacing: '0.2em',
                 textTransform: 'uppercase', fontWeight: 600,
-                boxShadow: '0 6px 20px -4px rgba(189,154,69,0.5)',
+                boxShadow: '0 8px 24px -4px rgba(189,154,69,0.5)',
                 border: '1px solid rgba(255,255,255,0.25)',
               }}
             >
@@ -173,7 +173,7 @@ function MobileHero() {
           </div>
 
           {/* Dots */}
-          <div role="tablist" aria-label="Slide navigation" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5, marginTop: 8 }}>
+          <div role="tablist" aria-label="Slide navigation" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, marginTop: 12 }}>
             {SLIDES.map((_, i) => (
               <button
                 key={i}
@@ -181,12 +181,12 @@ function MobileHero() {
                 aria-selected={i === idx}
                 aria-label={`Go to slide ${i + 1}`}
                 onClick={() => { go(i); start(); }}
-                style={{ padding: '3px 0', background: 'transparent', border: 'none', cursor: 'pointer', lineHeight: 0 }}
+                style={{ padding: '4px 0', background: 'transparent', border: 'none', cursor: 'pointer', lineHeight: 0 }}
               >
                 <span style={{
-                  display: 'block', height: 3.5, width: i === idx ? 18 : 5, borderRadius: 2,
+                  display: 'block', height: 4, width: i === idx ? 22 : 6, borderRadius: 2,
                   background: i === idx ? 'var(--gold-soft)' : 'rgba(244,239,227,0.4)',
-                  boxShadow: i === idx ? '0 0 6px rgba(228,202,128,0.6)' : 'none',
+                  boxShadow: i === idx ? '0 0 8px rgba(228,202,128,0.6)' : 'none',
                   transition: 'width 0.4s ease, background 0.4s ease',
                 }} />
               </button>
